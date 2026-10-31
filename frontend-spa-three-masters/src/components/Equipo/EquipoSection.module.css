@@ -1,0 +1,155 @@
+/*
+ * Nuestro equipo · nodo 3:13115 del diseño de Figma.
+ * Sección de 688px sobre blanco: introducción 85px + 40px + 3 tarjetas de 408×403.
+ */
+.section {
+  padding: clamp(2.5rem, 5.5vw, 80px) clamp(1.25rem, 5.5vw, 80px);
+  background-color: var(--catalog-surface);
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Encabezado de sección: antetítulo + título con 16px de separación */
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 962px;
+  min-height: 85px;
+}
+
+/* Jost 500 · 11px · #783E50 */
+.eyebrow {
+  font-family: var(--catalog-font-body);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+/* Playfair Display SC · 50px · 106% · #332A2B */
+.title {
+  font-family: var(--catalog-font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.5vw, 50px);
+  line-height: 1.06;
+  color: var(--catalog-ink);
+}
+
+.aviso {
+  font-family: var(--catalog-font-label);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--catalog-muted);
+}
+
+/* Tres tarjetas de 408px con 28px de separación */
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 28px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Fotografía 408 × 300, radio 6px */
+.photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 408 / 300;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #ece2dd;
+}
+
+.photoVacia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(135deg, #e6d3d9 0%, #c9a6b2 100%);
+  font-family: var(--catalog-font-display);
+  font-size: 2.5rem;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.presentation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Playfair Display SC · 30px · 106% · #332A2B */
+.name {
+  font-family: var(--catalog-font-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.06;
+  color: var(--catalog-ink);
+}
+
+/* Inter 500 · 11px · #783E50 */
+.specialties {
+  font-family: var(--catalog-font-label);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+/* Inter 400 · 13px · #817576 */
+.experience {
+  font-family: var(--catalog-font-label);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--catalog-muted);
+}
+
+.skeleton,
+.skeletonCorta {
+  display: block;
+  height: 14px;
+  border-radius: 4px;
+  background-color: #ece2dd;
+}
+
+.skeleton {
+  width: 60%;
+}
+
+.skeletonCorta {
+  width: 40%;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

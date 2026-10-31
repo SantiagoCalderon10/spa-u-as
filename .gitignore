@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (secretos). El .env.example SÍ se sube
+.env
+.env.*
+!.env.example
+
+# Builds
+dist/
+build/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Caché y temporales
+.cache/
+.vite/
+.eslintcache
+*.tmp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editor (dejo .vscode/ fuera por si comparten configuración; ver nota)
+.idea/
+*.swp

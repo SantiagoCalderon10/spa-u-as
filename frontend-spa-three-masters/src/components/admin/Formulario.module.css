@@ -1,0 +1,272 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.filaTres {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.filaDos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.control {
+  width: 100%;
+  padding: 0.72rem 0.85rem;
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-body);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.control::placeholder {
+  color: #75646c;
+}
+
+.control:hover {
+  border-color: var(--color-border-hover);
+}
+
+.control:focus {
+  outline: none;
+  border-color: var(--color-brand-primary);
+  box-shadow: 0 0 0 3px rgba(163, 62, 89, 0.14);
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+select.control {
+  appearance: none;
+  padding-right: 2.4rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b6834' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  cursor: pointer;
+}
+
+textarea.control {
+  min-height: 6rem;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.errorGeneral {
+  padding: 0.75rem 0.9rem;
+  background-color: var(--color-danger-soft);
+  border: 1px solid #ecc7ce;
+  border-radius: var(--radius-sm);
+  color: #661f2c;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* Cuenta vinculada al perfil */
+.cuenta {
+  padding: 0.9rem 1rem;
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.cuentaNombre {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-brand-plum);
+}
+
+.cuentaDetalle {
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--color-text-body);
+  overflow-wrap: anywhere;
+}
+
+.cuentaNota {
+  margin-top: 0.45rem;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+/* Selector de origen de la cuenta */
+.segmentado {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.3rem;
+  padding: 0.28rem;
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.segmento {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.segmento:hover {
+  color: var(--color-brand-plum);
+}
+
+.segmentoActivo {
+  background-color: var(--color-surface-card);
+  border-color: var(--color-border-subtle);
+  color: var(--color-brand-plum);
+  box-shadow: var(--shadow-subtle);
+}
+
+.segmento:focus-visible {
+  outline: 2px solid var(--color-brand-primary);
+  outline-offset: 2px;
+}
+
+/* Especialidades */
+.grupoEspecialidades {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.leyenda {
+  padding: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-body);
+}
+
+.leyendaAyuda {
+  margin-top: 0.2rem;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.especialidades {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.especialidad {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.especialidad:hover {
+  border-color: var(--color-border-hover);
+}
+
+.especialidad:has(.especialidadControl:checked) {
+  background-color: var(--color-brand-soft);
+  border-color: #dcc3ca;
+}
+
+.especialidadControl {
+  width: 15px;
+  height: 15px;
+  margin-top: 0.12rem;
+  accent-color: var(--color-brand-primary);
+  flex-shrink: 0;
+}
+
+.especialidadTexto {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--color-text-body);
+  overflow-wrap: anywhere;
+}
+
+.especialidadNota {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+}
+
+.avisoSinDatos {
+  margin-top: 0.65rem;
+  padding: 0.7rem 0.8rem;
+  background-color: var(--color-warning-soft);
+  border: 1px solid #eeddbf;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-warning);
+}
+
+.errorGrupo {
+  margin-top: 0.45rem;
+  font-size: 0.76rem;
+  color: var(--color-danger);
+}
+
+.notaFranja {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.notaFranja strong {
+  color: var(--color-brand-plum);
+}
+
+@media (max-width: 620px) {
+  .filaTres,
+  .filaDos,
+  .especialidades {
+    grid-template-columns: 1fr;
+  }
+
+  .acciones {
+    flex-direction: column;
+  }
+
+  .acciones > * {
+    width: 100%;
+  }
+}

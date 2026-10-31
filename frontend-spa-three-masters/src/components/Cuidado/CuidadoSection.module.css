@@ -1,0 +1,121 @@
+/*
+ * Nuestro cuidado · nodo 3:13141 del diseño de Figma.
+ * Fila de 592px: foto 490×432, separación 76px, columna de beneficios 714px.
+ */
+.section {
+  padding: clamp(2.5rem, 5.5vw, 80px) clamp(1.25rem, 5.5vw, 80px);
+  background-color: var(--landing-surface);
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 76px;
+}
+
+/*
+ * Fotografía de la sección (490 × 432).
+ * Para mostrarla: guarda la imagen en public/images/cuidado-aceite.jpg
+ */
+.photo {
+  --foto: url('/images/cuidado-aceite.jpg');
+  flex: 0 0 490px;
+  max-width: 490px;
+  aspect-ratio: 490 / 432;
+  border-radius: 6px;
+  background-image: var(--foto), linear-gradient(135deg, #e6d3d9 0%, #c9a6b2 100%);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+/* Jost 500 · 11px · #783E50 */
+.eyebrow {
+  font-family: var(--catalog-font-body);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+/* Playfair Display SC · 50px · 106% · #332A2B */
+.title {
+  font-family: var(--catalog-font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.5vw, 50px);
+  line-height: 1.06;
+  color: var(--catalog-ink);
+}
+
+.benefits {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Beneficio: icono 22px + detalle, con 18px de separación */
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+/* Icono de 22px con trazo 1.6px #783E50 */
+.icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--catalog-wine);
+}
+
+.benefitTitle {
+  font-family: var(--catalog-font-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--catalog-ink);
+}
+
+.benefitBody {
+  margin-top: 5px;
+  font-family: var(--catalog-font-label);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--catalog-muted);
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2.5rem;
+  }
+
+  .photo {
+    flex: none;
+    max-width: none;
+    aspect-ratio: 16 / 10;
+  }
+}

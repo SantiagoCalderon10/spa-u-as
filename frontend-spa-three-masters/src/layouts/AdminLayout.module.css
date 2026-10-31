@@ -1,0 +1,269 @@
+.marco {
+  display: grid;
+  grid-template-columns: 286px minmax(0, 1fr);
+  min-height: 100vh;
+  background-color: var(--color-surface-page);
+}
+
+.barra {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 2rem 1.4rem 1.6rem;
+  background-color: var(--color-brand-plum);
+  background-image:
+    radial-gradient(ellipse at 12% -8%, rgba(163, 62, 89, 0.42), transparent 58%),
+    linear-gradient(180deg, #2c1322 0%, #28111f 55%, #22101b 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-y: auto;
+}
+
+.marcaBloque {
+  min-width: 0;
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.marcaIcono {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: var(--radius-xs);
+  color: #d9a7b5;
+}
+
+.marcaTexto {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.marcaTexto em {
+  font-style: italic;
+  font-weight: 400;
+  color: #d98299;
+}
+
+.marcaNota {
+  margin-top: 0.7rem;
+  max-width: 20ch;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: #bda9b4;
+}
+
+.navegacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 2.6rem;
+}
+
+.enlace {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: #d6c5ce;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.enlace:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.enlaceActivo {
+  background-color: var(--color-surface-page);
+  color: var(--color-brand-plum);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.enlaceActivo:hover {
+  background-color: var(--color-surface-page);
+  color: var(--color-brand-plum);
+}
+
+.enlaceIcono {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-xs);
+  color: #d9a7b5;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.enlaceActivo .enlaceIcono {
+  border-color: rgba(40, 17, 31, 0.14);
+  color: var(--color-brand-primary);
+}
+
+.enlaceTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.enlaceEtiqueta {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.enlaceDetalle {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  opacity: 0.64;
+}
+
+.enlaceActivo .enlaceDetalle {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.pie {
+  margin-top: auto;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.volver {
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  color: #e8dbe1;
+  font-size: 0.82rem;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.volver:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.pieNota {
+  margin-top: 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: #b9a4ae;
+}
+
+.contenido {
+  min-width: 0;
+}
+
+.principal {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3.5rem) 5rem;
+}
+
+@media (max-width: 900px) {
+  .marco {
+    grid-template-columns: 1fr;
+  }
+
+  .barra {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    height: auto;
+    padding: 0.85rem 1.25rem;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    overflow: visible;
+  }
+
+  .marcaBloque {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .marcaTexto {
+    font-size: 1.18rem;
+  }
+
+  .marcaNota {
+    display: none;
+  }
+
+  .pie {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .pieNota {
+    display: none;
+  }
+
+  .volver {
+    font-size: 0.76rem;
+    white-space: nowrap;
+  }
+
+  .navegacion {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-direction: row;
+    gap: 0.4rem;
+    margin: 0;
+    padding-bottom: 0.1rem;
+    overflow-x: auto;
+  }
+
+  .enlace {
+    flex: 1 0 auto;
+    grid-template-columns: auto auto;
+    gap: 0.45rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .enlaceIcono {
+    width: 24px;
+    height: 24px;
+    border: 0;
+  }
+
+  .enlaceIcono svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .enlaceDetalle {
+    display: none;
+  }
+
+  .enlaceEtiqueta {
+    font-size: 0.8rem;
+  }
+
+  .principal {
+    padding-top: 2rem;
+  }
+}

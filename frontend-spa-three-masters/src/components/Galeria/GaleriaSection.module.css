@@ -1,0 +1,156 @@
+/*
+ * Galería de trabajos · nodo 3:13090 del diseño de Figma.
+ * Contenedor 1280px: introducción 138px + 38px de separación + colección 420px.
+ * La colección se alinea abajo, por eso la tarjeta central queda 56px más baja.
+ */
+.section {
+  padding: clamp(2.5rem, 5.5vw, 80px) clamp(1.25rem, 5.5vw, 80px);
+  background-color: var(--landing-surface);
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+
+.intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 138px;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 800px;
+}
+
+/* Jost 500 · 11px · #783E50 */
+.eyebrow {
+  font-family: var(--catalog-font-body);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+/* Playfair Display SC · 50px · 106% · #332A2B */
+.title {
+  font-family: var(--catalog-font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.5vw, 50px);
+  line-height: 1.06;
+  color: var(--catalog-ink);
+}
+
+/* Enlace social: icono 18px + etiqueta Inter 400 12px, ambos #783E50 */
+.social {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--catalog-font-label);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--catalog-wine);
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.social:hover {
+  opacity: 0.75;
+}
+
+.socialIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Colección: 512 + 360 + 360 con 24px de separación, alineada al pie */
+.collection {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 512fr 360fr 360fr;
+  align-items: end;
+  gap: 24px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.photo {
+  width: 100%;
+  border-radius: 6px;
+  background-image: var(--foto), linear-gradient(135deg, #ecd9df 0%, #c9a6b2 100%);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/*
+ * Fotografías de la galería (512 × 388, 360 × 332 y 360 × 388 en el diseño).
+ * Guarda los archivos en public/images/galeria/ con estos nombres.
+ */
+.item[data-posicion='1'] .photo {
+  --foto: url('/images/galeria/manicura-burdeos.jpg');
+  aspect-ratio: 512 / 388;
+}
+
+.item[data-posicion='2'] .photo {
+  --foto: url('/images/galeria/french-tips-burdeos.jpg');
+  aspect-ratio: 360 / 332;
+}
+
+.item[data-posicion='3'] .photo {
+  --foto: url('/images/galeria/peinado.jpg');
+  aspect-ratio: 360 / 388;
+}
+
+/* Pie de cada trabajo: Jost 400 · 12px · #332A2B */
+.caption {
+  font-family: var(--catalog-font-body);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--catalog-ink);
+}
+
+@media (max-width: 1024px) {
+  .collection {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .item[data-posicion='1'] .photo,
+  .item[data-posicion='2'] .photo,
+  .item[data-posicion='3'] .photo {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 640px) {
+  .intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    min-height: 0;
+  }
+
+  .collection {
+    grid-template-columns: 1fr;
+  }
+}

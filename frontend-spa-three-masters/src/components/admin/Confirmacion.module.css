@@ -1,0 +1,28 @@
+.mensaje {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-text-body);
+}
+
+.mensaje strong {
+  color: var(--color-brand-plum);
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+@media (max-width: 560px) {
+  .acciones {
+    flex-direction: column;
+  }
+
+  .acciones > * {
+    width: 100%;
+  }
+}

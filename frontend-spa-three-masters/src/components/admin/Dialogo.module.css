@@ -1,0 +1,145 @@
+.dialogo {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-body);
+  max-height: calc(100vh - 2rem);
+}
+
+.dialogo::backdrop {
+  background-color: rgba(40, 17, 31, 0.55);
+  backdrop-filter: blur(3px);
+  animation: fundir 0.2s ease-out;
+}
+
+.dialogo[open] {
+  animation: aparecer 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.md {
+  width: min(640px, calc(100vw - 2rem));
+}
+
+.sm {
+  width: min(460px, calc(100vw - 2rem));
+}
+
+.lg {
+  width: min(760px, calc(100vw - 2rem));
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
+  background-color: var(--color-surface-page);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-floating);
+  overflow: hidden;
+}
+
+.cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.6rem 1.8rem 1.1rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.tituloBloque {
+  min-width: 0;
+}
+
+.titulo {
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--color-brand-plum);
+  letter-spacing: -0.02em;
+}
+
+.descripcion {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  max-width: 48ch;
+}
+
+.cerrar {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 50%;
+  color: var(--color-text-muted);
+}
+
+.cerrar:hover:not(:disabled) {
+  color: var(--color-brand-plum);
+  border-color: var(--color-border-hover);
+  background-color: var(--color-surface-card);
+}
+
+.cuerpo {
+  padding: 1.4rem 1.8rem 1.8rem;
+  overflow-y: auto;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fundir {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .dialogo {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+  }
+
+  .panel {
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: 0;
+  }
+
+  .cabecera {
+    padding: 1.15rem 1.2rem 0.9rem;
+  }
+
+  .cuerpo {
+    padding: 1.1rem 1.2rem 1.5rem;
+  }
+
+  .titulo {
+    font-size: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogo[open],
+  .dialogo::backdrop {
+    animation: none;
+  }
+}
