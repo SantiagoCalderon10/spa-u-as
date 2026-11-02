@@ -65,7 +65,7 @@ export default function ProfesionalesAdminPage() {
     crear,
     actualizar,
     eliminar,
-  } = useProfesionales();
+  } = useProfesionales({ soloAdmin: true });
   const {
     categorias,
     cargando: cargandoCategorias,
@@ -220,10 +220,9 @@ export default function ProfesionalesAdminPage() {
     <div className={page.pagina}>
       <header className={page.cabecera}>
         <div className={page.tituloBloque}>
-          <h1 className={page.titulo}>Profesionales</h1>
+          <h1 className={page.titulo}>Las manos de Three Masters</h1>
           <p className={page.intro}>
-            Gestiona el equipo del atelier: su cuenta de acceso, las categorías que
-            atiende y su experiencia.
+            Gestioma tu equipo y sus especialidades.
           </p>
         </div>
 

@@ -1,19 +1,14 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import app from "./app.js";
 import { Database } from "./config/db.js";
-
-const PORT = process.env.PORT || 4000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/three-masters";
+import { config } from "./config/config.js";
 
 async function iniciarServidor() {
   try {
-    const db = new Database(MONGO_URI);
+    const db = new Database(config.mongoUri);
     await db.connect();
 
-    app.listen(PORT, () => {
-      console.log(` Servidor ejecutándose en http://localhost:${PORT}`);
+    app.listen(config.puerto, () => {
+      console.log(` Servidor ejecutándose en http://localhost:${config.puerto}`);
     });
   } catch (error) {
     console.error("Error al iniciar el servidor:", error.message);

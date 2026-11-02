@@ -21,6 +21,15 @@ export class ProfesionalControlador {
     }
   }
 
+  async obtenerProfesionalesAdmin(req, res, next) {
+    try {
+      const lista = await this.profesionalServicio.obtenerProfesionalesAdmin();
+      return res.status(200).json(lista);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async obtenerProfesionalPorId(req, res, next) {
     try {
       const prof = await this.profesionalServicio.obtenerProfesionalPorId(req.params.id);

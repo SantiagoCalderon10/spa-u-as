@@ -13,6 +13,10 @@ export class ProfesionalServicio {
     return await this.profesionalRepositorio.obtenerProfesionales();
   }
 
+  async obtenerProfesionalesAdmin() {
+    return await this.profesionalRepositorio.obtenerProfesionales(true);
+  }
+
   async obtenerProfesionalPorId(id) {
     const prof = await this.profesionalRepositorio.obtenerProfesionalPorId(id);
     if (!prof) throw new NotFoundError(`Profesional con id ${id} no encontrado`);

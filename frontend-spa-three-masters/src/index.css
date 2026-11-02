@@ -76,6 +76,42 @@
   --landing-rose-soft: #e8b8c8;
   --landing-cream: #faf0f3;
   --landing-muted: #cbb7be;
+
+  /* Panel de administración (diseño Figma · tokens derivados de A-04 y A-06) */
+  --admin-bg: #f6f4f1;
+  --admin-surface: #ffffff;
+  --admin-sidebar-from: #ffffff;
+  --admin-sidebar-to: #f2e4ec;
+  --admin-primary: #7a3a55;
+  --admin-primary-dark: #5e2742;
+  --admin-text: #2e2328;
+  --admin-text-muted: #6e666a;
+  --admin-text-subtle: #8f888b;
+  --admin-border: #e9e4e1;
+  --admin-table-head: #f3f0ed;
+  --admin-accent-soft: #f4e1e8;
+  --admin-accent-border: #e6c9d5;
+  --admin-success-bg: #e5eee4;
+  --admin-success-text: #3f5f47;
+  --admin-neutral-bg: #efebe9;
+  --admin-neutral-text: #6e666a;
+  --admin-danger-soft: #f8e9ec;
+  --admin-danger: #932c40;
+
+  --admin-font-display: 'Playfair Display SC', 'Cormorant Garamond', Georgia, serif;
+  --admin-font-serif: 'Cormorant Garamond', Georgia, serif;
+  --admin-font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  --admin-radius-card: 14px;
+  --admin-radius-control: 8px;
+  --admin-radius-item: 10px;
+  --admin-shadow-card: 0 1px 2px rgba(20, 12, 15, 0.04);
+  --admin-shadow-active: 0 4px 10px rgba(94, 39, 66, 0.25);
+  --admin-shadow-floating: 0 24px 60px rgba(46, 35, 40, 0.2);
+
+  --admin-sidebar-width: 240px;
+  --admin-topbar-height: 90px;
+  --admin-pad: 38px;
 }
 
 /* Custom Selection Theme */

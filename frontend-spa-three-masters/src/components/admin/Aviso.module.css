@@ -3,22 +3,22 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.8rem 1rem;
+  padding: 12px 14px;
   border: 1px solid;
-  border-radius: var(--radius-sm);
-  font-size: 0.86rem;
+  border-radius: var(--admin-radius-control);
+  font-size: 12.5px;
   line-height: 1.5;
   animation: entrar 0.2s ease-out;
 }
 
 .exito {
-  background-color: var(--color-positive-soft);
-  border-color: #c5dfd0;
-  color: #155238;
+  background-color: var(--admin-success-bg);
+  border-color: #cfdecf;
+  color: var(--admin-success-text);
 }
 
 .error {
-  background-color: var(--color-danger-soft);
+  background-color: var(--admin-danger-soft);
   border-color: #ecc7ce;
   color: #661f2c;
 }
@@ -34,15 +34,17 @@
   place-items: center;
   width: 26px;
   height: 26px;
+  padding: 0;
   border-radius: 50%;
   color: inherit;
+  cursor: pointer;
   opacity: 0.75;
   transition: opacity 0.18s ease, background-color 0.18s ease;
 }
 
 .cerrar:hover {
+  background-color: rgba(255, 255, 255, 0.55);
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.5);
 }
 
 @keyframes entrar {

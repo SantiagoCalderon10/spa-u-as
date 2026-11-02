@@ -16,6 +16,7 @@
   padding: 0 5rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   gap: 2rem;
 }
@@ -51,6 +52,12 @@
   font-style: italic;
   font-weight: 400;
   color: var(--nav-accent);
+}
+
+.brandMonogram {
+  font-family: var(--catalog-font-display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
 }
 
 .navigation {
@@ -135,7 +142,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .navLinks {
     display: none;
   }
@@ -161,5 +168,17 @@
     height: 40px;
     padding: 0 14px;
     gap: 6px;
+  }
+}
+
+@media (max-width: 560px) {
+  .brandText {
+    display: none;
+  }
+
+  .loginBtn {
+    gap: 0;
+    padding: 0 12px;
+    font-size: 0;
   }
 }

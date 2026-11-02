@@ -182,7 +182,7 @@ export default function HorariosAdminPage() {
     <div className={page.pagina}>
       <header className={page.cabecera}>
         <div className={page.tituloBloque}>
-          <h1 className={page.titulo}>Horarios</h1>
+          <h1 className={page.titulo}>Maneja los tiempos de tu equipo</h1>
           <p className={page.intro}>
             Define las franjas semanales en las que cada profesional atiende. La agenda
             de citas se apoyará en estos horarios.

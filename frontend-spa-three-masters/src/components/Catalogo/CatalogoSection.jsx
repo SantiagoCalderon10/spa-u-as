@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getCategorias } from '../../api/categoriaService';
 import { getServicios } from '../../api/servicioService';
 import { formatearDuracion, formatearPrecio, mensajeDeError } from '../../utils/catalogo';
+import { esObjectId } from '../../utils/reserva';
 import styles from './CatalogoSection.module.css';
 
 // Datos de referencia cuando la base de datos o el backend no tienen registros cargados
@@ -107,7 +109,7 @@ function IconoFlecha() {
   );
 }
 
-function TarjetaServicio({ servicio, categoria }) {
+function TarjetaServicio({ servicio, categoria, puedeReservar }) {
   const [fotoFallida, setFotoFallida] = useState(false);
   const mostrarFoto = Boolean(servicio.urlFoto) && !fotoFallida;
 
@@ -145,6 +147,13 @@ function TarjetaServicio({ servicio, categoria }) {
         </span>
         <span className={styles.cardPrice}>{formatearPrecio(servicio.precio)}</span>
       </div>
+
+      {puedeReservar && (
+        <Link className={styles.cardReserve} to={`/reservar?servicio=${servicio._id}`}>
+          Reservar este servicio
+          <IconoFlecha />
+        </Link>
+      )}
     </article>
   );
 }
@@ -154,6 +163,7 @@ export default function CatalogoSection() {
   const [servicios, setServicios] = useState([]);
   const [categoriaActiva, setCategoriaActiva] = useState('todas');
   const [cargando, setCargando] = useState(true);
+  const [usandoReferencia, setUsandoReferencia] = useState(false);
 
   const cargarDatosReales = useCallback(async () => {
     setCargando(true);
@@ -167,11 +177,13 @@ export default function CatalogoSection() {
 
       setCategorias(categoriasValidas ? resCategorias : MOCK_CATEGORIAS);
       setServicios(serviciosValidos ? resServicios : MOCK_SERVICIOS);
+      setUsandoReferencia(!categoriasValidas || !serviciosValidos);
     } catch (err) {
       // Mensaje sin detalles técnicos ni URLs
       console.info('Catálogo con datos de referencia:', mensajeDeError(err));
       setCategorias(MOCK_CATEGORIAS);
       setServicios(MOCK_SERVICIOS);
+      setUsandoReferencia(true);
     } finally {
       setCargando(false);
     }
@@ -223,6 +235,13 @@ export default function CatalogoSection() {
             Desde un acabado natural hasta ese diseño que guardaste. Encuentra tu próximo favorito.
           </p>
         </div>
+
+        {usandoReferencia && (
+          <p className={styles.referenceNotice}>
+            Este es un catálogo de referencia mientras el salón publica sus servicios. La reserva en línea se habilita
+            cuando los servicios estén cargados en el sistema.
+          </p>
+        )}
 
         {/* Filtros por categoría real */}
         <div className={styles.filters} role="group" aria-label="Filtrar por categoría">
@@ -285,6 +304,7 @@ export default function CatalogoSection() {
                   key={servicio._id ?? `${servicio.nombre}-${index}`}
                   servicio={servicio}
                   categoria={categoria}
+                  puedeReservar={esObjectId(servicio._id)}
                 />
               );
             })}

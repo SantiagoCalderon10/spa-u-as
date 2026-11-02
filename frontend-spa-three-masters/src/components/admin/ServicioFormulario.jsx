@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Boton from './Boton';
 import Campo from './Campo';
 import Dialogo from './Dialogo';
@@ -11,22 +11,79 @@ import {
 } from '../../utils/catalogo';
 import styles from './Formulario.module.css';
 
-export default function ServicioFormulario({ servicio, categorias, onGuardar, onCerrar }) {
+const DURACIONES_FRECUENTES = [30, 45, 60, 90, 120];
+const MAX_DESCRIPCION = 240;
+
+const IDS_CAMPOS = {
+  nombre: 'servicio-nombre',
+  precio: 'servicio-precio',
+  duracion: 'servicio-duracion',
+};
+
+function IconoImagen() {
+  return (
+    <svg
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <circle cx="8.5" cy="9.5" r="1.5" />
+      <path d="m21 15.5-4.5-4.5L7 20.5" />
+    </svg>
+  );
+}
+
+export default function ServicioFormulario({
+  servicio,
+  categorias,
+  onGuardar,
+  onCerrar,
+}) {
   const editando = Boolean(servicio?._id);
   const [datos, setDatos] = useState(() => datosFormularioServicio(servicio));
   const [errores, setErrores] = useState({});
   const [errorGeneral, setErrorGeneral] = useState('');
   const [guardando, setGuardando] = useState(false);
+  const [fotoRota, setFotoRota] = useState(false);
+
+  // Lleva el foco al primer campo inválido después de validar.
+  useEffect(() => {
+    const primero = Object.keys(errores)[0];
+    if (!primero) return;
+    const id = IDS_CAMPOS[primero];
+    if (!id) return;
+    document.getElementById(id)?.focus();
+  }, [errores]);
 
   const cambiar = (campo) => (evento) => {
     const valor =
       evento.target.type === 'checkbox' ? evento.target.checked : evento.target.value;
+
+    if (campo === 'urlFoto') setFotoRota(false);
+    if (errorGeneral) setErrorGeneral('');
 
     setDatos((previos) => ({ ...previos, [campo]: valor }));
     setErrores((previos) => {
       if (!previos[campo]) return previos;
       const copia = { ...previos };
       delete copia[campo];
+      return copia;
+    });
+  };
+
+  const elegirDuracion = (minutos) => {
+    setDatos((previos) => ({ ...previos, duracion: String(minutos) }));
+    setErrores((previos) => {
+      if (!previos.duracion) return previos;
+      const copia = { ...previos };
+      delete copia.duracion;
       return copia;
     });
   };
@@ -53,6 +110,9 @@ export default function ServicioFormulario({ servicio, categorias, onGuardar, on
     }
   };
 
+  const urlFoto = datos.urlFoto.trim();
+  const mostrarFoto = Boolean(urlFoto) && !fotoRota;
+
   return (
     <Dialogo
       titulo={editando ? 'Editar servicio' : 'Nuevo servicio'}
@@ -78,6 +138,9 @@ export default function ServicioFormulario({ servicio, categorias, onGuardar, on
               type="text"
               value={datos.nombre}
               onChange={cambiar('nombre')}
+              placeholder="Ej. Manicure semipermanente"
+              autoComplete="off"
+              maxLength={90}
               aria-invalid={Boolean(errores.nombre)}
               aria-describedby={errores.nombre ? 'servicio-nombre-error' : undefined}
               data-autofoco
@@ -88,6 +151,7 @@ export default function ServicioFormulario({ servicio, categorias, onGuardar, on
             etiqueta="Descripción"
             htmlFor="servicio-descripcion"
             opcional
+            extra={`${datos.descripcion.length}/${MAX_DESCRIPCION}`}
             ayuda="Una o dos frases sobre la técnica y el resultado."
           >
             <textarea
@@ -96,93 +160,130 @@ export default function ServicioFormulario({ servicio, categorias, onGuardar, on
               rows="3"
               value={datos.descripcion}
               onChange={cambiar('descripcion')}
+              placeholder="Ej. Esmaltado en gel con cabina de secado LED."
+              maxLength={MAX_DESCRIPCION}
               aria-describedby="servicio-descripcion-ayuda"
             />
           </Campo>
 
-          <div className={styles.filaTres}>
+          <div className={styles.filaDos}>
             <Campo
               etiqueta="Precio"
               htmlFor="servicio-precio"
               error={errores.precio}
-              ayuda="En pesos colombianos."
+              ayuda="En pesos colombianos (COP)."
             >
-              <input
-                id="servicio-precio"
-                className={styles.control}
-                type="number"
-                min="0"
-                step="1000"
-                inputMode="numeric"
-                value={datos.precio}
-                onChange={cambiar('precio')}
-                aria-invalid={Boolean(errores.precio)}
-                aria-describedby={
-                  errores.precio ? 'servicio-precio-error' : 'servicio-precio-ayuda'
-                }
-              />
+              <div className={styles.campoPrefijo}>
+                <span className={styles.prefijo} aria-hidden="true">
+                  $
+                </span>
+                <input
+                  id="servicio-precio"
+                  className={`${styles.control} ${styles.controlConPrefijo}`}
+                  type="number"
+                  min="0"
+                  step="1000"
+                  inputMode="numeric"
+                  value={datos.precio}
+                  onChange={cambiar('precio')}
+                  placeholder="45.000"
+                  aria-invalid={Boolean(errores.precio)}
+                  aria-describedby={
+                    errores.precio ? 'servicio-precio-error' : 'servicio-precio-ayuda'
+                  }
+                />
+              </div>
             </Campo>
 
-            <Campo
-              etiqueta="Duración"
-              htmlFor="servicio-duracion"
-              error={errores.duracion}
-              ayuda="En minutos."
-            >
-              <input
-                id="servicio-duracion"
-                className={styles.control}
-                type="number"
-                min="1"
-                step="5"
-                inputMode="numeric"
-                value={datos.duracion}
-                onChange={cambiar('duracion')}
-                aria-invalid={Boolean(errores.duracion)}
-                aria-describedby={
-                  errores.duracion ? 'servicio-duracion-error' : 'servicio-duracion-ayuda'
-                }
-              />
-            </Campo>
+            <Campo etiqueta="Duración" htmlFor="servicio-duracion" error={errores.duracion}>
+              <div className={styles.entradaDuracion}>
+                <input
+                  id="servicio-duracion"
+                  className={`${styles.control} ${styles.controlConSufijo}`}
+                  type="number"
+                  min="1"
+                  step="5"
+                  inputMode="numeric"
+                  value={datos.duracion}
+                  onChange={cambiar('duracion')}
+                  placeholder="60"
+                  aria-invalid={Boolean(errores.duracion)}
+                  aria-describedby={
+                    errores.duracion ? 'servicio-duracion-error' : undefined
+                  }
+                />
+                <span className={styles.sufijo} aria-hidden="true">
+                  min
+                </span>
+              </div>
 
-            <Campo
-              etiqueta="Categoría"
-              htmlFor="servicio-categoria"
-              ayuda="Puede quedar sin categoría."
-            >
-              <select
-                id="servicio-categoria"
-                className={styles.control}
-                value={datos.idCategoria}
-                onChange={cambiar('idCategoria')}
-                aria-describedby="servicio-categoria-ayuda"
-              >
-                <option value="">Sin categoría</option>
-                {categorias.map((categoria) => (
-                  <option key={categoria._id} value={categoria._id}>
-                    {categoria.nombre}
-                    {categoria.estado === false ? ' (inactiva)' : ''}
-                  </option>
-                ))}
-              </select>
+              <div className={styles.presets} role="group" aria-label="Duraciones frecuentes">
+                {DURACIONES_FRECUENTES.map((minutos) => {
+                  const activo = Number(datos.duracion) === minutos;
+
+                  return (
+                    <button
+                      key={minutos}
+                      type="button"
+                      className={`${styles.preset} ${activo ? styles.presetActivo : ''}`}
+                      onClick={() => elegirDuracion(minutos)}
+                      aria-pressed={activo}
+                    >
+                      {minutos} min
+                    </button>
+                  );
+                })}
+              </div>
             </Campo>
           </div>
+
+          <Campo
+            etiqueta="Categoría"
+            htmlFor="servicio-categoria"
+            ayuda="Agrupa el servicio en el catálogo público."
+          >
+            <select
+              id="servicio-categoria"
+              className={styles.control}
+              value={datos.idCategoria}
+              onChange={cambiar('idCategoria')}
+              aria-describedby="servicio-categoria-ayuda"
+            >
+              <option value="">Sin categoría</option>
+              {categorias.map((categoria) => (
+                <option key={categoria._id} value={categoria._id}>
+                  {categoria.nombre}
+                  {categoria.estado === false ? ' (inactiva)' : ''}
+                </option>
+              ))}
+            </select>
+          </Campo>
 
           <Campo
             etiqueta="Foto del servicio"
             htmlFor="servicio-foto"
             opcional
-            ayuda="Enlace público a una imagen. Si no hay foto, se muestra un monograma."
+            ayuda="Enlace público a una imagen. Si no hay foto, mostramos un monograma."
           >
-            <input
-              id="servicio-foto"
-              className={styles.control}
-              type="url"
-              value={datos.urlFoto}
-              onChange={cambiar('urlFoto')}
-              aria-describedby="servicio-foto-ayuda"
-              placeholder="https://..."
-            />
+            <div className={styles.fotoFila}>
+              <input
+                id="servicio-foto"
+                className={styles.control}
+                type="url"
+                value={datos.urlFoto}
+                onChange={cambiar('urlFoto')}
+                aria-describedby="servicio-foto-ayuda"
+                placeholder="https://..."
+                autoComplete="off"
+              />
+              <span className={styles.vistaPrevia} aria-hidden="true">
+                {mostrarFoto ? (
+                  <img src={urlFoto} alt="" onError={() => setFotoRota(true)} />
+                ) : (
+                  <IconoImagen />
+                )}
+              </span>
+            </div>
           </Campo>
 
           <Interruptor

@@ -1,7 +1,11 @@
 import { Router } from "express";
 
-export function crearClienteRoutes(clienteControlador) {
+export function crearClienteRoutes(clienteControlador, guardia) {
   const router = Router();
+
+  // Los datos de clientas son sensibles: solo administración.
+  // El alta pública de una clienta ocurre dentro de POST /citas/publica.
+  router.use(guardia.soloAdministrador);
 
   router.get("/", clienteControlador.obtenerClientes.bind(clienteControlador));
   router.post("/", clienteControlador.crearCliente.bind(clienteControlador));
@@ -11,4 +15,3 @@ export function crearClienteRoutes(clienteControlador) {
 
   return router;
 }
-

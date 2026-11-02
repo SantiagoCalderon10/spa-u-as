@@ -9,24 +9,20 @@ export class ProfesionalRepositorio {
     }
   }
 
-  async obtenerProfesionales() {
-    try {
-      return await ProfesionalesModel.find()
-        .populate('idUsuario', 'nombrecompleto correo telefono')
-        .populate('especialidades', 'nombre');
-    } catch (error) {
-      throw new Error(`Error al obtener profesionales: ${error.message}`);
-    }
+  async obtenerProfesionales(incluirContacto = false) {
+    const camposUsuario = incluirContacto
+      ? 'nombrecompleto correo telefono'
+      : 'nombrecompleto';
+
+    return await ProfesionalesModel.find()
+      .populate('idUsuario', camposUsuario)
+      .populate('especialidades', 'nombre');
   }
 
   async obtenerProfesionalPorId(id) {
-    try {
-      return await ProfesionalesModel.findById(id)
-        .populate('idUsuario', 'nombrecompleto correo telefono')
-        .populate('especialidades', 'nombre');
-    } catch (error) {
-      throw new Error(`Error al obtener profesional por id: ${error.message}`);
-    }
+    return await ProfesionalesModel.findById(id)
+      .populate('idUsuario', 'nombrecompleto')
+      .populate('especialidades', 'nombre');
   }
 
   async actualizarProfesional(id, datos) {

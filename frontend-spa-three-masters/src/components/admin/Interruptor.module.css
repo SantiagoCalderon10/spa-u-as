@@ -2,17 +2,22 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.85rem 0.95rem;
-  background-color: var(--color-surface-card);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-xs);
+  gap: 12px;
+  padding: 13px 14px;
+  background-color: #fbfaf9;
+  border: 1px solid #e2dbd7;
+  border-radius: var(--admin-radius-item);
   cursor: pointer;
-  transition: border-color 0.18s ease;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .interruptor:hover {
-  border-color: var(--color-border-hover);
+  border-color: #d3c9c6;
+}
+
+.interruptor:has(.control:checked) {
+  background-color: #fdf9fb;
+  border-color: var(--admin-accent-border);
 }
 
 .control {
@@ -26,10 +31,10 @@
 .pista {
   position: relative;
   flex: 0 0 auto;
-  width: 40px;
-  height: 22px;
-  border-radius: var(--radius-pill);
-  background-color: #d9cdc7;
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background-color: #d9cec9;
   transition: background-color 0.18s ease;
 }
 
@@ -37,16 +42,16 @@
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(40, 17, 31, 0.25);
+  box-shadow: 0 1px 3px rgba(46, 35, 40, 0.28);
   transition: transform 0.18s ease;
 }
 
 .control:checked + .pista {
-  background-color: var(--color-brand-primary);
+  background-color: var(--admin-primary);
 }
 
 .control:checked + .pista .perilla {
@@ -54,27 +59,27 @@
 }
 
 .control:focus-visible + .pista {
-  outline: 2px solid var(--color-brand-primary);
+  outline: 2px solid var(--admin-primary);
   outline-offset: 3px;
 }
 
 .texto {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 2px;
   min-width: 0;
 }
 
 .titulo {
-  font-size: 0.85rem;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--color-brand-plum);
+  color: var(--admin-text);
 }
 
 .descripcion {
-  font-size: 0.76rem;
+  font-size: 11.5px;
   line-height: 1.45;
-  color: var(--color-text-muted);
+  color: var(--admin-text-muted);
 }
 
 .deshabilitado {

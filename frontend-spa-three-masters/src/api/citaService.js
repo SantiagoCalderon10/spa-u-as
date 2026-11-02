@@ -22,3 +22,33 @@ export const cancelarCitaPorToken = async (token, motivo) => {
   const response = await axiosClient.patch(`/citas/enlace/${token}/cancelar`, { motivo });
   return response.data;
 };
+
+/* ------------------------- Administración ------------------------- */
+
+export const getCitas = async ({ signal } = {}) => {
+  const response = await axiosClient.get('/citas', { signal });
+  return response.data;
+};
+
+export const cancelarCita = async (id, motivo) => {
+  const response = await axiosClient.patch(`/citas/${id}/cancelar`, { motivo });
+  return response.data;
+};
+
+export const reprogramarCita = async (id, { nuevaFecha, nuevaHoraInicio }) => {
+  const response = await axiosClient.patch(`/citas/${id}/reprogramar`, {
+    nuevaFecha,
+    nuevaHoraInicio,
+  });
+  return response.data;
+};
+
+export const completarCita = async (id) => {
+  const response = await axiosClient.patch(`/citas/${id}/completar`);
+  return response.data;
+};
+
+export const marcarCitaNoAsistio = async (id) => {
+  const response = await axiosClient.patch(`/citas/${id}/no-asistio`);
+  return response.data;
+};

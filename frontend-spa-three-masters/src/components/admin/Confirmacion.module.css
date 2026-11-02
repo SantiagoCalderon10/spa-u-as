@@ -1,25 +1,26 @@
 .mensaje {
-  font-size: 0.95rem;
+  font-size: 13.5px;
   line-height: 1.65;
-  color: var(--color-text-body);
+  color: var(--admin-text-muted);
 }
 
 .mensaje strong {
-  color: var(--color-brand-plum);
+  color: var(--admin-text);
+  font-weight: 600;
 }
 
 .acciones {
   display: flex;
   justify-content: flex-end;
-  gap: 0.6rem;
-  margin-top: 1.6rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--color-border-subtle);
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--admin-border);
 }
 
 @media (max-width: 560px) {
   .acciones {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 
   .acciones > * {

@@ -12,6 +12,81 @@ import {
 import page from './AdminPage.module.css';
 import styles from './CategoriasAdmin.module.css';
 
+function IconoBuscar() {
+  return (
+    <svg
+      className={styles.iconoBusqueda}
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  );
+}
+
+function IconoChevron() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+function IconoLapiz() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 20h9" />
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+    </svg>
+  );
+}
+
+function IconoPapelera() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" />
+      <path d="M10 11v5M14 11v5" />
+    </svg>
+  );
+}
+
 function MiniaturaCategoria({ nombre }) {
   const inicial = (nombre ?? '?').trim().charAt(0).toUpperCase() || '?';
   return (
@@ -21,22 +96,32 @@ function MiniaturaCategoria({ nombre }) {
   );
 }
 
-function EsqueletoLista() {
+function EsqueletoTabla() {
   return (
-    <div className={styles.esqueletoLista}>
-      <p className={page.srOnly} role="status">
-        Cargando categorías…
-      </p>
+    <>
       {Array.from({ length: 4 }).map((_, indice) => (
-        <div className={styles.esqueletoFila} key={indice} aria-hidden="true">
-          <span className={`${page.esqueleto} ${styles.esqueletoMiniatura}`} />
-          <span className={`${page.esqueleto} ${styles.esqueletoNombre}`} />
-          <span className={`${page.esqueleto} ${styles.esqueletoConteo}`} />
-          <span className={`${page.esqueleto} ${styles.esqueletoEstado}`} />
-          <span className={`${page.esqueleto} ${styles.esqueletoAcciones}`} />
-        </div>
+        <tr className={styles.filaEsqueleto} key={indice} aria-hidden="true">
+          <td>
+            <span className={styles.esqueletoCategoria}>
+              <span className={`${page.esqueleto} ${styles.esqueletoMiniatura}`} />
+              <span className={styles.esqueletoTextos}>
+                <span className={`${page.esqueleto} ${styles.esqueletoNombre}`} />
+                <span className={`${page.esqueleto} ${styles.esqueletoDescripcion}`} />
+              </span>
+            </span>
+          </td>
+          <td>
+            <span className={`${page.esqueleto} ${styles.esqueletoChip}`} />
+          </td>
+          <td>
+            <span className={`${page.esqueleto} ${styles.esqueletoEstado}`} />
+          </td>
+          <td>
+            <span className={`${page.esqueleto} ${styles.esqueletoAcciones}`} />
+          </td>
+        </tr>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -192,10 +277,9 @@ export default function CategoriasAdminPage() {
     <div className={page.pagina}>
       <header className={page.cabecera}>
         <div className={page.tituloBloque}>
-          <h1 className={page.titulo}>Categorías</h1>
+          <h1 className={page.titulo}>Cada cuidado, en su lugar</h1>
           <p className={page.intro}>
-            Agrupa los servicios del atelier para que el catálogo sea más fácil de
-            recorrer y de mantener.
+            Organiza tu carta para que encontrar un servicio sea sencillo.
           </p>
         </div>
 
@@ -255,163 +339,196 @@ export default function CategoriasAdminPage() {
         </div>
       )}
 
-      <div className={styles.herramientas}>
-        <div className={styles.busqueda}>
-          <svg
-            className={styles.iconoBusqueda}
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-3.5-3.5" />
-          </svg>
-          <input
-            type="search"
-            className={styles.entradaBusqueda}
-            placeholder="Buscar por nombre o descripción"
-            value={busqueda}
-            onChange={(evento) => setBusqueda(evento.target.value)}
-            aria-label="Buscar categorías"
-          />
-        </div>
+      <section className={styles.panel} aria-label="Categorías del catálogo">
+        <div className={styles.herramientas}>
+          <div className={styles.busqueda}>
+            <IconoBuscar />
+            <input
+              type="search"
+              className={styles.entradaBusqueda}
+              placeholder="Buscar por nombre o descripción"
+              value={busqueda}
+              onChange={(evento) => setBusqueda(evento.target.value)}
+              aria-label="Buscar categorías"
+            />
+          </div>
 
-        <div className={styles.selector}>
-          <select
-            className={styles.select}
-            value={filtroEstado}
-            onChange={(evento) => setFiltroEstado(evento.target.value)}
-            aria-label="Filtrar por estado"
-          >
-            <option value="todas">Todos los estados</option>
-            <option value="activas">Solo activas</option>
-            <option value="pausadas">Solo en pausa</option>
-          </select>
-          <svg
-            className={styles.iconoSelector}
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </div>
+          <div className={styles.selector}>
+            <select
+              className={styles.select}
+              value={filtroEstado}
+              onChange={(evento) => setFiltroEstado(evento.target.value)}
+              aria-label="Filtrar por estado"
+            >
+              <option value="todas">Todos los estados</option>
+              <option value="activas">Solo activas</option>
+              <option value="pausadas">Solo en pausa</option>
+            </select>
+            <span className={styles.iconoSelector} aria-hidden="true">
+              <IconoChevron />
+            </span>
+          </div>
 
-        <p className={styles.resultado} aria-live="polite">
-          {hayFiltros
-            ? `${filtradas.length} de ${categorias.length} categorías`
-            : `${categorias.length} ${
-                categorias.length === 1 ? 'categoría' : 'categorías'
-              }`}
-        </p>
-      </div>
-
-      {error ? null : cargando ? (
-        <EsqueletoLista />
-      ) : categorias.length === 0 ? (
-        <div className={page.vacio}>
-          <h2 className={page.vacioTitulo}>Todavía no hay categorías</h2>
-          <p className={page.vacioTexto}>
-            Crea categorías para ordenar los servicios del catálogo y facilitar la
-            búsqueda de las clientas.
+          <p className={styles.resultado} aria-live="polite">
+            {hayFiltros
+              ? `${filtradas.length} de ${categorias.length} categorías`
+              : `${categorias.length} ${
+                  categorias.length === 1 ? 'categoría' : 'categorías'
+                }`}
           </p>
-          <div className={page.vacioAcciones}>
-            <Boton variante="primario" onClick={abrirNuevo}>
-              Crear categoría
-            </Boton>
-          </div>
         </div>
-      ) : filtradas.length === 0 ? (
-        <div className={`${page.vacio} ${page.vacioCompacto}`}>
-          <h2 className={page.vacioTitulo}>Ninguna categoría coincide</h2>
-          <p className={page.vacioTexto}>
-            Prueba con otro término o quita los filtros para ver todas las categorías.
-          </p>
-          <div className={page.vacioAcciones}>
-            <Boton onClick={limpiarFiltros}>Limpiar filtros</Boton>
+
+        {error ? null : cargando ? (
+          <>
+            <p className={page.srOnly} role="status">
+              Cargando categorías…
+            </p>
+            <div className={styles.tablaEnvoltura}>
+              <table className={styles.tabla}>
+                <thead>
+                  <tr>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Servicios</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" className={styles.colAcciones}>
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <EsqueletoTabla />
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : categorias.length === 0 ? (
+          <div className={styles.vacioPanel}>
+            <div className={page.vacio}>
+              <h2 className={page.vacioTitulo}>Todavía no hay categorías</h2>
+              <p className={page.vacioTexto}>
+                Crea categorías para ordenar los servicios del catálogo y facilitar la
+                búsqueda de las clientas.
+              </p>
+              <div className={page.vacioAcciones}>
+                <Boton variante="primario" onClick={abrirNuevo}>
+                  Crear categoría
+                </Boton>
+              </div>
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          <div className={styles.cabeceraLista} aria-hidden="true">
-            <span />
-            <span>Categoría</span>
-            <span>Servicios</span>
-            <span>Estado</span>
-            <span className={styles.cabeceraAcciones}>Acciones</span>
+        ) : filtradas.length === 0 ? (
+          <div className={styles.vacioPanel}>
+            <div className={`${page.vacio} ${page.vacioCompacto}`}>
+              <h2 className={page.vacioTitulo}>Ninguna categoría coincide</h2>
+              <p className={page.vacioTexto}>
+                Prueba con otro término o quita los filtros para ver todas las categorías.
+              </p>
+              <div className={page.vacioAcciones}>
+                <Boton onClick={limpiarFiltros}>Limpiar filtros</Boton>
+              </div>
+            </div>
           </div>
-
-          <ul className={styles.lista}>
-            {filtradas.map((categoria) => {
-              const estaActiva = categoria.estado !== false;
-              const ocupada = idEstado === categoria._id;
-              const asociados = conteoPorCategoria.get(categoria._id) ?? 0;
-
-              return (
-                <li className={styles.fila} key={categoria._id}>
-                  <MiniaturaCategoria nombre={categoria.nombre} />
-
-                  <div className={styles.identidad}>
-                    <h2 className={styles.nombre}>{categoria.nombre}</h2>
-                    <p className={styles.descripcion}>
-                      {categoria.descripcion || 'Sin descripción.'}
-                    </p>
-                  </div>
-
-                  <div className={styles.conteo}>
-                    {cargandoServicios || errorServicios
+        ) : (
+          <div className={styles.tablaEnvoltura}>
+            <table className={styles.tabla}>
+              <caption className={page.srOnly}>Categorías del catálogo</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Categoría</th>
+                  <th scope="col">Servicios</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col" className={styles.colAcciones}>
+                    Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtradas.map((categoria) => {
+                  const estaActiva = categoria.estado !== false;
+                  const ocupada = idEstado === categoria._id;
+                  const asociados = conteoPorCategoria.get(categoria._id) ?? 0;
+                  const conteo =
+                    cargandoServicios || errorServicios
                       ? '—'
-                      : `${asociados} ${asociados === 1 ? 'servicio' : 'servicios'}`}
-                  </div>
+                      : `${asociados} ${asociados === 1 ? 'servicio' : 'servicios'}`;
 
-                  <button
-                    type="button"
-                    className={`${styles.estado} ${
-                      estaActiva ? styles.estadoActivo : styles.estadoPausado
-                    }`}
-                    onClick={() => alternarEstado(categoria)}
-                    disabled={ocupada}
-                    aria-pressed={estaActiva}
-                    aria-label={`${estaActiva ? 'Pausar' : 'Activar'} ${categoria.nombre}`}
-                    title={estaActiva ? 'Pausar en el catálogo' : 'Activar en el catálogo'}
-                  >
-                    <span className={styles.punto} aria-hidden="true" />
-                    {ocupada ? 'Guardando' : estaActiva ? 'Activo' : 'En pausa'}
-                  </button>
+                  return (
+                    <tr className={styles.fila} key={categoria._id}>
+                      <th scope="row" className={styles.celdaCategoria}>
+                        <span className={styles.categoriaFila}>
+                          <MiniaturaCategoria nombre={categoria.nombre} />
+                          <span className={styles.categoriaTexto}>
+                            <span className={styles.nombre}>{categoria.nombre}</span>
+                            <span className={styles.descripcion}>
+                              {categoria.descripcion || 'Sin descripción.'}
+                            </span>
+                          </span>
+                        </span>
+                      </th>
 
-                  <div className={styles.acciones}>
-                    <Boton
-                      tamano="sm"
-                      variante="fantasma"
-                      onClick={() => abrirEditar(categoria)}
-                    >
-                      Editar
-                    </Boton>
-                    <Boton
-                      tamano="sm"
-                      variante="peligroSuave"
-                      onClick={() => setPorEliminar(categoria)}
-                    >
-                      Eliminar
-                    </Boton>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
+                      <td data-etiqueta="Servicios">
+                        <span
+                          className={`${styles.chip} ${
+                            asociados === 0 ? styles.chipVacio : ''
+                          }`}
+                        >
+                          {asociados === 0 && conteo !== '—' ? 'Sin servicios' : conteo}
+                        </span>
+                      </td>
+
+                      <td data-etiqueta="Estado">
+                        <button
+                          type="button"
+                          className={`${styles.estado} ${
+                            estaActiva ? styles.estadoActivo : styles.estadoPausado
+                          }`}
+                          onClick={() => alternarEstado(categoria)}
+                          disabled={ocupada}
+                          aria-pressed={estaActiva}
+                          aria-label={`${estaActiva ? 'Pausar' : 'Activar'} ${
+                            categoria.nombre
+                          } en el catálogo`}
+                          title={
+                            estaActiva ? 'Pausar en el catálogo' : 'Activar en el catálogo'
+                          }
+                        >
+                          <span className={styles.punto} aria-hidden="true" />
+                          {ocupada ? 'Guardando…' : estaActiva ? 'Activa' : 'En pausa'}
+                        </button>
+                      </td>
+
+                      <td className={styles.celdaAcciones}>
+                        <div className={styles.acciones}>
+                          <Boton
+                            tamano="sm"
+                            variante="fantasma"
+                            className={styles.botonIcono}
+                            onClick={() => abrirEditar(categoria)}
+                            aria-label={`Editar ${categoria.nombre}`}
+                            title="Editar categoría"
+                          >
+                            <IconoLapiz />
+                          </Boton>
+                          <Boton
+                            tamano="sm"
+                            variante="peligroSuave"
+                            className={styles.botonIcono}
+                            onClick={() => setPorEliminar(categoria)}
+                            aria-label={`Eliminar ${categoria.nombre}`}
+                            title="Eliminar categoría"
+                          >
+                            <IconoPapelera />
+                          </Boton>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
 
       {formulario && (
         <CategoriaFormulario

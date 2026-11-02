@@ -5,6 +5,12 @@ export const getProfesionales = async ({ signal } = {}) => {
   return response.data;
 };
 
+// Panel: incluye correo y teléfono de la profesional.
+export const getProfesionalesAdmin = async ({ signal } = {}) => {
+  const response = await axiosClient.get('/profesionales/admin', { signal });
+  return response.data;
+};
+
 export const getProfesionalPorId = async (id, { signal } = {}) => {
   const response = await axiosClient.get(`/profesionales/${id}`, { signal });
   return response.data;

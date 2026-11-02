@@ -106,7 +106,9 @@ export class CitaControlador {
     async cancelarCita(req, res, next) {
         try {
             const { id } = req.params;
-            const { rolUsuario, motivo } = req.body || {};
+            const { motivo } = req.body || {};
+            // El rol nunca viene del cuerpo: sale del usuario autenticado.
+            const rolUsuario = req.usuario?.rol;
             const citaCancelada = await this.citaServicio.cancelarCita(id, { rolUsuario, motivo });
             return res.status(200).json({
                 mensaje: "Cita cancelada exitosamente",

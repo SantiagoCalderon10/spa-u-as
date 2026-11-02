@@ -4,30 +4,36 @@ import {
   crearProfesional,
   eliminarProfesional,
   getProfesionales,
+  getProfesionalesAdmin,
 } from '../api/profesionalService';
 import { crearUsuario, eliminarUsuario } from '../api/usuarioService';
 import { cuerpoCuentaProfesional, cuerpoPerfilProfesional } from '../utils/agenda';
 import { mensajeDeError } from '../utils/catalogo';
 
-export function useProfesionales() {
+export function useProfesionales({ soloAdmin = false } = {}) {
   const [profesionales, setProfesionales] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
 
-  const cargar = useCallback(async (signal) => {
-    setCargando(true);
-    setError('');
+  const cargar = useCallback(
+    async (signal) => {
+      setCargando(true);
+      setError('');
 
-    try {
-      const datos = await getProfesionales({ signal });
-      setProfesionales(Array.isArray(datos) ? datos : []);
-    } catch (err) {
-      if (signal?.aborted) return;
-      setError(mensajeDeError(err, 'No pudimos cargar los profesionales.'));
-    } finally {
-      if (!signal?.aborted) setCargando(false);
-    }
-  }, []);
+      try {
+        const datos = soloAdmin
+          ? await getProfesionalesAdmin({ signal })
+          : await getProfesionales({ signal });
+        setProfesionales(Array.isArray(datos) ? datos : []);
+      } catch (err) {
+        if (signal?.aborted) return;
+        setError(mensajeDeError(err, 'No pudimos cargar los profesionales.'));
+      } finally {
+        if (!signal?.aborted) setCargando(false);
+      }
+    },
+    [soloAdmin]
+  );
 
   useEffect(() => {
     const control = new AbortController();

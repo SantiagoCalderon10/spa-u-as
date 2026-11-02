@@ -1,0 +1,32 @@
+.pantalla {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--admin-bg);
+  color: var(--admin-text-muted);
+  font-family: var(--admin-font-sans);
+  font-size: 13px;
+}
+
+.girador {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--admin-accent-border);
+  border-top-color: var(--admin-primary);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .girador {
+    animation: none;
+  }
+}

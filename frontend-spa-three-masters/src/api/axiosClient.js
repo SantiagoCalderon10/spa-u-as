@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { leerToken, notificarSesionExpirada } from '../utils/sesion';
 
 // Instancia global de Axios apuntando al backend Express
 const axiosClient = axios.create({
@@ -9,5 +10,30 @@ const axiosClient = axios.create({
   timeout: 8000,
 });
 
-export default axiosClient;
+// Adjunta el token guardado a cada solicitud. El backend decide si la ruta
+// es pública o privada; mandar el token en una ruta pública no molesta.
+axiosClient.interceptors.request.use((config) => {
+  const token = leerToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
+// Un 401 significa que la sesión ya no sirve. Se avisa una sola vez para que
+// AuthContext borre el token y RutaPrivada mande al login.
+axiosClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const estado = error.response?.status;
+    const esLogin = error.config?.url?.includes('/auth/login');
+
+    if (estado === 401 && !esLogin && leerToken()) {
+      notificarSesionExpirada();
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default axiosClient;

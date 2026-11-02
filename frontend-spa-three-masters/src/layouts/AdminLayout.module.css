@@ -1,183 +1,317 @@
 .marco {
   display: grid;
-  grid-template-columns: 286px minmax(0, 1fr);
+  grid-template-columns: var(--admin-sidebar-width) minmax(0, 1fr);
   min-height: 100vh;
-  background-color: var(--color-surface-page);
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: var(--admin-font-sans);
 }
 
+/* Barra lateral */
 .barra {
   position: sticky;
   top: 0;
   display: flex;
   flex-direction: column;
+  gap: 2.2rem;
   height: 100vh;
-  padding: 2rem 1.4rem 1.6rem;
-  background-color: var(--color-brand-plum);
-  background-image:
-    radial-gradient(ellipse at 12% -8%, rgba(163, 62, 89, 0.42), transparent 58%),
-    linear-gradient(180deg, #2c1322 0%, #28111f 55%, #22101b 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 34px 20px 26px;
+  background-image: linear-gradient(180deg, var(--admin-sidebar-from) 0%, var(--admin-sidebar-to) 100%);
+  border-right: 1px solid #ddd0d5;
   overflow-y: auto;
 }
 
 .marcaBloque {
   min-width: 0;
+  padding-left: 8px;
 }
 
 .marca {
   display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.marcaIcono {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.34);
-  border-radius: var(--radius-xs);
-  color: #d9a7b5;
-}
-
-.marcaTexto {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.32rem;
+  font-family: var(--admin-font-serif);
+  font-size: 1.55rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
   line-height: 1.1;
-  color: #ffffff;
+  letter-spacing: 0.01em;
+  color: var(--admin-text);
 }
 
-.marcaTexto em {
+.marca em {
   font-style: italic;
   font-weight: 400;
-  color: #d98299;
+  color: var(--admin-primary);
 }
 
 .marcaNota {
-  margin-top: 0.7rem;
-  max-width: 20ch;
-  font-size: 0.76rem;
-  line-height: 1.5;
-  color: #bda9b4;
+  margin-top: 0.55rem;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9a7080;
 }
 
 .navegacion {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  margin-top: 2.6rem;
+  gap: 8px;
 }
 
 .enlace {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.8rem 0.85rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  color: #d6c5ce;
-  transition: background-color 0.18s ease, color 0.18s ease;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: var(--admin-radius-item);
+  color: #4a2d38;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .enlace:hover {
-  background-color: rgba(255, 255, 255, 0.06);
-  color: #ffffff;
+  background-color: rgba(122, 58, 85, 0.07);
+  color: var(--admin-primary);
 }
 
-.enlaceActivo {
-  background-color: var(--color-surface-page);
-  color: var(--color-brand-plum);
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
-}
-
+.enlaceActivo,
 .enlaceActivo:hover {
-  background-color: var(--color-surface-page);
-  color: var(--color-brand-plum);
+  background-image: linear-gradient(167deg, var(--admin-primary) 25%, var(--admin-primary-dark) 75%);
+  color: #ffffff;
+  box-shadow: var(--admin-shadow-active);
 }
 
 .enlaceIcono {
   display: grid;
+  flex: 0 0 auto;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-xs);
-  color: #d9a7b5;
-  transition: border-color 0.18s ease, color 0.18s ease;
-}
-
-.enlaceActivo .enlaceIcono {
-  border-color: rgba(40, 17, 31, 0.14);
-  color: var(--color-brand-primary);
+  width: 18px;
+  height: 18px;
 }
 
 .enlaceTexto {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+  font-family: var(--catalog-font-body);
   min-width: 0;
-}
-
-.enlaceEtiqueta {
-  font-size: 0.92rem;
-  font-weight: 600;
-}
-
-.enlaceDetalle {
-  font-size: 0.72rem;
-  line-height: 1.4;
-  opacity: 0.64;
-}
-
-.enlaceActivo .enlaceDetalle {
-  color: var(--color-text-muted);
-  opacity: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pie {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   margin-top: auto;
-  padding-top: 1.4rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.volver {
-  display: inline-block;
-  padding-bottom: 2px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-  color: #e8dbe1;
-  font-size: 0.82rem;
-  transition: color 0.18s ease, border-color 0.18s ease;
+.sitioCard {
+  padding: 16px;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(120, 61, 79, 0.08);
 }
 
-.volver:hover {
-  color: #ffffff;
-  border-color: #ffffff;
+.sitioIcono {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--admin-primary);
+}
+
+.sitioTitulo {
+  margin-top: 0.6rem;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.sitioTexto {
+  margin-top: 0.3rem;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #817576;
+}
+
+.sitioEnlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0.7rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-primary);
+}
+
+.sitioEnlace:hover {
+  color: var(--admin-primary-dark);
 }
 
 .pieNota {
-  margin-top: 0.75rem;
-  font-size: 0.72rem;
-  line-height: 1.55;
-  color: #b9a4ae;
+  padding-left: 2px;
+  font-size: 10px;
+  color: #817576;
 }
 
-.contenido {
+/* Área de trabajo */
+.area {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: var(--admin-topbar-height);
+  padding: 0 var(--admin-pad);
+  background-color: var(--admin-surface);
+  border-bottom: 1px solid #e7e0db;
+}
+
+.ruta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.rutaRaiz {
+  font-size: 12px;
+  color: #817576;
+}
+
+.rutaSeparador {
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  color: #b3a5ab;
+}
+
+.rutaActual {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.cuenta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sitioEnlaceTopbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-primary);
+}
+
+.sitioEnlaceTopbar:hover {
+  color: var(--admin-primary-dark);
+}
+
+.separador {
+  width: 1px;
+  height: 26px;
+  background-color: var(--admin-border);
+}
+
+.avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background-color: var(--admin-accent-soft);
+  border-radius: 999px;
+  color: var(--admin-primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.cuentaTexto {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+
+.cuentaNombre {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.cuentaRol {
+  font-size: 10px;
+  color: #817576;
+}
+
+.cerrarSesion {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: 1px solid var(--admin-border);
+  border-radius: 999px;
+  color: var(--admin-text-muted);
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.cerrarSesion:hover {
+  background-color: var(--admin-danger-soft);
+  border-color: #eccdd4;
+  color: var(--admin-danger);
+}
+
+.cerrarSesion:focus-visible {
+  outline: 2px solid var(--admin-primary);
+  outline-offset: 2px;
 }
 
 .principal {
   width: 100%;
-  max-width: 1180px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3.5rem) 5rem;
+  padding: var(--admin-pad) var(--admin-pad) 4rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+  .marco {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+
+  .principal {
+    padding: 26px 24px 3.5rem;
+  }
+
+  .topbar {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 860px) {
   .marco {
     grid-template-columns: 1fr;
   }
@@ -191,79 +325,85 @@
     align-items: center;
     gap: 0.75rem 1rem;
     height: auto;
-    padding: 0.85rem 1.25rem;
+    padding: 14px 20px;
     border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid #ddd0d5;
     overflow: visible;
   }
 
   .marcaBloque {
     grid-column: 1;
     grid-row: 1;
+    padding-left: 0;
   }
 
-  .marcaTexto {
-    font-size: 1.18rem;
+  .marca {
+    font-size: 1.3rem;
   }
 
   .marcaNota {
-    display: none;
+    margin-top: 0.2rem;
+    font-size: 9px;
   }
 
   .pie {
     grid-column: 2;
     grid-row: 1;
     margin: 0;
-    padding: 0;
-    border: 0;
   }
 
+  .sitioCard,
   .pieNota {
     display: none;
-  }
-
-  .volver {
-    font-size: 0.76rem;
-    white-space: nowrap;
   }
 
   .navegacion {
     grid-column: 1 / -1;
     grid-row: 2;
     flex-direction: row;
-    gap: 0.4rem;
+    gap: 6px;
     margin: 0;
-    padding-bottom: 0.1rem;
+    padding-bottom: 2px;
     overflow-x: auto;
   }
 
   .enlace {
     flex: 1 0 auto;
-    grid-template-columns: auto auto;
-    gap: 0.45rem;
-    padding: 0.5rem 0.7rem;
+    min-height: 40px;
+    gap: 8px;
+    padding: 0 12px;
+    font-size: 13px;
   }
 
   .enlaceIcono {
-    width: 24px;
-    height: 24px;
-    border: 0;
-  }
-
-  .enlaceIcono svg {
     width: 16px;
     height: 16px;
   }
 
-  .enlaceDetalle {
+  .topbar {
+    position: static;
+    min-height: 64px;
+    padding: 0 20px;
+  }
+
+  .sitioEnlaceTopbar,
+  .separador,
+  .cuentaTexto {
     display: none;
   }
 
-  .enlaceEtiqueta {
-    font-size: 0.8rem;
+  .principal {
+    padding: 22px 20px 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navegacion {
+    gap: 4px;
   }
 
-  .principal {
-    padding-top: 2rem;
+  .enlace {
+    padding: 0 10px;
+    font-size: 12px;
   }
 }

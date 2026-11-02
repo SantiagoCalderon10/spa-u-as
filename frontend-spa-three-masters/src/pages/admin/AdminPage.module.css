@@ -1,72 +1,74 @@
 .pagina {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .cabecera {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 24px;
   flex-wrap: wrap;
 }
 
 .tituloBloque {
-  max-width: 660px;
+  max-width: 640px;
   min-width: 0;
 }
 
 .titulo {
-  font-size: clamp(2.6rem, 5vw, 3.8rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--color-brand-plum);
-  text-wrap: balance;
+  font-family: var(--admin-font-display);
+  font-size: clamp(1.9rem, 3.4vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--admin-text);
 }
 
 .intro {
-  margin-top: 0.9rem;
-  max-width: 60ch;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  color: var(--color-text-muted);
+  margin-top: 0.65rem;
+  max-width: 62ch;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--admin-text-muted);
 }
 
+/* Cifras de resumen */
 .resumen {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
   list-style: none;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--color-border-subtle);
-  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .resumenItem {
   display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-  padding: 0 1.2rem;
-  border-left: 1px solid var(--color-border-subtle);
-}
-
-.resumenItem:first-child {
-  padding-left: 0;
-  border-left: 0;
+  flex-direction: column-reverse;
+  gap: 6px;
+  padding: 16px 18px;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-card);
+  box-shadow: var(--admin-shadow-card);
 }
 
 .resumenItem dt {
-  font-size: 0.78rem;
-  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  
+  color: var(--admin-text-subtle);
 }
 
 .resumenItem dd {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--admin-text);
   font-variant-numeric: tabular-nums;
-  color: var(--color-brand-plum);
 }
 
 .errorCarga {
@@ -74,21 +76,21 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1.25rem;
-  padding: 1rem 1.1rem;
-  background-color: var(--color-danger-soft);
+  padding: 14px 16px;
+  background-color: var(--admin-danger-soft);
   border: 1px solid #ecc7ce;
-  border-radius: var(--radius-sm);
+  border-radius: var(--admin-radius-control);
 }
 
 .errorCarga strong {
   display: block;
-  font-size: 0.88rem;
+  font-size: 13px;
   color: #661f2c;
 }
 
 .errorCarga p {
   margin-top: 0.25rem;
-  font-size: 0.82rem;
+  font-size: 12.5px;
   line-height: 1.5;
   color: #7a3341;
   overflow-wrap: anywhere;
@@ -97,9 +99,9 @@
 .vacio {
   padding: 4rem 2rem;
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-top: 1px solid var(--color-border-subtle);
-  border-bottom: 1px solid var(--color-border-subtle);
+  background-color: var(--admin-surface);
+  border: 1px dashed var(--admin-accent-border);
+  border-radius: var(--admin-radius-card);
 }
 
 .vacioCompacto {
@@ -107,17 +109,18 @@
 }
 
 .vacioTitulo {
+  font-family: var(--admin-font-serif);
   font-size: clamp(1.6rem, 3vw, 2rem);
-  color: var(--color-brand-plum);
-  letter-spacing: -0.01em;
+  color: var(--admin-text);
+  letter-spacing: 0.01em;
 }
 
 .vacioTexto {
   max-width: 46ch;
-  margin: 0.6rem auto 1.4rem;
-  font-size: 0.92rem;
+  margin: 0.55rem auto 1.4rem;
+  font-size: 13px;
   line-height: 1.65;
-  color: var(--color-text-muted);
+  color: var(--admin-text-muted);
 }
 
 .vacioAcciones {
@@ -142,8 +145,8 @@
 .esqueleto {
   display: block;
   height: 0.8rem;
-  border-radius: 3px;
-  background: linear-gradient(90deg, #eadfd9 25%, #f7f0ec 50%, #eadfd9 75%);
+  border-radius: 4px;
+  background: linear-gradient(90deg, #ece7e4 25%, #f7f4f2 50%, #ece7e4 75%);
   background-size: 200% 100%;
   animation: brillo 1.6s linear infinite;
 }
@@ -157,19 +160,16 @@
   }
 }
 
+@media (max-width: 900px) {
+  .resumen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
   .cabecera {
     align-items: flex-start;
-    gap: 1.4rem;
-  }
-
-  .resumen {
-    gap: 0.45rem 1.1rem;
-  }
-
-  .resumenItem {
-    padding: 0;
-    border-left: 0;
+    gap: 1.1rem;
   }
 
   .errorCarga {
@@ -182,9 +182,15 @@
   }
 }
 
+@media (max-width: 420px) {
+  .resumen {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .esqueleto {
     animation: none;
-    background: #efe5df;
+    background: #efeae7;
   }
 }

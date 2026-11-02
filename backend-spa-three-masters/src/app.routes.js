@@ -1,4 +1,11 @@
 import { Router } from "express";
+import { config } from "./config/config.js";
+import { crearGuardia } from "./shared/middlewares/autorizacion.js";
+
+// Auth
+import { AuthServicio } from "./modules/auth/auth.servicio.js";
+import { AuthControlador } from "./modules/auth/auth.controlador.js";
+import { crearAuthRoutes } from "./modules/auth/auth.rutas.js";
 
 // Citas
 import { CitaRepositorio } from "./modules/citas/cita.repositorio.js";
@@ -44,48 +51,53 @@ import { crearHorarioRoutes } from "./modules/horarios/horario.routes.js";
 
 const appRouter = Router();
 
+// Repositorios compartidos
 const horRepo = new HorarioRepositorio();
+const servRepo = new ServicioRepositorio();
+const cliRepo = new ClienteRepositorio();
+
+// Servicios y controladores
 const horServ = new HorarioServicio(horRepo);
 const horCtrl = new HorarioControlador(horServ);
-appRouter.use("/horarios", crearHorarioRoutes(horCtrl));
-// Inyección y montaje de Servicios (repositorio compartido con Citas)
-const servRepo = new ServicioRepositorio();
+
 const servServ = new ServicioServicio(servRepo);
 const servCtrl = new ServicioControlador(servServ);
-appRouter.use("/servicios", crearServicioRoutes(servCtrl));
 
-// Inyección y montaje de Clientes (se usa en el agendamiento público de citas)
-const cliRepo = new ClienteRepositorio();
 const cliServ = new ClienteServicio(cliRepo);
 const cliCtrl = new ClienteControlador(cliServ);
-appRouter.use("/clientes", crearClienteRoutes(cliCtrl));
 
-// Inyección y montaje de Citas
 const citaRepo = new CitaRepositorio();
 const citaServ = new CitaServicio(citaRepo, servRepo, cliServ, horRepo);
 const citaCtrl = new CitaControlador(citaServ);
-appRouter.use("/citas", crearCitaRoutes(citaCtrl));
 
-// Inyección y montaje de Categorías
 const catRepo = new CategoriaRepositorio();
 const catServ = new CategoriaServicio(catRepo);
 const catCtrl = new CategoriaControlador(catServ);
-appRouter.use("/categorias", crearCategoriaRoutes(catCtrl));
 
-// Inyección y montaje de Usuarios
 const usuRepo = new UsuarioRepositorio();
 const usuServ = new UsuarioServicio(usuRepo);
 const usuCtrl = new UsuarioControlador(usuServ);
-appRouter.use("/usuarios", crearUsuarioRoutes(usuCtrl));
 
-// Inyección y montaje de Profesionales
 const profRepo = new ProfesionalRepositorio();
 const profServ = new ProfesionalServicio(profRepo);
 const profCtrl = new ProfesionalControlador(profServ);
-appRouter.use("/profesionales", crearProfesionalRoutes(profCtrl));
 
-// Inyección y montaje de Horarios
+// Autenticación y guardias por rol
+const authServ = new AuthServicio(usuServ, {
+  jwtSecret: config.jwtSecret,
+  jwtExpira: config.jwtExpira,
+});
+const authCtrl = new AuthControlador(authServ);
+const guardia = crearGuardia(authServ);
 
+// Montaje de módulos bajo /api
+appRouter.use("/auth", crearAuthRoutes(authCtrl, guardia));
+appRouter.use("/horarios", crearHorarioRoutes(horCtrl, guardia));
+appRouter.use("/servicios", crearServicioRoutes(servCtrl, guardia));
+appRouter.use("/clientes", crearClienteRoutes(cliCtrl, guardia));
+appRouter.use("/citas", crearCitaRoutes(citaCtrl, guardia));
+appRouter.use("/categorias", crearCategoriaRoutes(catCtrl, guardia));
+appRouter.use("/usuarios", crearUsuarioRoutes(usuCtrl, guardia));
+appRouter.use("/profesionales", crearProfesionalRoutes(profCtrl, guardia));
 
 export default appRouter;
-

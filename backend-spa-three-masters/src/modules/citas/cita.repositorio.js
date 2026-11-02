@@ -36,7 +36,15 @@ export class CitaRepositorio {
 
     async obtenerCitas() {
         try {
-            const citas = await CitasModel.find();
+            // La vista de administración necesita los nombres de la clienta y
+            // de la profesional; los ObjectId solos no alcanzan para la tabla.
+            const citas = await CitasModel.find()
+                .populate('idCliente', 'nombre telefono')
+                .populate({
+                    path: 'idProfesional',
+                    populate: { path: 'idUsuario', select: 'nombrecompleto' },
+                })
+                .sort({ fecha: -1, horaInicio: -1 });
             return citas || [];
         } catch (error) {
             throw new Error(`Error al obtener las citas: ${error.message}`);
@@ -58,7 +66,14 @@ export class CitaRepositorio {
 
     async obtenerCitaPorTokenHash(tokenHash) {
         try {
-            return await CitasModel.findOne({ tokenHash });
+            // El enlace público muestra el nombre de la clienta y de la
+            // profesional sin exponer el tokenHash (select: false en el modelo).
+            return await CitasModel.findOne({ tokenHash })
+                .populate('idCliente', 'nombre telefono')
+                .populate({
+                    path: 'idProfesional',
+                    populate: { path: 'idUsuario', select: 'nombrecompleto' },
+                });
         } catch (error) {
             throw new Error(`Error al obtener la cita por enlace: ${error.message}`);
         }

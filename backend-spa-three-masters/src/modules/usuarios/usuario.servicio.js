@@ -1,37 +1,59 @@
-import { NotFoundError, ConflictError, ValidationError } from '../../shared/errors/AppError.js';
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
+import { ConflictError, NotFoundError, ValidationError } from '../../shared/errors/AppError.js';
+import { RolUsuario } from '../../shared/enums.js';
+
+const CAMPOS_CREACION = [
+  'nombreusuario',
+  'correo',
+  'telefono',
+  'nombrecompleto',
+  'rol',
+  'activo',
+];
+
+const CAMPOS_ACTUALIZACION = [
+  'nombreusuario',
+  'correo',
+  'telefono',
+  'nombrecompleto',
+  'rol',
+  'activo',
+  'contrasena',
+];
+
+const LONGITUD_MINIMA_CONTRASENA = 6;
 
 export class UsuarioServicio {
   constructor(usuarioRepositorio) {
     this.usuarioRepositorio = usuarioRepositorio;
   }
 
-  async crearUsuario(datos) {
-    const { contrasena, ...restoDatos } = datos;
+  async crearUsuario(datos = {}) {
+    const { contrasena, ...restoDatos } = datos || {};
+    const campos = this.#seleccionar(restoDatos, CAMPOS_CREACION);
 
-    if (!contrasena || contrasena.length < 6) {
-      throw new ValidationError('La contraseña es requerida y debe tener al menos 6 caracteres');
+    this.#validarContrasena(contrasena);
+    this.#validarRol(campos.rol);
+
+    const correo = this.#normalizarCorreo(campos.correo);
+    if (!correo) {
+      throw new ValidationError('El correo es requerido');
     }
+    campos.correo = correo;
 
-    const existe = await this.usuarioRepositorio.obtenerPorCorreo(restoDatos.correo);
+    const existe = await this.usuarioRepositorio.obtenerPorCorreo(correo);
     if (existe) {
-      throw new ConflictError(`Ya existe un usuario con el correo ${restoDatos.correo}`);
+      throw new ConflictError(`Ya existe un usuario con el correo ${correo}`);
     }
 
-    // Generar hash seguro con salt de costo 10
-    const salt = await bcrypt.genSalt(10);
-    const contrasenaHash = await bcrypt.hash(contrasena, salt);
+    const contrasenaHash = await bcrypt.hash(contrasena, 10);
 
     const nuevoUsuario = await this.usuarioRepositorio.crearUsuario({
-      ...restoDatos,
+      ...campos,
       contrasenaHash,
     });
 
-    // Asegurar que la respuesta devuelta al controlador no contenga el hash
-    const usuarioRespuesta = nuevoUsuario.toObject ? nuevoUsuario.toObject() : { ...nuevoUsuario };
-    delete usuarioRespuesta.contrasenaHash;
-
-    return usuarioRespuesta;
+    return this.#sinHash(nuevoUsuario);
   }
 
   async obtenerUsuarios() {
@@ -40,16 +62,103 @@ export class UsuarioServicio {
 
   async obtenerUsuarioPorId(id) {
     const usuario = await this.usuarioRepositorio.obtenerUsuarioPorId(id);
-    if (!usuario) throw new NotFoundError(`Usuario con id ${id} no encontrado`);
+    if (!usuario) {
+      throw new NotFoundError(`Usuario con id ${id} no encontrado`);
+    }
     return usuario;
   }
 
-  async actualizarUsuario(id, datos) {
-    return await this.usuarioRepositorio.actualizarUsuario(id, datos);
+  /**
+   * Solo lo usa AuthServicio para verificar credenciales.
+   * Devuelve el documento con contrasenaHash incluido.
+   */
+  async obtenerPorCorreoConContrasena(correo) {
+    const correoNormalizado = this.#normalizarCorreo(correo);
+    if (!correoNormalizado) {
+      return null;
+    }
+    return await this.usuarioRepositorio.obtenerPorCorreo(correoNormalizado, true);
+  }
+
+  async actualizarUsuario(id, datos = {}) {
+    const cambios = this.#seleccionar(datos || {}, CAMPOS_ACTUALIZACION);
+
+    if (Object.keys(cambios).length === 0) {
+      throw new ValidationError('No hay campos para actualizar');
+    }
+
+    this.#validarRol(cambios.rol);
+
+    if (cambios.correo !== undefined) {
+      const correo = this.#normalizarCorreo(cambios.correo);
+      if (!correo) {
+        throw new ValidationError('El correo no puede estar vacío');
+      }
+
+      const existente = await this.usuarioRepositorio.obtenerPorCorreo(correo);
+      if (existente && String(existente._id) !== String(id)) {
+        throw new ConflictError(`Ya existe un usuario con el correo ${correo}`);
+      }
+
+      cambios.correo = correo;
+    }
+
+    if (cambios.contrasena !== undefined) {
+      this.#validarContrasena(cambios.contrasena);
+      cambios.contrasenaHash = await bcrypt.hash(cambios.contrasena, 10);
+      delete cambios.contrasena;
+    }
+
+    const actualizado = await this.usuarioRepositorio.actualizarUsuario(id, cambios);
+    if (!actualizado) {
+      throw new NotFoundError(`Usuario con id ${id} no encontrado`);
+    }
+
+    return this.#sinHash(actualizado);
   }
 
   async eliminarUsuario(id) {
-    return await this.usuarioRepositorio.eliminarUsuario(id);
+    const eliminado = await this.usuarioRepositorio.eliminarUsuario(id);
+    if (!eliminado) {
+      throw new NotFoundError(`Usuario con id ${id} no encontrado`);
+    }
+    return this.#sinHash(eliminado);
+  }
+
+  #seleccionar(datos, camposPermitidos) {
+    const resultado = {};
+    for (const campo of camposPermitidos) {
+      if (datos[campo] !== undefined) {
+        resultado[campo] = datos[campo];
+      }
+    }
+    return resultado;
+  }
+
+  #normalizarCorreo(correo) {
+    return String(correo ?? '').toLowerCase().trim();
+  }
+
+  #validarContrasena(contrasena) {
+    if (typeof contrasena !== 'string' || contrasena.length < LONGITUD_MINIMA_CONTRASENA) {
+      throw new ValidationError(
+        `La contraseña es requerida y debe tener al menos ${LONGITUD_MINIMA_CONTRASENA} caracteres`
+      );
+    }
+  }
+
+  #validarRol(rol) {
+    if (rol === undefined) {
+      return;
+    }
+    if (!Object.values(RolUsuario).includes(rol)) {
+      throw new ValidationError('El rol enviado no es válido');
+    }
+  }
+
+  #sinHash(usuario) {
+    const obj = usuario.toObject ? usuario.toObject() : { ...usuario };
+    delete obj.contrasenaHash;
+    return obj;
   }
 }
-

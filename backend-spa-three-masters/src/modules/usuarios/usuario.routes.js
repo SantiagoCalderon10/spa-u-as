@@ -1,7 +1,10 @@
 import { Router } from "express";
 
-export function crearUsuarioRoutes(usuarioControlador) {
+export function crearUsuarioRoutes(usuarioControlador, guardia) {
   const router = Router();
+
+  // Datos de usuarios: solo administración
+  router.use(guardia.soloAdministrador);
 
   router.get("/", usuarioControlador.obtenerUsuarios.bind(usuarioControlador));
   router.post("/", usuarioControlador.crearUsuario.bind(usuarioControlador));
@@ -11,4 +14,3 @@ export function crearUsuarioRoutes(usuarioControlador) {
 
   return router;
 }
-

@@ -1,51 +1,57 @@
 .dialogo {
-  border: 0;
+  inset: 0;
+  /* El reset global (`* { margin: 0 }`) pisa el `margin: auto` con el que el
+     navegador centra los <dialog> modales; hay que restaurarlo aquí. */
+  margin: auto;
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
   padding: 0;
   background: transparent;
-  color: var(--color-text-body);
-  max-height: calc(100vh - 2rem);
+  border: 0;
+  color: var(--admin-text);
 }
 
 .dialogo::backdrop {
-  background-color: rgba(40, 17, 31, 0.55);
-  backdrop-filter: blur(3px);
+  background-color: rgba(46, 35, 40, 0.45);
+  backdrop-filter: blur(4px);
   animation: fundir 0.2s ease-out;
 }
 
 .dialogo[open] {
-  animation: aparecer 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: aparecer 0.26s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .md {
-  width: min(640px, calc(100vw - 2rem));
+  width: min(660px, calc(100vw - 2rem));
 }
 
 .sm {
-  width: min(460px, calc(100vw - 2rem));
+  width: min(440px, calc(100vw - 2rem));
 }
 
 .lg {
-  width: min(760px, calc(100vw - 2rem));
+  width: min(780px, calc(100vw - 2rem));
 }
 
 .panel {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 2rem);
-  background-color: var(--color-surface-page);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-floating);
+  max-height: calc(100dvh - 2rem);
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  box-shadow: var(--admin-shadow-floating);
   overflow: hidden;
 }
 
 .cabecera {
   display: flex;
+  flex: 0 0 auto;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.6rem 1.8rem 1.1rem;
-  border-bottom: 1px solid var(--color-border-subtle);
+  padding: 26px 28px 20px;
+  border-bottom: 1px solid var(--admin-border);
 }
 
 .tituloBloque {
@@ -53,49 +59,52 @@
 }
 
 .titulo {
-  font-size: 1.75rem;
+  font-family: var(--admin-font-serif);
+  font-size: 1.8rem;
+  font-weight: 600;
   line-height: 1.1;
-  color: var(--color-brand-plum);
-  letter-spacing: -0.02em;
+  letter-spacing: 0.01em;
+  color: var(--admin-text);
 }
 
 .descripcion {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
+  max-width: 50ch;
+  margin-top: 8px;
+  font-size: 12.5px;
   line-height: 1.55;
-  color: var(--color-text-muted);
-  max-width: 48ch;
+  color: var(--admin-text-muted);
 }
 
-.cerrar {
+.cerrar.cerrar {
   flex-shrink: 0;
   width: 34px;
   height: 34px;
   padding: 0;
-  border: 1px solid var(--color-border-subtle);
+  background-color: transparent;
+  border: 1px solid var(--admin-border);
   border-radius: 50%;
-  color: var(--color-text-muted);
+  color: var(--admin-text-muted);
 }
 
-.cerrar:hover:not(:disabled) {
-  color: var(--color-brand-plum);
-  border-color: var(--color-border-hover);
-  background-color: var(--color-surface-card);
+.cerrar.cerrar:hover:not(:disabled) {
+  background-color: #f7f2f0;
+  border-color: var(--admin-accent-border);
+  color: var(--admin-primary);
 }
 
 .cuerpo {
-  padding: 1.4rem 1.8rem 1.8rem;
+  padding: 24px 28px 28px;
   overflow-y: auto;
 }
 
 @keyframes aparecer {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(14px) scale(0.99);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -111,7 +120,6 @@
 @media (max-width: 560px) {
   .dialogo {
     width: 100vw;
-    max-width: none;
     height: 100dvh;
     max-height: 100dvh;
     margin: 0;
@@ -120,20 +128,20 @@
   .panel {
     height: 100dvh;
     max-height: 100dvh;
-    border-radius: 0;
     border: 0;
+    border-radius: 0;
   }
 
   .cabecera {
-    padding: 1.15rem 1.2rem 0.9rem;
+    padding: 20px 20px 16px;
   }
 
   .cuerpo {
-    padding: 1.1rem 1.2rem 1.5rem;
+    padding: 20px 20px 28px;
   }
 
   .titulo {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
   }
 }
 

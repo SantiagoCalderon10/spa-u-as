@@ -38,6 +38,7 @@ Resumen en `docs/contexto/arquitectura-y-datos.md` (sección 4). Cambios relevan
 | 2026-10-?? | Cliente identificado por teléfono y nombre | Sobrescribir, conservar el primero | Teléfono y nombre | *(completar)* | | modelo |
 | 2026-10-?? | Servicios sin repositorios | Con repositorios | Sin repositorios (como en clase) | *(completar)* | | arquitectura |
 | 2026-10-29 | Hero público con degradado de respaldo en lugar de la fotografía del diseño | (a) exportar la foto a `src/assets/hero/hero.jpg` y usarla como `background-image`; (b) usar un `<img>` con `object-fit: cover`; (c) dejar el bloque sin imagen | (a) con variable `--hero-photo` documentada en el CSS | El equipo aceptó el respaldo porque la imagen binaria no se pudo exportar en el entorno del agente y el bloque no debía quedar roto. La foto se agrega descomentando una línea cuando se exporte desde Figma | Equipo | `Hero.module.css` |
+| 2026-11-02 | Autenticación con Bearer token en el encabezado `Authorization` | (a) Bearer en `Authorization`; (b) cookie httpOnly | (a) por encajar con el `axiosClient` actual y no requerir CSRF | El equipo eligió Bearer para esta etapa; el frontend deberá guardar el token y enviarlo en cada petición privada | Equipo | `backend/src/modules/auth/`, `backend/src/shared/middlewares/` |
 
 ## 7. Correcciones y rechazos a la IA
 Lo más valioso para mostrar criterio propio.

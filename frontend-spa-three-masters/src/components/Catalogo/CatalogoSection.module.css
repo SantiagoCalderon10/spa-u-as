@@ -186,6 +186,36 @@
   white-space: nowrap;
 }
 
+.cardReserve {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 7px;
+  margin-top: -4px;
+  font-family: var(--catalog-font-label);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--catalog-wine);
+  transition: color 0.2s ease;
+}
+
+.cardReserve:hover {
+  color: var(--catalog-ink);
+}
+
+.referenceNotice {
+  padding: 0.85rem 1.1rem;
+  border: 1px solid #ecd9b7;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-warning-soft);
+  font-family: var(--catalog-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: #6f4a10;
+}
+
 .footer {
   display: flex;
   align-items: center;
