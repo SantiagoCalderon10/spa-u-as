@@ -1,12 +1,12 @@
 import { createHash, randomBytes } from 'crypto';
-import { ConflictError, NotFoundError, ValidationError } from '../../shared/errors/AppError.js';
+import { ConflictError, ForbiddenError, NotFoundError, ValidationError } from '../../shared/errors/AppError.js';
 import { EstadoCita, RolUsuario } from '../../shared/enums.js';
 import { Fecha } from '../../shared/utils/Fecha.js';
 import { Hora } from '../../shared/utils/Hora.js';
 import { Cita } from './models/domain/Cita.js';
 
 export class CitaServicio {
-    constructor(citaRepositorio, servicioRepositorio, clienteServicio, horarioRepositorio) {
+    constructor(citaRepositorio, servicioRepositorio, clienteServicio, horarioRepositorio, profesionalRepositorio) {
         if (!citaRepositorio) {
             throw new ValidationError("CitaRepositorio es requerido para instanciar CitaServicio");
         }
@@ -20,6 +20,7 @@ export class CitaServicio {
         this.servicioRepositorio = servicioRepositorio;
         this.clienteServicio = clienteServicio;
         this.horarioRepositorio = horarioRepositorio || null;
+        this.profesionalRepositorio = profesionalRepositorio || null;
     }
 
     generarToken() {
@@ -265,6 +266,47 @@ export class CitaServicio {
 
     async obtenerCitas() {
         return await this.citaRepositorio.obtenerCitas();
+    }
+
+    /**
+     * Resuelve el perfil profesional de la cuenta autenticada.
+     * El idUsuario viene del token, no de la petición.
+     */
+    async #obtenerPerfilProfesional(idUsuario) {
+        if (!this.profesionalRepositorio) {
+            throw new ValidationError("ProfesionalRepositorio es requerido para la agenda profesional");
+        }
+        if (!idUsuario) {
+            throw new ValidationError("No se pudo identificar la cuenta autenticada");
+        }
+
+        const perfil = await this.profesionalRepositorio.obtenerPorUsuario(idUsuario);
+        if (!perfil) {
+            throw new NotFoundError("Esta cuenta no tiene un perfil profesional vinculado");
+        }
+
+        return perfil;
+    }
+
+    async obtenerCitasDeProfesional(idUsuario) {
+        const perfil = await this.#obtenerPerfilProfesional(idUsuario);
+        return await this.citaRepositorio.obtenerCitasPorProfesional(perfil._id);
+    }
+
+    async cancelarCitaDeProfesional(id, idUsuario, motivo) {
+        this.validarMotivo(motivo);
+
+        const perfil = await this.#obtenerPerfilProfesional(idUsuario);
+        const cita = await this.obtenerCitaPorId(id);
+
+        // La profesional solo puede cancelar lo que está asignado a su agenda.
+        if (String(cita.idProfesional) !== String(perfil._id)) {
+            throw new ForbiddenError("No puedes cancelar una cita que no está asignada a tu agenda");
+        }
+
+        cita.cancelar(RolUsuario.PROFESIONAL, motivo);
+
+        return await this.citaRepositorio.guardar(cita);
     }
 
     async obtenerCitaPorToken(token) {

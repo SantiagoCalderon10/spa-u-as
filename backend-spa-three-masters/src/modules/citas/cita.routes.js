@@ -9,8 +9,16 @@ export function crearCitaRoutes(citaControlador, guardia) {
     router.get("/enlace/:token", citaControlador.obtenerCitaPorToken.bind(citaControlador));
     router.patch("/enlace/:token/cancelar", citaControlador.cancelarCitaPorToken.bind(citaControlador));
 
+    // Panel de la profesional. El id del perfil sale del token, no de la URL.
+    // Debe ir antes del bloqueo de administración y de /:id.
+    router.get("/mias", guardia.soloProfesional, citaControlador.obtenerMisCitas.bind(citaControlador));
+    router.patch(
+        "/mias/:id/cancelar",
+        guardia.soloProfesional,
+        citaControlador.cancelarMiCita.bind(citaControlador)
+    );
+
     // A partir de aquí todo requiere sesión de administración.
-    // El rol del profesional se incorporará cuando exista su vista (FN-14).
     router.use(guardia.soloAdministrador);
 
     // Rutas CRUD base

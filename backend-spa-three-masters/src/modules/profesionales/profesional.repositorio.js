@@ -25,6 +25,19 @@ export class ProfesionalRepositorio {
       .populate('especialidades', 'nombre');
   }
 
+  // Perfil de la cuenta autenticada. El id sale del token, nunca del cuerpo.
+  async obtenerPorUsuario(idUsuario) {
+    try {
+      if (!idUsuario) return null;
+
+      return await ProfesionalesModel.findOne({ idUsuario })
+        .populate('idUsuario', 'nombrecompleto correo telefono')
+        .populate('especialidades', 'nombre');
+    } catch (error) {
+      throw new Error(`Error al obtener el perfil profesional: ${error.message}`);
+    }
+  }
+
   async actualizarProfesional(id, datos) {
     try {
       return await ProfesionalesModel.findByIdAndUpdate(id, datos, { new: true, runValidators: true });

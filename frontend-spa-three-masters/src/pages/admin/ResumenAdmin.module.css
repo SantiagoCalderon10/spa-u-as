@@ -1,0 +1,592 @@
+/* Tablero de resumen del atelier */
+
+.fechaHoy {
+  color: var(--admin-primary-dark);
+  font-weight: 600;
+}
+
+/* La cifra de ingresos puede ser larga: se ajusta dentro de su tarjeta. */
+.kpiMoneda.kpiMoneda {
+  font-size: clamp(18px, 2vw, 22px);
+}
+
+.tablero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+/* Paneles */
+.panel {
+  min-width: 0;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-card);
+  box-shadow: var(--admin-shadow-card);
+  overflow: hidden;
+}
+
+.panelCabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.panelTitulo {
+  font-family: var(--admin-font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--admin-text);
+}
+
+.panelNota {
+  margin-top: 3px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--admin-text-subtle);
+}
+
+.enlacePanel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  padding-top: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--admin-primary);
+  white-space: nowrap;
+}
+
+.enlacePanel:hover {
+  color: var(--admin-primary-dark);
+  text-decoration: underline;
+}
+
+/* Próximas citas */
+.listaCitas {
+  list-style: none;
+}
+
+.cita {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.cita:last-child {
+  border-bottom: 0;
+}
+
+.citaFecha {
+  display: flex;
+  flex: 0 0 62px;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.citaDia {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--admin-text-subtle);
+  white-space: nowrap;
+}
+
+.citaHora {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--admin-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.citaPersona {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background-color: var(--admin-accent-soft);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 50%;
+  color: var(--admin-primary-dark);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.citaTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.citaNombre {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--admin-text);
+  overflow-wrap: anywhere;
+}
+
+.citaDetalle {
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--admin-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.citaPrecio {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--admin-text-subtle);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Distribución por estado */
+.distribucion {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 18px 20px 20px;
+  list-style: none;
+}
+
+.distribucionItem {
+  display: block;
+}
+
+.distribucionFila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.distribucionEtiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--admin-text);
+}
+
+.distribucionValor {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--admin-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--admin-text-subtle);
+}
+
+.puntoConfirmada {
+  background-color: #6f8f73;
+}
+
+.puntoCompletada {
+  background-color: var(--admin-primary);
+}
+
+.puntoCancelada {
+  background-color: var(--admin-danger);
+}
+
+.puntoNoAsistio {
+  background-color: #b58a3a;
+}
+
+.barra {
+  display: block;
+  height: 7px;
+  background-color: var(--admin-neutral-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barraRelleno {
+  display: block;
+  height: 100%;
+  background-color: var(--admin-primary);
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.barraConfirmada {
+  background-color: #6f8f73;
+}
+
+.barraCompletada {
+  background-color: var(--admin-primary);
+}
+
+.barraCancelada {
+  background-color: var(--admin-danger);
+}
+
+.barraNoAsistio {
+  background-color: #b58a3a;
+}
+
+/* Ranking de servicios */
+.ranking {
+  padding: 8px 20px 14px;
+  list-style: none;
+}
+
+.rankingItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--admin-border);
+}
+
+.rankingItem:last-child {
+  border-bottom: 0;
+}
+
+.rankingPuesto {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--admin-accent-soft);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 50%;
+  color: var(--admin-primary-dark);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.rankingTexto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rankingNombre {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--admin-text);
+  overflow-wrap: anywhere;
+}
+
+.rankingBarra {
+  display: block;
+  height: 5px;
+  background-color: var(--admin-neutral-bg);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.rankingBarra > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--admin-primary), #b4798f);
+  border-radius: inherit;
+}
+
+.rankingTotal {
+  flex: 0 0 auto;
+  font-size: 11.5px;
+  color: var(--admin-text-subtle);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Catálogo y equipo */
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px 20px 20px;
+}
+
+.catalogoEnlace {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-width: 0;
+  padding: 14px;
+  background-color: #fcfbfa;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-item);
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.catalogoEnlace:hover {
+  background-color: var(--admin-accent-soft);
+  border-color: var(--admin-accent-border);
+}
+
+.catalogoIcono {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background-color: var(--admin-accent-soft);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 50%;
+  color: var(--admin-primary-dark);
+}
+
+.catalogoTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.catalogoValor {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--admin-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.catalogoEtiqueta {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--admin-text);
+}
+
+.catalogoNota {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--admin-text-subtle);
+}
+
+/* Estados vacíos */
+.vacioPanel {
+  padding: 34px 20px;
+  text-align: center;
+}
+
+.vacioTitulo {
+  font-family: var(--admin-font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.vacioTexto {
+  max-width: 40ch;
+  margin: 4px auto 12px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--admin-text-muted);
+}
+
+.vacioEnlace {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--admin-primary);
+}
+
+.vacioEnlace:hover {
+  color: var(--admin-primary-dark);
+  text-decoration: underline;
+}
+
+/* Esqueletos */
+.esqueletoFila {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.esqueletoFila:last-child {
+  border-bottom: 0;
+}
+
+.esqueletoFecha {
+  flex: 0 0 52px;
+  width: 52px;
+  height: 26px;
+}
+
+.esqueletoCirculo {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.esqueletoTexto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.esqueletoLinea {
+  width: min(70%, 190px);
+  height: 11px;
+}
+
+.esqueletoLineaCorta {
+  width: min(45%, 130px);
+  height: 9px;
+}
+
+.esqueletoValor {
+  width: 54px;
+  height: 18px;
+}
+
+.esqueletoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+}
+
+.esqueletoBarra {
+  width: 100%;
+  height: 9px;
+  border-radius: 999px;
+}
+
+.esqueletoFilaRanking {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.esqueletoPuesto {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.catalogoEsqueleto {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-item);
+}
+
+/* Adaptación */
+@media (max-width: 1100px) {
+  .tablero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .panelCabecera {
+    padding: 16px 16px 13px;
+  }
+
+  .cita {
+    padding: 13px 16px;
+  }
+
+  .distribucion {
+    padding: 16px;
+  }
+
+  .ranking {
+    padding: 6px 16px 12px;
+  }
+
+  .catalogo {
+    padding: 16px;
+  }
+
+  .esqueletoFila {
+    padding: 14px 16px;
+  }
+
+  .esqueletoPanel {
+    padding: 16px;
+  }
+
+  .vacioPanel {
+    padding: 28px 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .catalogo {
+    grid-template-columns: 1fr;
+  }
+
+  .cita {
+    flex-wrap: wrap;
+    gap: 10px 12px;
+  }
+
+  .citaFecha {
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 7px;
+  }
+
+  .citaPrecio {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .citaPersona {
+    flex-basis: 100%;
+  }
+
+  .citaPrecio {
+    margin-left: 44px;
+  }
+
+  .rankingPuesto {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barraRelleno {
+    transition: none;
+  }
+}

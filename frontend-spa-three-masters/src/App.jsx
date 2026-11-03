@@ -3,13 +3,16 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-route
 import RutaPrivada from './components/admin/RutaPrivada';
 import { AuthProvider } from './context/AuthContext';
 import AdminLayout from './layouts/AdminLayout';
+import ProfesionalLayout from './layouts/ProfesionalLayout';
 import PublicLayout from './layouts/PublicLayout';
 import CategoriasAdminPage from './pages/admin/CategoriasAdminPage';
 import CitasAdminPage from './pages/admin/CitasAdminPage';
 import HorariosAdminPage from './pages/admin/HorariosAdminPage';
 import LoginPage from './pages/admin/LoginPage';
 import ProfesionalesAdminPage from './pages/admin/ProfesionalesAdminPage';
+import ResumenAdminPage from './pages/admin/ResumenAdminPage';
 import ServiciosAdminPage from './pages/admin/ServiciosAdminPage';
+import AgendaProfesionalPage from './pages/profesional/AgendaProfesionalPage';
 import LandingPage from './pages/LandingPage';
 import CitaTokenPage from './pages/publico/CitaTokenPage';
 import ReservaPage from './pages/publico/ReservaPage';
@@ -36,15 +39,21 @@ function App() {
             <Route path="cita/:token" element={<CitaTokenPage />} />
           </Route>
           <Route path="/admin/login" element={<LoginPage />} />
-          <Route element={<RutaPrivada />}>
+          <Route element={<RutaPrivada roles={['administrador']} />}>
             <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Navigate to="servicios" replace />} />
-              <Route path="resumen" element={<Navigate to="citas" replace />} />
+              <Route index element={<Navigate to="resumen" replace />} />
+              <Route path="resumen" element={<ResumenAdminPage />} />
               <Route path="citas" element={<CitasAdminPage />} />
               <Route path="servicios" element={<ServiciosAdminPage />} />
               <Route path="categorias" element={<CategoriasAdminPage />} />
               <Route path="profesionales" element={<ProfesionalesAdminPage />} />
               <Route path="horarios" element={<HorariosAdminPage />} />
+            </Route>
+          </Route>
+          <Route element={<RutaPrivada roles={['profesional']} />}>
+            <Route path="/profesional" element={<ProfesionalLayout />}>
+              <Route index element={<Navigate to="agenda" replace />} />
+              <Route path="agenda" element={<AgendaProfesionalPage />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

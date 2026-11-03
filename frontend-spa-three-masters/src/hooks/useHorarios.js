@@ -8,17 +8,23 @@ import {
 import { cuerpoHorario } from '../utils/agenda';
 import { mensajeDeError } from '../utils/catalogo';
 
-export function useHorarios() {
+export function useHorarios({ idProfesional, activo = true } = {}) {
   const [horarios, setHorarios] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const [cargando, setCargando] = useState(activo);
   const [error, setError] = useState('');
 
   const cargar = useCallback(async (signal) => {
+    if (!activo) {
+      setHorarios([]);
+      setCargando(false);
+      return;
+    }
+
     setCargando(true);
     setError('');
 
     try {
-      const datos = await getHorarios({ signal });
+      const datos = await getHorarios({ idProfesional, signal });
       setHorarios(Array.isArray(datos) ? datos : []);
     } catch (err) {
       if (signal?.aborted) return;
@@ -26,7 +32,7 @@ export function useHorarios() {
     } finally {
       if (!signal?.aborted) setCargando(false);
     }
-  }, []);
+  }, [activo, idProfesional]);
 
   useEffect(() => {
     const control = new AbortController();

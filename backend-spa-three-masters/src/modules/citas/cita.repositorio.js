@@ -51,6 +51,23 @@ export class CitaRepositorio {
         }
     }
 
+    // Agenda de una profesional: solo sus citas, con los datos que necesita
+    // para atender (clienta y servicio), nunca las de sus compañeras.
+    async obtenerCitasPorProfesional(idProfesional) {
+        try {
+            const citas = await CitasModel.find({ idProfesional })
+                .populate('idCliente', 'nombre telefono')
+                .populate({
+                    path: 'idProfesional',
+                    populate: { path: 'idUsuario', select: 'nombrecompleto' },
+                })
+                .sort({ fecha: 1, horaInicio: 1 });
+            return citas || [];
+        } catch (error) {
+            throw new Error(`Error al obtener las citas del profesional: ${error.message}`);
+        }
+    }
+
     async obtenerCitasConfirmadasPorProfesionalYFecha(idProfesional, inicio, fin) {
         try {
             const citas = await CitasModel.find({

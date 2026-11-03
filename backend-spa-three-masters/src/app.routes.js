@@ -55,6 +55,7 @@ const appRouter = Router();
 const horRepo = new HorarioRepositorio();
 const servRepo = new ServicioRepositorio();
 const cliRepo = new ClienteRepositorio();
+const profRepo = new ProfesionalRepositorio();
 
 // Servicios y controladores
 const horServ = new HorarioServicio(horRepo);
@@ -67,7 +68,7 @@ const cliServ = new ClienteServicio(cliRepo);
 const cliCtrl = new ClienteControlador(cliServ);
 
 const citaRepo = new CitaRepositorio();
-const citaServ = new CitaServicio(citaRepo, servRepo, cliServ, horRepo);
+const citaServ = new CitaServicio(citaRepo, servRepo, cliServ, horRepo, profRepo);
 const citaCtrl = new CitaControlador(citaServ);
 
 const catRepo = new CategoriaRepositorio();
@@ -78,7 +79,6 @@ const usuRepo = new UsuarioRepositorio();
 const usuServ = new UsuarioServicio(usuRepo);
 const usuCtrl = new UsuarioControlador(usuServ);
 
-const profRepo = new ProfesionalRepositorio();
 const profServ = new ProfesionalServicio(profRepo);
 const profCtrl = new ProfesionalControlador(profServ);
 

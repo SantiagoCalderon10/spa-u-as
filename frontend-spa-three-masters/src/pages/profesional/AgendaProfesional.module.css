@@ -1,0 +1,607 @@
+/* Agenda de la profesional */
+.panel {
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-card);
+  box-shadow: var(--admin-shadow-card);
+  overflow: hidden;
+}
+
+.panelCabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.panelTitulo {
+  font-family: var(--admin-font-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--admin-text);
+}
+
+.panelTexto {
+  max-width: 62ch;
+  margin-top: 0.35rem;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--admin-text-muted);
+}
+
+.panelMeta {
+  flex: 0 0 auto;
+  padding: 5px 11px;
+  background-color: var(--admin-accent-soft);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 999px;
+  color: var(--admin-primary-dark);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Horario semanal */
+.semana {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  padding: 18px 20px 22px;
+  list-style: none;
+}
+
+.dia {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  padding: 12px;
+  background-color: #fbfaf9;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+}
+
+.diaLibre {
+  background-color: #fdfcfb;
+  border-style: dashed;
+}
+
+.diaNombre {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--admin-text-subtle);
+}
+
+.franjas {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.franja {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 9px;
+  background-color: var(--admin-accent-soft);
+  border-left: 2px solid var(--admin-primary);
+  border-radius: 6px;
+}
+
+.franjaHoras {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.franjaDuracion {
+  font-size: 10.5px;
+  color: var(--admin-text-muted);
+}
+
+.libre {
+  font-size: 12px;
+  color: var(--admin-text-subtle);
+}
+
+.vacioPanel {
+  padding: 20px;
+}
+
+.vacioTexto {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--admin-text-muted);
+}
+
+/* Barra de herramientas */
+.herramientas {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.busqueda {
+  position: relative;
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.iconoBusqueda {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  color: var(--admin-text-subtle);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.entradaBusqueda {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px 0 38px;
+  background-color: #fbfaf9;
+  border: 1px solid #e2dbd7;
+  border-radius: var(--admin-radius-control);
+  color: var(--admin-text);
+  font-family: var(--admin-font-sans);
+  font-size: 13px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.entradaBusqueda::placeholder {
+  color: #a49a9d;
+}
+
+.entradaBusqueda:hover {
+  border-color: #d3c9c6;
+}
+
+.entradaBusqueda:focus {
+  outline: none;
+  background-color: var(--admin-surface);
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(122, 58, 85, 0.12);
+}
+
+.selector {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.select {
+  appearance: none;
+  width: 100%;
+  height: 40px;
+  padding: 0 34px 0 13px;
+  background-color: #fbfaf9;
+  border: 1px solid #e2dbd7;
+  border-radius: var(--admin-radius-control);
+  color: #5c5257;
+  font-family: var(--admin-font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.select:hover {
+  border-color: #d3c9c6;
+}
+
+.select:focus {
+  outline: none;
+  background-color: var(--admin-surface);
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(122, 58, 85, 0.12);
+}
+
+.iconoSelector {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--admin-text-subtle);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.resultado {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--admin-text-subtle);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Citas agrupadas por día */
+.grupos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 22px;
+}
+
+.grupo {
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.grupoCabecera {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background-color: var(--admin-table-head);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.grupoFecha {
+  font-family: var(--admin-font-serif);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.hoyBadge {
+  padding: 3px 9px;
+  background-color: var(--admin-success-bg);
+  border: 1px solid #cfdecf;
+  border-radius: 999px;
+  color: var(--admin-success-text);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.grupoConteo {
+  margin-left: auto;
+  font-size: 11.5px;
+  color: var(--admin-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.listaCitas {
+  list-style: none;
+}
+
+.cita {
+  display: grid;
+  grid-template-columns: 92px minmax(170px, 1.1fr) minmax(150px, 1fr) minmax(130px, 0.8fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.cita:last-child {
+  border-bottom: 0;
+}
+
+.citaHora {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.horaInicio {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--admin-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.horaFin {
+  font-size: 10.5px;
+  color: var(--admin-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+.citaPersona {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--admin-accent-soft);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 50%;
+  color: var(--admin-primary-dark);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.personaTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.citaNombre {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--admin-text);
+  overflow-wrap: anywhere;
+}
+
+.telefono {
+  color: var(--admin-text-muted);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+
+a.telefono:hover {
+  color: var(--admin-primary);
+  text-decoration: underline;
+}
+
+.citaServicio {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.servicio {
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--admin-text);
+  overflow-wrap: anywhere;
+}
+
+.precio {
+  color: var(--admin-text-subtle);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.resumenHora {
+  color: var(--admin-text-subtle);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.citaEstado {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.punto {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.estadoConfirmada {
+  background-color: var(--admin-success-bg);
+  border-color: #cfdecf;
+  color: var(--admin-success-text);
+}
+
+.estadoCompletada {
+  background-color: var(--admin-accent-soft);
+  border-color: var(--admin-accent-border);
+  color: var(--admin-primary-dark);
+}
+
+.estadoCancelada {
+  background-color: var(--admin-danger-soft);
+  border-color: #ecc7ce;
+  color: var(--admin-danger);
+}
+
+.estadoNoAsistio {
+  background-color: #f6ecd9;
+  border-color: #e7d5b4;
+  color: #7a5a1f;
+}
+
+.estadoNeutro {
+  background-color: var(--admin-neutral-bg);
+  border-color: #e2dbd7;
+  color: var(--admin-neutral-text);
+}
+
+.motivo {
+  display: -webkit-box;
+  max-width: 24ch;
+  overflow: hidden;
+  color: var(--admin-text-subtle);
+  font-size: 10.5px;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.citaAcciones {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sinAcciones {
+  color: var(--admin-text-subtle);
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+/* Esqueletos */
+.esqueletoSemana {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  padding: 18px 20px 22px;
+}
+
+.esqueletoDia {
+  height: 74px;
+  border-radius: 12px;
+}
+
+.esqueletoCitas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px 22px;
+}
+
+.esqueletoCita {
+  height: 56px;
+  border-radius: 12px;
+}
+
+/* Adaptación */
+@media (max-width: 1180px) {
+  .semana,
+  .esqueletoSemana {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .cita {
+    grid-template-columns: 84px minmax(150px, 1fr) minmax(130px, 1fr) auto;
+  }
+
+  .citaEstado {
+    grid-column: 1 / 3;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .citaAcciones {
+    grid-column: 4;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 860px) {
+  .semana,
+  .esqueletoSemana {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .panelCabecera {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .cita {
+    grid-template-columns: 80px minmax(0, 1fr) auto;
+    gap: 10px 14px;
+  }
+
+  .citaServicio {
+    grid-column: 2;
+  }
+
+  .citaEstado {
+    grid-column: 2;
+  }
+
+  .citaAcciones {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .herramientas {
+    padding: 14px 16px;
+  }
+
+  .busqueda {
+    flex-basis: 100%;
+  }
+
+  .selector {
+    flex: 1 1 150px;
+  }
+
+  .resultado {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  .grupos {
+    padding: 14px;
+  }
+
+  .cita {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .citaHora {
+    grid-column: 1;
+  }
+
+  .citaPersona {
+    grid-column: 1;
+  }
+
+  .citaServicio {
+    grid-column: 1;
+  }
+
+  .citaEstado {
+    grid-column: 1;
+  }
+
+  .citaAcciones {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+  }
+}
+
+@media (max-width: 460px) {
+  .semana,
+  .esqueletoSemana {
+    grid-template-columns: 1fr;
+  }
+}

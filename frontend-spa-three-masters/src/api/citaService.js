@@ -23,6 +23,18 @@ export const cancelarCitaPorToken = async (token, motivo) => {
   return response.data;
 };
 
+/* ------------------------- Panel de la profesional ------------------------- */
+
+export const getCitasProfesional = async ({ signal } = {}) => {
+  const response = await axiosClient.get('/citas/mias', { signal });
+  return response.data;
+};
+
+export const cancelarCitaProfesional = async (id, motivo) => {
+  const response = await axiosClient.patch(`/citas/mias/${id}/cancelar`, { motivo });
+  return response.data;
+};
+
 /* ------------------------- Administración ------------------------- */
 
 export const getCitas = async ({ signal } = {}) => {

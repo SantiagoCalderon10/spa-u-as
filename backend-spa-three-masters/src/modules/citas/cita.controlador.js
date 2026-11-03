@@ -57,6 +57,35 @@ export class CitaControlador {
         }
     }
 
+    // --- Panel de la profesional ---
+
+    async obtenerMisCitas(req, res, next) {
+        try {
+            const citas = await this.citaServicio.obtenerCitasDeProfesional(req.usuario?._id);
+            return res.status(200).json(citas);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async cancelarMiCita(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { motivo } = req.body || {};
+            const citaCancelada = await this.citaServicio.cancelarCitaDeProfesional(
+                id,
+                req.usuario?._id,
+                motivo
+            );
+            return res.status(200).json({
+                mensaje: "Cita cancelada exitosamente",
+                cita: citaCancelada
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async obtenerCitaPorId(req, res, next) {
         try {
             const { id } = req.params;

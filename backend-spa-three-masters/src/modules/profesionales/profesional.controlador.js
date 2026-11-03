@@ -30,6 +30,15 @@ export class ProfesionalControlador {
     }
   }
 
+  async obtenerMiPerfil(req, res, next) {
+    try {
+      const prof = await this.profesionalServicio.obtenerMiPerfil(req.usuario?._id);
+      return res.status(200).json(prof);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async obtenerProfesionalPorId(req, res, next) {
     try {
       const prof = await this.profesionalServicio.obtenerProfesionalPorId(req.params.id);

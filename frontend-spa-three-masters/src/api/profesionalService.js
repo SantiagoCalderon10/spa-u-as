@@ -11,6 +11,12 @@ export const getProfesionalesAdmin = async ({ signal } = {}) => {
   return response.data;
 };
 
+// Perfil de la cuenta autenticada. El backend lo resuelve desde el token.
+export const getMiPerfilProfesional = async ({ signal } = {}) => {
+  const response = await axiosClient.get('/profesionales/mi-perfil', { signal });
+  return response.data;
+};
+
 export const getProfesionalPorId = async (id, { signal } = {}) => {
   const response = await axiosClient.get(`/profesionales/${id}`, { signal });
   return response.data;

@@ -12,6 +12,7 @@ export function crearGuardia(authServicio) {
   return Object.freeze({
     autenticar,
     soloAdministrador: [autenticar, permitirRoles(RolUsuario.ADMINISTRADOR)],
+    soloProfesional: [autenticar, permitirRoles(RolUsuario.PROFESIONAL)],
     soloPersonal: [
       autenticar,
       permitirRoles(RolUsuario.ADMINISTRADOR, RolUsuario.PROFESIONAL),

@@ -34,12 +34,15 @@
 ## Estado de implementación *(el equipo completa)*
 | Módulo | Dominio | Entidad | Repositorio | Servicio (casos de uso) | Controlador y rutas |
 |---|---|---|---|---|---|
-| citas | | | | | |
-| clientes | | | | | |
-| profesionales | | | | | |
-| horarios | | | | | |
-| categorías | | | | | |
-| servicios | | | | | |
-| auth / usuarios | | | | | |
-| ingresos y reportes | | | | | |
-| configuración | | | | | |
+| citas | Hecho | Hecho | Hecho | Hecho | Hecho |
+| clientes | Hecho | Hecho | Hecho | Hecho | Hecho |
+| profesionales | Hecho | Hecho | Hecho | Hecho | Hecho |
+| horarios | Hecho | Hecho | Hecho | Hecho | Hecho |
+| categorías | Hecho | Hecho | Hecho | Hecho | Hecho |
+| servicios | Hecho | Hecho | Hecho | Hecho | Hecho |
+| auth / usuarios | Hecho | Hecho | Hecho | Hecho | Hecho |
+| ingresos y reportes | No iniciado | No iniciado | No iniciado | No iniciado | No iniciado |
+| configuración | No iniciado | No iniciado | No iniciado | No iniciado | No iniciado |
+
+**Entidades actuales:** 7 (usuarios, clientes, profesionales, horarios, categorías, servicios, citas). El mínimo del docente es 10; faltan ingresos, configuración y una tercera entidad por definir con el equipo.
+**Nota:** el módulo `auth` conserva archivos duplicados en inglés (`auth.controller.js`, `auth.service.js`) que no se importan; `app.routes.js` usa `auth.controlador.js`, `auth.servicio.js` y `auth.rutas.js`.

@@ -11,6 +11,14 @@ export function crearProfesionalRoutes(profesionalControlador, guardia) {
     profesionalControlador.obtenerProfesionalesAdmin.bind(profesionalControlador)
   );
 
+  // Panel de la profesional: su propio perfil, resuelto desde el token.
+  // Debe ir antes de /:id para que "mi-perfil" no se interprete como un id.
+  router.get(
+    "/mi-perfil",
+    guardia.soloProfesional,
+    profesionalControlador.obtenerMiPerfil.bind(profesionalControlador)
+  );
+
   // Catálogo público: solo datos visibles para la clienta
   router.get("/", profesionalControlador.obtenerProfesionales.bind(profesionalControlador));
   router.get("/:id", profesionalControlador.obtenerProfesionalPorId.bind(profesionalControlador));

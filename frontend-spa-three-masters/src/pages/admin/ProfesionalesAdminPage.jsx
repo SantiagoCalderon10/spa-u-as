@@ -243,6 +243,7 @@ export default function ProfesionalesAdminPage() {
         </Boton>
       </header>
 
+
       <dl className={page.resumen} aria-label="Resumen del equipo">
         <div className={page.resumenItem}>
           <dt>En el equipo</dt>

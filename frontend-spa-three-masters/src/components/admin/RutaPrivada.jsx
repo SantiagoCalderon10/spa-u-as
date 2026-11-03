@@ -2,11 +2,12 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './RutaPrivada.module.css';
 
-// Por ahora el panel es solo de administración. La vista del profesional
-// (FN-14) tendrá su propia guardia cuando se implemente.
-const ROLES_CON_PANEL = ['administrador'];
+const PANEL_POR_ROL = {
+  administrador: '/admin',
+  profesional: '/profesional/agenda',
+};
 
-export default function RutaPrivada() {
+export default function RutaPrivada({ roles = ['administrador'] }) {
   const { usuario, cargando } = useAuth();
   const ubicacion = useLocation();
 
@@ -19,8 +20,12 @@ export default function RutaPrivada() {
     );
   }
 
-  if (!usuario || !ROLES_CON_PANEL.includes(usuario.rol)) {
+  if (!usuario) {
     return <Navigate to="/admin/login" replace state={{ desde: ubicacion }} />;
+  }
+
+  if (!roles.includes(usuario.rol)) {
+    return <Navigate to={PANEL_POR_ROL[usuario.rol] ?? '/'} replace />;
   }
 
   return <Outlet />;

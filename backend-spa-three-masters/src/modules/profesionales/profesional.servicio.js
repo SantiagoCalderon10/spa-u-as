@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../shared/errors/AppError.js';
+import { NotFoundError, ValidationError } from '../../shared/errors/AppError.js';
 
 export class ProfesionalServicio {
   constructor(profesionalRepositorio) {
@@ -20,6 +20,19 @@ export class ProfesionalServicio {
   async obtenerProfesionalPorId(id) {
     const prof = await this.profesionalRepositorio.obtenerProfesionalPorId(id);
     if (!prof) throw new NotFoundError(`Profesional con id ${id} no encontrado`);
+    return prof;
+  }
+
+  async obtenerMiPerfil(idUsuario) {
+    if (!idUsuario) {
+      throw new ValidationError('No se pudo identificar la cuenta autenticada');
+    }
+
+    const prof = await this.profesionalRepositorio.obtenerPorUsuario(idUsuario);
+    if (!prof) {
+      throw new NotFoundError('Esta cuenta no tiene un perfil profesional vinculado');
+    }
+
     return prof;
   }
 

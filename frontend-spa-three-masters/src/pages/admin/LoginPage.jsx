@@ -18,13 +18,22 @@ export default function LoginPage() {
   const [errorGeneral, setErrorGeneral] = useState('');
   const [enviando, setEnviando] = useState(false);
 
-  const yaEsAdmin = usuario?.rol === 'administrador';
+  const PANEL_POR_ROL = {
+    administrador: '/admin',
+    profesional: '/profesional/agenda',
+  };
 
-  const destino = ubicacion.state?.desde?.pathname ?? '/admin';
+  const destinoPara = (rol) => {
+    const panel = PANEL_POR_ROL[rol];
+    const solicitado = ubicacion.state?.desde?.pathname;
+    return solicitado && solicitado.startsWith(panel) ? solicitado : panel;
+  };
 
-  // Si ya hay una sesión de administración, el login no tiene sentido.
-  if (yaEsAdmin) {
-    return <Navigate to={destino} replace />;
+  const panelActual = usuario ? PANEL_POR_ROL[usuario.rol] : null;
+
+  // Si ya hay una sesión con panel, el login no tiene sentido.
+  if (panelActual) {
+    return <Navigate to={destinoPara(usuario.rol)} replace />;
   }
 
   const validar = () => {
@@ -53,13 +62,13 @@ export default function LoginPage() {
     try {
       const cuenta = await iniciarSesion(correo.trim(), contrasena);
 
-      if (cuenta?.rol !== 'administrador') {
+      if (!cuenta || !PANEL_POR_ROL[cuenta.rol]) {
         cerrarSesion();
-        setErrorGeneral('Esta cuenta no tiene acceso al panel de administración.');
+        setErrorGeneral('Esta cuenta no tiene acceso al panel de gestión.');
         return;
       }
 
-      navegar(destino, { replace: true });
+      navegar(destinoPara(cuenta.rol), { replace: true });
     } catch (err) {
       setErrorGeneral(
         mensajeDeError(err, 'No pudimos iniciar sesión. Revisa tus datos e intenta de nuevo.')
@@ -81,7 +90,7 @@ export default function LoginPage() {
           Iniciar sesión
         </h1>
         <p className={styles.intro}>
-          Ingresa con tu cuenta de administración para gestionar el atelier.
+          Ingresa con tu cuenta de administración o profesional para gestionar el atelier.
         </p>
 
         {errorGeneral && (
