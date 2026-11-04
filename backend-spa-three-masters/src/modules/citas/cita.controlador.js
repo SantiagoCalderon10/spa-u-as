@@ -23,7 +23,11 @@ export class CitaControlador {
     async crearCitaPublica(req, res, next) {
         try {
             const datosCita = req.body || {};
-            const { cita, enlaceToken } = await this.citaServicio.crearCitaPublica(datosCita);
+            // req.usuario existe solo si la clienta trae sesión; si no, es invitada.
+            const { cita, enlaceToken } = await this.citaServicio.crearCitaPublica(
+                datosCita,
+                req.usuario
+            );
             return res.status(201).json({
                 mensaje: "Cita creada exitosamente",
                 cita,
@@ -75,6 +79,51 @@ export class CitaControlador {
             const citaCancelada = await this.citaServicio.cancelarCitaDeProfesional(
                 id,
                 req.usuario?._id,
+                motivo
+            );
+            return res.status(200).json({
+                mensaje: "Cita cancelada exitosamente",
+                cita: citaCancelada
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // --- Panel de la clienta ---
+
+    async obtenerMisCitasCliente(req, res, next) {
+        try {
+            const citas = await this.citaServicio.obtenerCitasDeCliente(
+                req.usuario?._id,
+                req.usuario
+            );
+            return res.status(200).json(citas);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async obtenerMiCitaCliente(req, res, next) {
+        try {
+            const cita = await this.citaServicio.obtenerCitaDeCliente(
+                req.params.id,
+                req.usuario?._id,
+                req.usuario
+            );
+            return res.status(200).json(cita);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async cancelarMiCitaCliente(req, res, next) {
+        try {
+            const { motivo } = req.body || {};
+            const citaCancelada = await this.citaServicio.cancelarCitaDeCliente(
+                req.params.id,
+                req.usuario?._id,
+                req.usuario,
                 motivo
             );
             return res.status(200).json({

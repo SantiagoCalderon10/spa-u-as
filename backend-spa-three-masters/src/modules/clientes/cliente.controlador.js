@@ -47,5 +47,39 @@ export class ClienteControlador {
       next(error);
     }
   }
+
+  // --- Panel de la clienta ---
+
+  async obtenerMiPerfil(req, res, next) {
+    try {
+      const cliente = await this.clienteServicio.obtenerMiPerfil(
+        req.usuario?._id,
+        req.usuario
+      );
+      return res.status(200).json({ cliente, usuario: datosPublicos(req.usuario) });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async actualizarMiPerfil(req, res, next) {
+    try {
+      const { cliente, usuario } = await this.clienteServicio.actualizarMiPerfil(
+        req.usuario?._id,
+        req.usuario,
+        req.body || {}
+      );
+      return res.status(200).json({ cliente, usuario: datosPublicos(usuario) });
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+function datosPublicos(usuario) {
+  if (!usuario) return null;
+  const datos = usuario.toObject ? usuario.toObject() : { ...usuario };
+  delete datos.contrasenaHash;
+  return datos;
 }
 

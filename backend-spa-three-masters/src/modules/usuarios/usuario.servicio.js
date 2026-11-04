@@ -117,6 +117,55 @@ export class UsuarioServicio {
     return this.#sinHash(actualizado);
   }
 
+  /**
+   * Perfil de la clienta: solo sus datos de contacto.
+   * El rol, el estado y la contraseña no se cambian desde aquí.
+   */
+  async actualizarPerfilCliente(id, datos = {}) {
+    const cambios = this.#seleccionar(datos || {}, ['nombrecompleto', 'telefono', 'correo']);
+
+    if (Object.keys(cambios).length === 0) {
+      throw new ValidationError('No hay campos para actualizar');
+    }
+
+    if (cambios.nombrecompleto !== undefined) {
+      const nombre = String(cambios.nombrecompleto).trim();
+      if (!nombre) {
+        throw new ValidationError('El nombre completo es requerido');
+      }
+      cambios.nombrecompleto = nombre;
+    }
+
+    if (cambios.telefono !== undefined) {
+      const telefono = Number(cambios.telefono);
+      if (!Number.isInteger(telefono) || telefono <= 0) {
+        throw new ValidationError('El teléfono no es válido');
+      }
+      cambios.telefono = telefono;
+    }
+
+    if (cambios.correo !== undefined) {
+      const correo = this.#normalizarCorreo(cambios.correo);
+      if (!correo) {
+        throw new ValidationError('El correo no puede estar vacío');
+      }
+
+      const existente = await this.usuarioRepositorio.obtenerPorCorreo(correo);
+      if (existente && String(existente._id) !== String(id)) {
+        throw new ConflictError(`Ya existe un usuario con el correo ${correo}`);
+      }
+
+      cambios.correo = correo;
+    }
+
+    const actualizado = await this.usuarioRepositorio.actualizarUsuario(id, cambios);
+    if (!actualizado) {
+      throw new NotFoundError(`Usuario con id ${id} no encontrado`);
+    }
+
+    return this.#sinHash(actualizado);
+  }
+
   async eliminarUsuario(id) {
     const eliminado = await this.usuarioRepositorio.eliminarUsuario(id);
     if (!eliminado) {

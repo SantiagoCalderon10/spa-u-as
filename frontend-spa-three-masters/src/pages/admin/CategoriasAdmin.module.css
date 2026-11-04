@@ -229,7 +229,7 @@
   align-items: center;
   padding: 5px 11px;
   background-color: var(--admin-accent-soft);
-  border: 1px solid var(--admin-accent-border);
+
   border-radius: 999px;
   color: var(--admin-primary-dark);
   font-size: 11px;
@@ -237,6 +237,7 @@
   letter-spacing: 0.04em;
   line-height: 1.2;
   white-space: nowrap;
+  
 }
 
 .chipVacio {

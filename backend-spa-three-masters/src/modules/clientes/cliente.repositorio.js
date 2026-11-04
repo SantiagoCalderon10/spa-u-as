@@ -33,6 +33,25 @@ export class ClienteRepositorio {
     }
   }
 
+  async obtenerPorUsuario(idUsuario) {
+    try {
+      return await ClienteModel.findOne({ idUsuario }).populate(
+        'idUsuario',
+        'nombreusuario correo telefono nombrecompleto'
+      );
+    } catch (error) {
+      throw new Error(`Error al buscar cliente por usuario: ${error.message}`);
+    }
+  }
+
+  async guardar(cliente) {
+    try {
+      return await cliente.save();
+    } catch (error) {
+      throw new Error(`Error al guardar cliente: ${error.message}`);
+    }
+  }
+
   async actualizarCliente(id, datos) {
     try {
       return await ClienteModel.findByIdAndUpdate(id, datos, { new: true, runValidators: true });

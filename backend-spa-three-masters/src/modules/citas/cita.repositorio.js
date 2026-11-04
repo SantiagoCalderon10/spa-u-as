@@ -68,6 +68,36 @@ export class CitaRepositorio {
         }
     }
 
+    // Historial de la clienta: sus citas con el nombre de la profesional.
+    async obtenerCitasPorCliente(idCliente) {
+        try {
+            const citas = await CitasModel.find({ idCliente })
+                .populate({
+                    path: 'idProfesional',
+                    populate: { path: 'idUsuario', select: 'nombrecompleto' },
+                })
+                .sort({ fecha: -1, horaInicio: -1 });
+            return citas || [];
+        } catch (error) {
+            throw new Error(`Error al obtener las citas de la clienta: ${error.message}`);
+        }
+    }
+
+    // Detalle de una cita de la clienta. El filtro por idCliente evita que
+    // una cuenta pueda consultar o cancelar citas ajenas cambiando el id.
+    async obtenerCitaDeClientePorId(id, idCliente) {
+        try {
+            return await CitasModel.findOne({ _id: id, idCliente })
+                .populate('idCliente', 'nombre telefono')
+                .populate({
+                    path: 'idProfesional',
+                    populate: { path: 'idUsuario', select: 'nombrecompleto' },
+                });
+        } catch (error) {
+            throw new Error(`Error al obtener la cita de la clienta: ${error.message}`);
+        }
+    }
+
     async obtenerCitasConfirmadasPorProfesionalYFecha(idProfesional, inicio, fin) {
         try {
             const citas = await CitasModel.find({

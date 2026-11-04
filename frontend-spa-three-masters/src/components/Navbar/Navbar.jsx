@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import styles from './Navbar.module.css';
 
 function IconoFlechaArriba() {
@@ -39,17 +40,27 @@ function IconoUsuario(){
 }
 
 export default function Navbar({ enLanding = true }) {
+  const { usuario } = useAuth();
+
   // En la landing los enlaces son anclas internas; en las páginas públicas
   // hijas deben volver a la landing antes de saltar a la sección.
   const enlaceSeccion = (id) => (enLanding ? `#${id}` : `/#${id}`);
 
+  const destinoCuenta =
+    usuario?.rol === 'cliente'
+      ? '/cuenta/perfil'
+      : usuario?.rol === 'profesional'
+        ? '/profesional/agenda'
+        : usuario
+          ? '/admin'
+          : '/cuenta';
+  const etiquetaCuenta =
+    usuario?.rol === 'cliente' ? 'Mi cuenta' : usuario ? 'Panel' : 'Mi cuenta';
+
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
-        <Link to="/" className={styles.brand} aria-label="Three Masters, volver al inicio">
-          <span className={`${styles.brandMark} ${styles.brandMonogram}`} aria-hidden="true">TM</span>
-          <span className={styles.brandText}>Three <span>Masters</span></span>
-        </Link>
+       
 
         <nav className={styles.navigation} aria-label="Navegación principal">
           <ul className={styles.navLinks}>
@@ -64,9 +75,9 @@ export default function Navbar({ enLanding = true }) {
             Reserva ahora
           </Link>
         </nav>
-        <Link to="/admin/login" className={`${styles.ctaBtn} ${styles.loginBtn}`} aria-label="Iniciar sesión">
+        <Link to={destinoCuenta} className={`${styles.ctaBtn} ${styles.loginBtn}`} aria-label={etiquetaCuenta}>
           <IconoUsuario />
-          Iniciar sesión
+          {etiquetaCuenta}
         </Link>
       </div>
     </header>

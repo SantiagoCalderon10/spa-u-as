@@ -9,3 +9,8 @@ export const obtenerPerfil = async () => {
   const response = await axiosClient.get('/auth/perfil');
   return response.data;
 };
+
+export const registrar = async (datos) => {
+  const response = await axiosClient.post('/auth/registro', datos);
+  return response.data;
+};

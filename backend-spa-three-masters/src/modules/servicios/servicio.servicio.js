@@ -7,8 +7,6 @@ export class ServicioServicio {
        
     }
 
-
-
     async obtenerServicios() {
         return await this.servicioRepositorio.obtenerServicios();
     }

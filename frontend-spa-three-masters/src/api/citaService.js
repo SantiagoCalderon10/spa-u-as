@@ -35,6 +35,23 @@ export const cancelarCitaProfesional = async (id, motivo) => {
   return response.data;
 };
 
+/* ------------------------- Panel de la clienta ------------------------- */
+
+export const getMisCitas = async ({ signal } = {}) => {
+  const response = await axiosClient.get('/citas/mis-citas', { signal });
+  return response.data;
+};
+
+export const getMiCita = async (id, { signal } = {}) => {
+  const response = await axiosClient.get(`/citas/mis-citas/${id}`, { signal });
+  return response.data;
+};
+
+export const cancelarMiCita = async (id, motivo) => {
+  const response = await axiosClient.patch(`/citas/mis-citas/${id}/cancelar`, { motivo });
+  return response.data;
+};
+
 /* ------------------------- Administración ------------------------- */
 
 export const getCitas = async ({ signal } = {}) => {

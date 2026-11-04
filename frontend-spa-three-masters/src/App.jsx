@@ -15,6 +15,9 @@ import ServiciosAdminPage from './pages/admin/ServiciosAdminPage';
 import AgendaProfesionalPage from './pages/profesional/AgendaProfesionalPage';
 import LandingPage from './pages/LandingPage';
 import CitaTokenPage from './pages/publico/CitaTokenPage';
+import CuentaPage from './pages/publico/CuentaPage';
+import DetalleCitaPage from './pages/publico/DetalleCitaPage';
+import PerfilClientePage from './pages/publico/PerfilClientePage';
 import ReservaPage from './pages/publico/ReservaPage';
 
 function ScrollToTop() {
@@ -37,6 +40,11 @@ function App() {
           <Route element={<PublicLayout />}>
             <Route path="reservar" element={<ReservaPage />} />
             <Route path="cita/:token" element={<CitaTokenPage />} />
+            <Route path="cuenta" element={<CuentaPage />} />
+            <Route element={<RutaPrivada roles={['cliente']} loginPath="/cuenta" />}>
+              <Route path="cuenta/perfil" element={<PerfilClientePage />} />
+              <Route path="cuenta/citas/:id" element={<DetalleCitaPage />} />
+            </Route>
           </Route>
           <Route path="/admin/login" element={<LoginPage />} />
           <Route element={<RutaPrivada roles={['administrador']} />}>

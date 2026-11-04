@@ -46,3 +46,14 @@
 
 **Entidades actuales:** 7 (usuarios, clientes, profesionales, horarios, categorías, servicios, citas). El mínimo del docente es 10; faltan ingresos, configuración y una tercera entidad por definir con el equipo.
 **Nota:** el módulo `auth` conserva archivos duplicados en inglés (`auth.controller.js`, `auth.service.js`) que no se importan; `app.routes.js` usa `auth.controlador.js`, `auth.servicio.js` y `auth.rutas.js`.
+
+## Cuenta de la clienta e historial
+- La cuenta es **opcional**: `POST /citas/publica` sigue funcionando para invitadas.
+- Si la petición trae sesión de rol `cliente`, la cita se vincula a esa cuenta; el id de la clienta sale del token, nunca del cuerpo.
+- **Vínculo cuenta ↔ historial:** se resuelve en el primer acceso autenticado (`GET /clientes/mi-perfil` o `GET /citas/mis-citas`). Si existe una clienta con el mismo teléfono y nombre normalizados y sin `idUsuario`, se vincula; si no existe, se crea con los datos de la cuenta.
+- **Riesgo aceptado:** sin verificación por SMS o correo, alguien que conozca el teléfono y el nombre exactos podría reclamar ese historial. La verificación real queda fuera de esta entrega y, si se requiere, debe registrarse como funcionalidad nueva.
+- **Limitación conocida:** como el vínculo usa teléfono + nombre y el índice es único, dos cuentas distintas con los mismos datos no pueden reclamar historiales separados; la segunda recibe un conflicto.
+- **Perfil editable:** nombre completo, teléfono y correo. Rol, estado y contraseña no se cambian desde el perfil.
+- **Rutas del frontend:** `/cuenta` es pública (login y registro) y `/cuenta/perfil` es privada con rol `cliente`, dentro del layout público con navbar y footer.
+- **Detalle y cancelación desde la cuenta:** cada cita del historial enlaza a `/cuenta/citas/:id`. Esa vista usa `GET /api/citas/mis-citas/:id` y el botón de cancelar usa `PATCH /api/citas/mis-citas/:id/cancelar`, ambos con `soloCliente`. La cita se busca por `_id` + `idCliente` resuelto desde el token; no se reutiliza el enlace público porque el token original no se guarda, solo su hash.
+- **Endpoints:** `GET/PUT /api/clientes/mi-perfil`, `GET /api/citas/mis-citas`, `GET /api/citas/mis-citas/:id` y `PATCH /api/citas/mis-citas/:id/cancelar`, todos con la guardia `soloCliente`.

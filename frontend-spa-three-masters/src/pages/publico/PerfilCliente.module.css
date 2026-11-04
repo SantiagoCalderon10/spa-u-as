@@ -1,0 +1,534 @@
+/* Perfil de la clienta: datos, resumen e historial de citas.
+   Mantiene el sistema visual público (--catalog-*). */
+
+.page {
+  padding: 4rem 2rem 5rem;
+  background-color: var(--color-surface-page);
+}
+
+.container {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.estado {
+  font-family: var(--catalog-font-body);
+  font-size: 15px;
+  color: var(--catalog-muted);
+}
+
+/* ------------------------------- Encabezado ------------------------------- */
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--catalog-border);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #f7edf0;
+  border: 1px solid var(--catalog-border);
+  font-family: var(--catalog-font-display);
+  font-size: 1.35rem;
+  color: var(--catalog-wine);
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.eyebrow {
+  font-family: var(--catalog-font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+.title {
+  font-family: var(--catalog-font-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--catalog-ink);
+}
+
+.subtitle {
+  font-family: var(--catalog-font-body);
+  font-size: 14px;
+  color: var(--catalog-muted);
+}
+
+/* ------------------------------- Resumen ------------------------------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  box-shadow: var(--shadow-subtle);
+}
+
+.statNumero {
+  font-family: var(--catalog-font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--catalog-wine);
+}
+
+.statEtiqueta {
+  font-family: var(--catalog-font-label);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--catalog-muted);
+}
+
+/* ------------------------------- Tarjetas ------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  box-shadow: var(--shadow-subtle);
+}
+
+.cardHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cardTitle {
+  font-family: var(--catalog-font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--catalog-ink);
+}
+
+.cardHint {
+  margin: 0;
+  font-family: var(--catalog-font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--catalog-muted);
+}
+
+.errorGeneral {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-danger-soft);
+  font-family: var(--catalog-font-body);
+  font-size: 14px;
+  color: var(--color-danger);
+}
+
+.exito {
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-positive);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-positive-soft);
+  font-family: var(--catalog-font-body);
+  font-size: 14px;
+  color: var(--color-positive);
+}
+
+/* ------------------------------- Formulario ------------------------------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-family: var(--catalog-font-label);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+.input {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-sm);
+  background-color: #ffffff;
+  font-family: var(--catalog-font-body);
+  font-size: 15px;
+  color: var(--catalog-ink);
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: var(--catalog-wine);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(120, 62, 80, 0.12);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+.error {
+  font-family: var(--catalog-font-label);
+  font-size: 12px;
+  color: var(--color-danger);
+}
+
+/* ------------------------------- Botones ------------------------------- */
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.3rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--catalog-font-label);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.primary {
+  border: 1px solid var(--catalog-wine);
+  background-color: var(--catalog-wine);
+  color: #ffffff;
+}
+
+.primary:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.primary:disabled {
+  border-color: #cbb9bf;
+  background-color: #cbb9bf;
+  cursor: not-allowed;
+}
+
+.secondary {
+  border: 1px solid var(--catalog-border);
+  background-color: #ffffff;
+  color: var(--catalog-ink);
+}
+
+.secondary:hover {
+  border-color: var(--catalog-wine);
+  color: var(--catalog-wine);
+}
+
+.textLink {
+  font-family: var(--catalog-font-label);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--catalog-wine);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ------------------------------- Próxima cita ------------------------------- */
+
+.proxima {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.25rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-sm);
+  background-color: #fbf8f6;
+}
+
+.proximaFecha {
+  font-family: var(--catalog-font-label);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+.proximaHora {
+  font-family: var(--catalog-font-display);
+  font-size: 1.5rem;
+  color: var(--catalog-ink);
+}
+
+.proximaServicio {
+  font-family: var(--catalog-font-body);
+  font-size: 15px;
+  color: var(--catalog-ink);
+}
+
+.proximaMeta {
+  font-family: var(--catalog-font-body);
+  font-size: 13.5px;
+  color: var(--catalog-muted);
+}
+
+/* ------------------------------- Historial ------------------------------- */
+
+.historial {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  box-shadow: var(--shadow-subtle);
+}
+
+.historialHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.grupoTitulo {
+  font-family: var(--catalog-font-label);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--catalog-wine);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cita {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.8fr) minmax(0, 1.4fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-sm);
+  background-color: #fdfbfa;
+}
+
+.citaFecha {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.citaDia {
+  font-family: var(--catalog-font-label);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--catalog-ink);
+}
+
+.citaHora {
+  font-family: var(--catalog-font-body);
+  font-size: 13px;
+  color: var(--catalog-muted);
+}
+
+.citaDetalle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.citaServicio {
+  font-family: var(--catalog-font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--catalog-ink);
+}
+
+.citaMeta {
+  font-family: var(--catalog-font-body);
+  font-size: 13px;
+  color: var(--catalog-muted);
+}
+
+.citaMotivo {
+  font-family: var(--catalog-font-body);
+  font-size: 12.5px;
+  color: var(--color-danger);
+}
+
+.citaLado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.citaPrecio {
+  font-family: var(--catalog-font-label);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--catalog-ink);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--catalog-font-label);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.confirmada {
+  background-color: var(--color-positive-soft);
+  color: var(--color-positive);
+}
+
+.completada {
+  background-color: #f7edf0;
+  color: var(--catalog-wine);
+}
+
+.cancelada {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.noAsistio {
+  background-color: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.neutro {
+  background-color: var(--color-surface-subtle);
+  color: var(--catalog-muted);
+}
+
+.vacio {
+  margin: 0;
+  font-family: var(--catalog-font-body);
+  font-size: 14px;
+  color: var(--catalog-muted);
+}
+
+.vacioCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px dashed var(--catalog-border);
+  border-radius: var(--radius-sm);
+  background-color: #fbf8f6;
+}
+
+/* ------------------------------- Error de carga ------------------------------- */
+
+.errorCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 2rem;
+  border: 1px solid var(--catalog-border);
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  box-shadow: var(--shadow-subtle);
+}
+
+.errorTitle {
+  font-family: var(--catalog-font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--catalog-ink);
+}
+
+.errorTexto {
+  margin: 0;
+  font-family: var(--catalog-font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--catalog-muted);
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 2.5rem 1.25rem 3.5rem;
+  }
+
+  .cita {
+    grid-template-columns: 1fr;
+  }
+
+  .citaLado {
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+}

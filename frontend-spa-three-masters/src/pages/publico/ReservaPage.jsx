@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { crearCitaPublica, obtenerDisponibilidad } from '../../api/citaService';
 import { getHorarios } from '../../api/horarioService';
+import { useAuth } from '../../context/AuthContext';
 import { useProfesionales } from '../../hooks/useProfesionales';
 import { useServicios } from '../../hooks/useServicios';
 import { inicialesDe, nombreDeProfesional } from '../../utils/agenda';
@@ -241,6 +242,22 @@ export default function ReservaPage() {
   const [resultado, setResultado] = useState(null);
   const [estadoCopia, setEstadoCopia] = useState('');
   const [estadoEnvio, setEstadoEnvio] = useState('');
+
+  // Si la clienta tiene sesión, el formulario se prellena con sus datos.
+  const { usuario } = useAuth();
+
+  useEffect(() => {
+    if (usuario?.rol !== 'cliente') return;
+
+    setCliente((previo) =>
+      previo.nombre || previo.telefono
+        ? previo
+        : {
+            nombre: usuario.nombrecompleto ?? '',
+            telefono: usuario.telefono ? String(usuario.telefono) : '',
+          }
+    );
+  }, [usuario]);
 
   const serviciosActivos = useMemo(
     () => servicios.filter((servicio) => servicio.activo !== false),
@@ -661,7 +678,11 @@ export default function ReservaPage() {
           <section className={styles.panel} aria-labelledby="paso-datos">
             <div className={styles.panelHead}>
               <h2 id="paso-datos" className={styles.panelTitle}>Tus datos</h2>
-              <p className={styles.panelHint}>Revisa el resumen antes de confirmar.</p>
+              <p className={styles.panelHint}>
+                {usuario?.rol === 'cliente'
+                  ? 'Estás reservando con tu cuenta. Si necesitas cambiar tus datos, hazlo desde Mi cuenta.'
+                  : 'Revisa el resumen antes de confirmar.'}
+              </p>
             </div>
 
             <div className={styles.summary}>
@@ -699,6 +720,7 @@ export default function ReservaPage() {
                   autoComplete="name"
                   value={cliente.nombre}
                   onChange={(evento) => setCliente((previo) => ({ ...previo, nombre: evento.target.value }))}
+                  readOnly={usuario?.rol === 'cliente'}
                   aria-invalid={Boolean(errores.nombre)}
                   aria-describedby={errores.nombre ? 'cliente-nombre-error' : undefined}
                   placeholder="Ej. Laura Gómez"
@@ -718,6 +740,7 @@ export default function ReservaPage() {
                   autoComplete="tel"
                   value={cliente.telefono}
                   onChange={(evento) => setCliente((previo) => ({ ...previo, telefono: evento.target.value }))}
+                  readOnly={usuario?.rol === 'cliente'}
                   aria-invalid={Boolean(errores.telefono)}
                   aria-describedby={errores.telefono ? 'cliente-telefono-error' : 'cliente-telefono-ayuda'}
                   placeholder="Ej. 318 450 9821"

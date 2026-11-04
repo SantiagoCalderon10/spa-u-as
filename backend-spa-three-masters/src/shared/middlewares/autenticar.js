@@ -10,7 +10,7 @@ export function crearAutenticar(authServicio) {
   };
 }
 
-function extraerToken(req) {
+export function extraerToken(req) {
   const encabezado = req.get("authorization") || "";
   const [tipo, token] = encabezado.trim().split(/\s+/);
 

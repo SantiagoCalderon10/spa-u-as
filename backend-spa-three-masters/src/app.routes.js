@@ -64,7 +64,11 @@ const horCtrl = new HorarioControlador(horServ);
 const servServ = new ServicioServicio(servRepo);
 const servCtrl = new ServicioControlador(servServ);
 
-const cliServ = new ClienteServicio(cliRepo);
+const usuRepo = new UsuarioRepositorio();
+const usuServ = new UsuarioServicio(usuRepo);
+const usuCtrl = new UsuarioControlador(usuServ);
+
+const cliServ = new ClienteServicio(cliRepo, usuServ);
 const cliCtrl = new ClienteControlador(cliServ);
 
 const citaRepo = new CitaRepositorio();
@@ -74,10 +78,6 @@ const citaCtrl = new CitaControlador(citaServ);
 const catRepo = new CategoriaRepositorio();
 const catServ = new CategoriaServicio(catRepo);
 const catCtrl = new CategoriaControlador(catServ);
-
-const usuRepo = new UsuarioRepositorio();
-const usuServ = new UsuarioServicio(usuRepo);
-const usuCtrl = new UsuarioControlador(usuServ);
 
 const profServ = new ProfesionalServicio(profRepo);
 const profCtrl = new ProfesionalControlador(profServ);

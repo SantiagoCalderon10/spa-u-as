@@ -493,7 +493,7 @@ export default function CategoriasAdminPage() {
                           }
                         >
                           <span className={styles.punto} aria-hidden="true" />
-                          {ocupada ? 'Guardando…' : estaActiva ? 'Activa' : 'En pausa'}
+                          {ocupada ? 'Guardando…' : estaActiva ? 'ACTIVA' : 'EN PAUSA'}
                         </button>
                       </td>
 

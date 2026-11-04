@@ -5,9 +5,10 @@ import styles from './RutaPrivada.module.css';
 const PANEL_POR_ROL = {
   administrador: '/admin',
   profesional: '/profesional/agenda',
+  cliente: '/cuenta/perfil',
 };
 
-export default function RutaPrivada({ roles = ['administrador'] }) {
+export default function RutaPrivada({ roles = ['administrador'], loginPath = '/admin/login' }) {
   const { usuario, cargando } = useAuth();
   const ubicacion = useLocation();
 
@@ -21,7 +22,7 @@ export default function RutaPrivada({ roles = ['administrador'] }) {
   }
 
   if (!usuario) {
-    return <Navigate to="/admin/login" replace state={{ desde: ubicacion }} />;
+    return <Navigate to={loginPath} replace state={{ desde: ubicacion }} />;
   }
 
   if (!roles.includes(usuario.rol)) {

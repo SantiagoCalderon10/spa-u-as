@@ -31,6 +31,11 @@ export default function LoginPage() {
 
   const panelActual = usuario ? PANEL_POR_ROL[usuario.rol] : null;
 
+  // Las clientas entran por /cuenta; este login es solo del personal.
+  if (usuario?.rol === 'cliente') {
+    return <Navigate to="/cuenta/perfil" replace />;
+  }
+
   // Si ya hay una sesión con panel, el login no tiene sentido.
   if (panelActual) {
     return <Navigate to={destinoPara(usuario.rol)} replace />;
@@ -79,6 +84,7 @@ export default function LoginPage() {
   };
 
   return (
+    
     <main className={styles.pantalla}>
       <section className={styles.tarjeta} aria-labelledby="titulo-login">
         <Link to="/" className={styles.marca}>

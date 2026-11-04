@@ -50,8 +50,8 @@
 - El motivo de cancelación es obligatorio si cancela el profesional o el administrador, y opcional si cancela la clienta. La clienta lo ve en su enlace.
 - La cita copia **nombre y precio del servicio**. Profesional y cliente van por referencia.
 - Las especialidades de una profesional son **categorías**; atiende todos los servicios activos de ellas.
-- Cliente sin cuenta: se identifica por **teléfono y nombre normalizados**. Mismo teléfono con otro nombre es otro cliente. El formulario nunca autocompleta ni revela datos de un cliente existente.
-- Cuenta opcional: el cliente se liga al usuario por `idUsuario`, **nunca** por teléfono.
+- Cliente sin cuenta: se identifica por **teléfono y nombre normalizados**. Mismo teléfono con otro nombre es otro cliente. El formulario público no autocompleta ni revela datos de otras clientas; solo se prellena con los datos de la cuenta que tiene sesión iniciada.
+- Cuenta opcional: la clienta se liga al usuario por `idUsuario`. El vínculo inicial se resuelve una vez con **teléfono + nombre normalizados** para recuperar el historial de invitada; de ahí en adelante manda `idUsuario`.
 - Descuento: tras N citas completadas, la siguiente tiene X% de descuento. N y X los configura el administrador. Se cuenta consultando citas completadas, sin contador guardado.
 - Ingresos: un registro por cita completada, con el precio final. Los reportes se calculan sobre esos registros.
 

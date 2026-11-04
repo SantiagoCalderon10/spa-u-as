@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { iniciarSesion as iniciarSesionApi, obtenerPerfil } from '../api/authService';
+import { iniciarSesion as iniciarSesionApi, obtenerPerfil, registrar as registrarApi } from '../api/authService';
 import {
   borrarSesion,
   guardarSesion,
@@ -74,15 +74,32 @@ export function AuthProvider({ children }) {
     setUsuario(null);
   }, []);
 
+  const registrar = useCallback(async (datos) => {
+    const respuesta = await registrarApi(datos);
+    guardarSesion(respuesta);
+    setUsuario(respuesta.usuario);
+    return respuesta.usuario;
+  }, []);
+
+  // Mantiene sincronizada la sesión cuando la clienta edita su perfil.
+  const actualizarUsuario = useCallback((datos) => {
+    if (!datos) return;
+    setUsuario(datos);
+    const token = leerToken();
+    if (token) guardarSesion({ token, usuario: datos });
+  }, []);
+
   const valor = useMemo(
     () => ({
       usuario,
       cargando,
       autenticado: Boolean(usuario),
       iniciarSesion,
+      registrar,
+      actualizarUsuario,
       cerrarSesion,
     }),
-    [usuario, cargando, iniciarSesion, cerrarSesion]
+    [usuario, cargando, iniciarSesion, registrar, actualizarUsuario, cerrarSesion]
   );
 
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;

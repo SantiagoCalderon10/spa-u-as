@@ -375,7 +375,7 @@ export default function CitasAdminPage() {
             <input
               type="search"
               className={styles.entradaBusqueda}
-              placeholder="Buscar por clienta, teléfono, servicio o profesional"
+              placeholder="Buscar por cliente, teléfono, servicio o profesional"
               value={busqueda}
               onChange={(evento) => setBusqueda(evento.target.value)}
               aria-label="Buscar citas"
@@ -457,7 +457,7 @@ export default function CitasAdminPage() {
                 <thead>
                   <tr>
                     <th scope="col">Cita</th>
-                    <th scope="col">Clienta</th>
+                    <th scope="col">Cliente</th>
                     <th scope="col">Servicio</th>
                     <th scope="col">Profesional</th>
                     <th scope="col">Estado</th>

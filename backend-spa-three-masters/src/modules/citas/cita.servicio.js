@@ -117,12 +117,21 @@ export class CitaServicio {
         return { cita: citaRespuesta, enlaceToken: token };
     }
 
-    async crearCitaPublica(datosCita) {
-        if (!datosCita || !datosCita.cliente) {
+    async crearCitaPublica(datosCita, usuario = null) {
+        if (!datosCita) {
+            throw new ValidationError("Los datos de la cita son requeridos");
+        }
+
+        const esCliente = usuario?.rol === RolUsuario.CLIENTE;
+        if (!esCliente && !datosCita.cliente) {
             throw new ValidationError("Los datos de la clienta son requeridos");
         }
 
-        const cliente = await this.clienteServicio.obtenerOCrearCliente(datosCita.cliente);
+        // Si la clienta tiene sesión, la cita queda en su cuenta aunque el
+        // formulario venga con otros datos. El id sale del token, no del body.
+        const cliente = esCliente
+            ? await this.clienteServicio.obtenerMiCliente(usuario._id, usuario)
+            : await this.clienteServicio.obtenerOCrearCliente(datosCita.cliente);
 
         return await this.crearCita({
             idProfesional: datosCita.idProfesional,
@@ -291,6 +300,36 @@ export class CitaServicio {
     async obtenerCitasDeProfesional(idUsuario) {
         const perfil = await this.#obtenerPerfilProfesional(idUsuario);
         return await this.citaRepositorio.obtenerCitasPorProfesional(perfil._id);
+    }
+
+    // Historial de la clienta autenticada, resuelto desde el token.
+    async obtenerCitasDeCliente(idUsuario, usuario) {
+        const cliente = await this.clienteServicio.obtenerMiCliente(idUsuario, usuario);
+        return await this.citaRepositorio.obtenerCitasPorCliente(cliente._id);
+    }
+
+    async obtenerCitaDeCliente(id, idUsuario, usuario) {
+        const cliente = await this.clienteServicio.obtenerMiCliente(idUsuario, usuario);
+        const cita = await this.citaRepositorio.obtenerCitaDeClientePorId(id, cliente._id);
+        if (!cita) {
+            throw new NotFoundError(`Cita con id ${id} no encontrada`);
+        }
+        return cita;
+    }
+
+    // La clienta cancela desde su cuenta, sin usar el token del enlace.
+    async cancelarCitaDeCliente(id, idUsuario, usuario, motivo) {
+        this.validarMotivo(motivo);
+
+        const cliente = await this.clienteServicio.obtenerMiCliente(idUsuario, usuario);
+        const cita = await this.citaRepositorio.obtenerCitaDeClientePorId(id, cliente._id);
+        if (!cita) {
+            throw new NotFoundError(`Cita con id ${id} no encontrada`);
+        }
+
+        cita.cancelar(RolUsuario.CLIENTE, motivo);
+
+        return await this.citaRepositorio.guardar(cita);
     }
 
     async cancelarCitaDeProfesional(id, idUsuario, motivo) {
