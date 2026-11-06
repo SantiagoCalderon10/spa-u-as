@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Boton from './Boton';
 import Campo from './Campo';
+import CampoImagen from './CampoImagen';
 import Dialogo from './Dialogo';
 import Interruptor from './Interruptor';
 import {
@@ -20,26 +21,6 @@ const IDS_CAMPOS = {
   duracion: 'servicio-duracion',
 };
 
-function IconoImagen() {
-  return (
-    <svg
-      width="17"
-      height="17"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="4" width="18" height="16" rx="2.5" />
-      <circle cx="8.5" cy="9.5" r="1.5" />
-      <path d="m21 15.5-4.5-4.5L7 20.5" />
-    </svg>
-  );
-}
-
 export default function ServicioFormulario({
   servicio,
   categorias,
@@ -51,7 +32,6 @@ export default function ServicioFormulario({
   const [errores, setErrores] = useState({});
   const [errorGeneral, setErrorGeneral] = useState('');
   const [guardando, setGuardando] = useState(false);
-  const [fotoRota, setFotoRota] = useState(false);
 
   // Lleva el foco al primer campo inválido después de validar.
   useEffect(() => {
@@ -66,7 +46,6 @@ export default function ServicioFormulario({
     const valor =
       evento.target.type === 'checkbox' ? evento.target.checked : evento.target.value;
 
-    if (campo === 'urlFoto') setFotoRota(false);
     if (errorGeneral) setErrorGeneral('');
 
     setDatos((previos) => ({ ...previos, [campo]: valor }));
@@ -109,9 +88,6 @@ export default function ServicioFormulario({
       setGuardando(false);
     }
   };
-
-  const urlFoto = datos.urlFoto.trim();
-  const mostrarFoto = Boolean(urlFoto) && !fotoRota;
 
   return (
     <Dialogo
@@ -263,27 +239,17 @@ export default function ServicioFormulario({
             etiqueta="Foto del servicio"
             htmlFor="servicio-foto"
             opcional
-            ayuda="Enlace público a una imagen. Si no hay foto, mostramos un monograma."
+            ayuda="Se muestra en el catálogo público. Si no hay foto, usamos un monograma."
           >
-            <div className={styles.fotoFila}>
-              <input
-                id="servicio-foto"
-                className={styles.control}
-                type="url"
-                value={datos.urlFoto}
-                onChange={cambiar('urlFoto')}
-                aria-describedby="servicio-foto-ayuda"
-                placeholder="https://..."
-                autoComplete="off"
-              />
-              <span className={styles.vistaPrevia} aria-hidden="true">
-                {mostrarFoto ? (
-                  <img src={urlFoto} alt="" onError={() => setFotoRota(true)} />
-                ) : (
-                  <IconoImagen />
-                )}
-              </span>
-            </div>
+            <CampoImagen
+              id="servicio-foto"
+              valor={datos.urlFoto}
+              carpeta="servicios"
+              descritoPor="servicio-foto-ayuda"
+              onCambiar={(url) =>
+                setDatos((previos) => ({ ...previos, urlFoto: url }))
+              }
+            />
           </Campo>
 
           <Interruptor

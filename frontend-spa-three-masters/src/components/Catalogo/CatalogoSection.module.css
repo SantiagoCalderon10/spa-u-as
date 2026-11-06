@@ -94,14 +94,16 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  /* Todas las filas comparten la altura de la tarjeta más alta. */
+  grid-auto-rows: 1fr;
   gap: 1.5rem;
-  align-items: start;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
   min-width: 0;
 }
 
@@ -128,20 +130,29 @@
 .cardInfo {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 12px;
 }
 
 .cardCategory {
+  display: block;
+  overflow: hidden;
   font-family: var(--catalog-font-body);
   font-size: 10px;
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: 0.02em;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--catalog-wine);
 }
 
 .cardTitle {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   font-family: var(--catalog-font-display);
   font-size: clamp(1.375rem, 1.9vw, 1.6875rem);
   font-weight: 400;
@@ -150,6 +161,10 @@
 }
 
 .cardDescription {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   font-family: var(--catalog-font-body);
   font-size: 15px;
   font-weight: 400;
@@ -186,12 +201,20 @@
   white-space: nowrap;
 }
 
+/* Reserva la altura del enlace aunque la tarjeta no permita reservar,
+   para que todas las tarjetas cierren a la misma altura. */
+.cardAction {
+  display: flex;
+  align-items: center;
+  min-height: 18px;
+  margin-top: auto;
+}
+
 .cardReserve {
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
   gap: 7px;
-  margin-top: -4px;
   font-family: var(--catalog-font-label);
   font-size: 12px;
   font-weight: 600;
@@ -285,5 +308,11 @@
 
   .grid {
     grid-template-columns: 1fr;
+    /* En una sola columna no hace falta igualar alturas entre tarjetas. */
+    grid-auto-rows: auto;
+  }
+
+  .card {
+    height: auto;
   }
 }

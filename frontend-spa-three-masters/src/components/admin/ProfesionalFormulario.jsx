@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Boton from './Boton';
 import Campo from './Campo';
+import CampoImagen from './CampoImagen';
 import Dialogo from './Dialogo';
 import { datosFormularioProfesional, validarProfesional } from '../../utils/agenda';
 import { mensajeDeError } from '../../utils/catalogo';
@@ -287,47 +288,45 @@ export default function ProfesionalFormulario({
             )}
           </fieldset>
 
-          <div className={styles.filaDos}>
-            <Campo
-              etiqueta="Años de experiencia"
-              htmlFor="profesional-experiencia"
-              opcional
-              error={errores.anioExperiencia}
-            >
-              <input
-                id="profesional-experiencia"
-                className={styles.control}
-                type="number"
-                min="0"
-                max="70"
-                step="1"
-                inputMode="numeric"
-                value={datos.anioExperiencia}
-                onChange={cambiar('anioExperiencia')}
-                aria-invalid={Boolean(errores.anioExperiencia)}
-                aria-describedby={
-                  errores.anioExperiencia ? 'profesional-experiencia-error' : undefined
-                }
-              />
-            </Campo>
+          <Campo
+            etiqueta="Años de experiencia"
+            htmlFor="profesional-experiencia"
+            opcional
+            error={errores.anioExperiencia}
+          >
+            <input
+              id="profesional-experiencia"
+              className={styles.control}
+              type="number"
+              min="0"
+              max="70"
+              step="1"
+              inputMode="numeric"
+              value={datos.anioExperiencia}
+              onChange={cambiar('anioExperiencia')}
+              aria-invalid={Boolean(errores.anioExperiencia)}
+              aria-describedby={
+                errores.anioExperiencia ? 'profesional-experiencia-error' : undefined
+              }
+            />
+          </Campo>
 
-            <Campo
-              etiqueta="Foto del perfil"
-              htmlFor="profesional-foto"
-              opcional
-              ayuda="Enlace público a una imagen."
-            >
-              <input
-                id="profesional-foto"
-                className={styles.control}
-                type="url"
-                value={datos.urlFoto}
-                onChange={cambiar('urlFoto')}
-                aria-describedby="profesional-foto-ayuda"
-                placeholder="https://..."
-              />
-            </Campo>
-          </div>
+          <Campo
+            etiqueta="Foto del perfil"
+            htmlFor="profesional-foto"
+            opcional
+            ayuda="Se muestra en la sección del equipo."
+          >
+            <CampoImagen
+              id="profesional-foto"
+              valor={datos.urlFoto}
+              carpeta="profesionales"
+              descritoPor="profesional-foto-ayuda"
+              onCambiar={(url) =>
+                setDatos((previos) => ({ ...previos, urlFoto: url }))
+              }
+            />
+          </Campo>
         </fieldset>
 
         {errorGeneral && (

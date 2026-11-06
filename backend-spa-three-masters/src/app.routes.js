@@ -49,6 +49,9 @@ import { HorarioServicio } from "./modules/horarios/horario.servicio.js";
 import { HorarioControlador } from "./modules/horarios/horario.controlador.js";
 import { crearHorarioRoutes } from "./modules/horarios/horario.routes.js";
 
+// Subida de imágenes
+import { crearUploadRoutes } from "./modules/uploads/upload.routes.js";
+
 const appRouter = Router();
 
 // Repositorios compartidos
@@ -99,5 +102,6 @@ appRouter.use("/citas", crearCitaRoutes(citaCtrl, guardia));
 appRouter.use("/categorias", crearCategoriaRoutes(catCtrl, guardia));
 appRouter.use("/usuarios", crearUsuarioRoutes(usuCtrl, guardia));
 appRouter.use("/profesionales", crearProfesionalRoutes(profCtrl, guardia));
+appRouter.use("/uploads", crearUploadRoutes(guardia));
 
 export default appRouter;

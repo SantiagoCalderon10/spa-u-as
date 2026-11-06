@@ -167,24 +167,34 @@ select.control {
   outline-offset: 2px;
 }
 
-/* Foto con vista previa */
-.fotoFila {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.fotoFila .control {
-  flex: 1;
-  min-width: 0;
-}
-
-.vistaPrevia {
+/* Selector de imagen con arrastrar y soltar */
+.zonaImagen {
   display: grid;
-  flex: 0 0 auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: #fbfaf9;
+  border: 1px dashed #ddd3d0;
+  border-radius: var(--admin-radius-item);
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.zonaImagen:focus-within {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(122, 58, 85, 0.1);
+}
+
+.zonaImagenActiva {
+  background-color: var(--admin-accent-soft);
+  border-color: var(--admin-accent-border);
+}
+
+.vistaPreviaImagen {
+  display: grid;
   place-items: center;
-  width: 44px;
-  height: 42px;
+  width: 56px;
+  height: 56px;
   overflow: hidden;
   background-color: var(--admin-accent-soft);
   border: 1px solid var(--admin-accent-border);
@@ -192,10 +202,105 @@ select.control {
   color: #b28d9d;
 }
 
-.vistaPrevia img {
+.vistaPreviaImagen img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.zonaTexto {
+  min-width: 0;
+}
+
+.zonaTitulo {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.zonaAyuda {
+  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--admin-text-muted);
+}
+
+.zonaAcciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inputOculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.botonArchivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 13px;
+  background-color: var(--admin-surface);
+  border: 1px solid #e2dbd7;
+  border-radius: 999px;
+  color: var(--admin-primary);
+  font-family: var(--admin-font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+}
+
+.botonArchivo:hover {
+  background-color: #fdf7fa;
+  border-color: var(--admin-accent-border);
+}
+
+.botonArchivo[aria-busy='true'] {
+  color: var(--admin-text-muted);
+  cursor: progress;
+}
+
+.inputOculto:focus-visible + .botonArchivo {
+  outline: 2px solid var(--admin-primary);
+  outline-offset: 2px;
+}
+
+.inputOculto:disabled + .botonArchivo {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.quitarImagen {
+  padding: 4px 2px;
+  background: none;
+  border: 0;
+  color: var(--admin-text-muted);
+  font-family: var(--admin-font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.quitarImagen:hover {
+  color: var(--admin-danger);
+}
+
+.errorImagen {
+  grid-column: 1 / -1;
+  margin-top: 0;
 }
 
 /* Mensajes y acciones */
@@ -386,6 +491,15 @@ select.control {
   .filaDos,
   .especialidades {
     grid-template-columns: 1fr;
+  }
+
+  .zonaImagen {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .zonaAcciones {
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
   }
 
   .acciones {

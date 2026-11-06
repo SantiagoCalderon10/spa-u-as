@@ -34,6 +34,16 @@ export function errorMiddleware(err, req, res, next) {
     });
   }
 
+  // Errores de subida de archivos (Multer)
+  if (err.name === "MulterError") {
+    const mensaje =
+      err.code === "LIMIT_FILE_SIZE"
+        ? "La imagen supera el límite de 5 MB"
+        : "No pudimos procesar el archivo enviado";
+
+    return res.status(400).json({ error: mensaje });
+  }
+
   // Error inesperado: no se exponen detalles técnicos al cliente
   console.error("💥 Error inesperado:", err.stack || err.message);
   return res.status(500).json({

@@ -25,4 +25,10 @@ export const config = Object.freeze({
   jwtSecret,
   jwtExpira: process.env.JWT_EXPIRA || "8h",
   corsOrigenes: leerOrigenes(process.env.CORS_ORIGENES),
+  // Almacenamiento de imágenes en la nube (Cloudinary).
+  cloudinary: Object.freeze({
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+    apiKey: process.env.CLOUDINARY_API_KEY || "",
+    apiSecret: process.env.CLOUDINARY_API_SECRET || "",
+  }),
 });

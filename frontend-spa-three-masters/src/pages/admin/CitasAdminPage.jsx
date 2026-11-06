@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Aviso from '../../components/admin/Aviso';
 import Boton from '../../components/admin/Boton';
+import CalendarioFiltroCitas from '../../components/admin/CalendarioFiltroCitas';
 import CancelarCitaFormulario from '../../components/admin/CancelarCitaFormulario';
 import Confirmacion from '../../components/admin/Confirmacion';
 import ReprogramarCitaFormulario from '../../components/admin/ReprogramarCitaFormulario';
@@ -25,7 +26,12 @@ import {
   telefonoClienteDeCita,
   textoBuscableDeCita,
 } from '../../utils/citas';
-import { etiquetaEstado, formatearFechaCita, formatearHora } from '../../utils/reserva';
+import {
+  etiquetaEstado,
+  formatearFechaCita,
+  formatearFechaLarga,
+  formatearHora,
+} from '../../utils/reserva';
 import page from './AdminPage.module.css';
 import styles from './CitasAdmin.module.css';
 
@@ -201,6 +207,7 @@ export default function CitasAdminPage() {
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('todos');
   const [filtroFecha, setFiltroFecha] = useState('todas');
+  const [fechaSeleccionada, setFechaSeleccionada] = useState('');
   const [reprogramando, setReprogramando] = useState(null);
   const [cancelando, setCancelando] = useState(null);
   const [porNoAsistir, setPorNoAsistir] = useState(null);
@@ -215,6 +222,16 @@ export default function CitasAdminPage() {
   const deHoy = citas.filter((cita) => esCitaDeHoy(cita, hoy)).length;
   const completadas = citas.filter((cita) => cita.estado === 'completada').length;
 
+  const conteoPorDia = useMemo(() => {
+    const mapa = new Map();
+    citas.forEach((cita) => {
+      const clave = claveFechaDeCita(cita);
+      if (!clave) return;
+      mapa.set(clave, (mapa.get(clave) ?? 0) + 1);
+    });
+    return mapa;
+  }, [citas]);
+
   const filtrados = useMemo(() => {
     const termino = busqueda.trim().toLowerCase();
     const hoyClave = claveDeHoy();
@@ -223,6 +240,8 @@ export default function CitasAdminPage() {
     const lista = citas.filter((cita) => {
       if (termino && !textoBuscableDeCita(cita).includes(termino)) return false;
       if (filtroEstado !== 'todos' && cita.estado !== filtroEstado) return false;
+
+      if (fechaSeleccionada && claveFechaDeCita(cita) !== fechaSeleccionada) return false;
 
       if (filtroFecha === 'proximas' && !esCitaFutura(cita, hoyClave)) return false;
       if (filtroFecha === 'hoy' && !esCitaDeHoy(cita, hoyClave)) return false;
@@ -233,22 +252,38 @@ export default function CitasAdminPage() {
       return true;
     });
 
-    const signo = filtroFecha === 'todas' ? -1 : 1;
-
+    // La agenda siempre se lee en orden cronológico: primero la fecha y,
+    // dentro del mismo día, la hora de inicio.
     return lista.sort((a, b) => {
       const claveA = `${claveFechaDeCita(a)}T${a.horaInicio || '00:00'}`;
       const claveB = `${claveFechaDeCita(b)}T${b.horaInicio || '00:00'}`;
-      return claveA.localeCompare(claveB) * signo;
+      return claveA.localeCompare(claveB);
     });
-  }, [citas, busqueda, filtroEstado, filtroFecha]);
+  }, [citas, busqueda, filtroEstado, filtroFecha, fechaSeleccionada]);
 
   const hayFiltros =
-    busqueda.trim() !== '' || filtroEstado !== 'todos' || filtroFecha !== 'todas';
+    busqueda.trim() !== '' ||
+    filtroEstado !== 'todos' ||
+    filtroFecha !== 'todas' ||
+    fechaSeleccionada !== '';
 
   const limpiarFiltros = () => {
     setBusqueda('');
     setFiltroEstado('todos');
     setFiltroFecha('todas');
+    setFechaSeleccionada('');
+  };
+
+  /** El calendario funciona como filtro conmutador del día elegido. */
+  const alternarFecha = (clave) => {
+    setFechaSeleccionada((actual) => (actual === clave ? '' : clave));
+    setFiltroFecha('todas');
+  };
+
+  /** Los dos controles de fecha no se contradicen entre sí. */
+  const cambiarFiltroFecha = (valor) => {
+    setFiltroFecha(valor);
+    if (valor !== 'todas') setFechaSeleccionada('');
   };
 
   const ejecutar = useCallback(async (cita, tipo, operacion, mensaje) => {
@@ -368,7 +403,18 @@ export default function CitasAdminPage() {
         </div>
       )}
 
-      <section className={styles.panel} aria-label="Citas del atelier">
+      <section
+        className={`${styles.panel} ${styles.panelAgenda}`}
+        aria-label="Agenda de citas del atelier"
+      >
+        <aside className={styles.columnaCalendario} aria-label="Calendario de la agenda">
+          <CalendarioFiltroCitas
+            valor={fechaSeleccionada}
+            onElegir={alternarFecha}
+            conteoPorDia={conteoPorDia}
+          />
+        </aside>
+
         <div className={styles.herramientas}>
           <div className={styles.busqueda}>
             <IconoBuscar />
@@ -415,7 +461,7 @@ export default function CitasAdminPage() {
             <select
               className={styles.select}
               value={filtroFecha}
-              onChange={(evento) => setFiltroFecha(evento.target.value)}
+              onChange={(evento) => cambiarFiltroFecha(evento.target.value)}
               aria-label="Filtrar por fecha"
             >
               {FILTROS_FECHA_CITA.map((filtro) => (
@@ -439,6 +485,22 @@ export default function CitasAdminPage() {
               </svg>
             </span>
           </div>
+
+          {fechaSeleccionada && (
+            <span className={styles.etiquetaFiltroFecha}>
+              <IconoCalendario />
+              {formatearFechaLarga(fechaSeleccionada)}
+              <button
+                type="button"
+                className={styles.etiquetaFiltroFechaBoton}
+                onClick={() => setFechaSeleccionada('')}
+                aria-label={`Quitar el filtro del ${formatearFechaLarga(fechaSeleccionada)}`}
+                title="Quitar filtro de fecha"
+              >
+                ×
+              </button>
+            </span>
+          )}
 
           <p className={styles.resultado} aria-live="polite">
             {hayFiltros
@@ -490,12 +552,20 @@ export default function CitasAdminPage() {
         ) : filtrados.length === 0 ? (
           <div className={styles.vacioPanel}>
             <div className={`${page.vacio} ${page.vacioCompacto}`}>
-              <h2 className={page.vacioTitulo}>Ninguna cita coincide</h2>
+              <h2 className={page.vacioTitulo}>
+                {fechaSeleccionada ? 'Sin citas ese día' : 'Ninguna cita coincide'}
+              </h2>
               <p className={page.vacioTexto}>
-                Prueba con otro término o quita los filtros para ver la agenda completa.
+                {fechaSeleccionada
+                  ? `No hay citas agendadas el ${formatearFechaLarga(
+                      fechaSeleccionada
+                    )}. Elige otro día en el calendario o vuelve a la agenda completa.`
+                  : 'Prueba con otro término o quita los filtros para ver la agenda completa.'}
               </p>
               <div className={page.vacioAcciones}>
-                <Boton onClick={limpiarFiltros}>Limpiar filtros</Boton>
+                <Boton onClick={limpiarFiltros}>
+                  {fechaSeleccionada ? 'Ver toda la agenda' : 'Limpiar filtros'}
+                </Boton>
               </div>
             </div>
           </div>

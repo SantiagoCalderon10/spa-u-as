@@ -148,12 +148,14 @@ function TarjetaServicio({ servicio, categoria, puedeReservar }) {
         <span className={styles.cardPrice}>{formatearPrecio(servicio.precio)}</span>
       </div>
 
-      {puedeReservar && (
-        <Link className={styles.cardReserve} to={`/reservar?servicio=${servicio._id}`}>
-          Reservar este servicio
-          <IconoFlecha />
-        </Link>
-      )}
+      <div className={styles.cardAction}>
+        {puedeReservar && (
+          <Link className={styles.cardReserve} to={`/reservar?servicio=${servicio._id}`}>
+            Reservar este servicio
+            <IconoFlecha />
+          </Link>
+        )}
+      </div>
     </article>
   );
 }

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Boton from '../../components/admin/Boton';
 import { useAuth } from '../../context/AuthContext';
@@ -18,6 +18,7 @@ import {
   precioServicioDeCita,
 } from '../../utils/citas';
 import {
+  claveFecha,
   etiquetaEstado,
   formatearFechaCorta,
   formatearFechaLarga,
@@ -27,6 +28,32 @@ import page from './AdminPage.module.css';
 import styles from './ResumenAdmin.module.css';
 
 const ESTADOS_RESUMEN = ['confirmada', 'completada', 'cancelada', 'no_asistio'];
+
+const FILTROS_TEMPORALES = [
+  { id: 'semana', etiqueta: 'Esta semana' },
+  { id: 'mes', etiqueta: 'Este mes' },
+  { id: 'anio', etiqueta: 'Este año' },
+  { id: 'todos', etiqueta: 'Histórico' },
+];
+
+const ETIQUETAS_PERIODO = {
+  semana: 'Citas esta semana',
+  mes: 'Citas este mes',
+  anio: 'Citas este año',
+  todos: 'Total citas',
+};
+
+function calcularRangoSemana(ahora = new Date()) {
+  const diaSemana = (ahora.getDay() + 6) % 7; // 0 = Lunes, 6 = Domingo
+  const lunes = new Date(ahora);
+  lunes.setDate(ahora.getDate() - diaSemana);
+  const domingo = new Date(lunes);
+  domingo.setDate(lunes.getDate() + 6);
+  return {
+    inicio: claveFecha(lunes),
+    fin: claveFecha(domingo),
+  };
+}
 
 const CLASES_BARRA = {
   confirmada: styles.barraConfirmada,
@@ -118,6 +145,25 @@ function IconoPersona() {
   );
 }
 
+function IconoFiltro() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7.5V12l3 1.8" />
+    </svg>
+  );
+}
+
 function ordenarPorFecha(a, b) {
   const claveA = `${claveFechaDeCita(a)}T${a.horaInicio || '00:00'}`;
   const claveB = `${claveFechaDeCita(b)}T${b.horaInicio || '00:00'}`;
@@ -203,15 +249,32 @@ export default function ResumenAdminPage() {
     recargar: recargarProfesionales,
   } = useProfesionales({ soloAdmin: true });
 
+  const [periodo, setPeriodo] = useState('mes');
+  const rangoSemana = useMemo(() => calcularRangoSemana(), []);
+
   const hoy = claveDeHoy();
   const fechaHoy = formatearFechaLarga(hoy);
   const nombre = usuario?.nombrecompleto?.split(/\s+/)[0] || usuario?.nombreusuario || 'equipo';
 
-  const totalCitas = citas.length;
-  const citasDeHoy = citas.filter((cita) => esCitaDeHoy(cita, hoy)).length;
-  const confirmadas = citas.filter((cita) => cita.estado === 'confirmada').length;
-  const completadas = citas.filter((cita) => cita.estado === 'completada').length;
-  const ingresosCompletados = citas
+  const citasFiltradas = useMemo(() => {
+    if (periodo === 'todos') return citas;
+
+    return citas.filter((cita) => {
+      const clave = claveFechaDeCita(cita);
+      if (!clave) return false;
+
+      if (periodo === 'semana') return clave >= rangoSemana.inicio && clave <= rangoSemana.fin;
+      if (periodo === 'mes') return clave.slice(0, 7) === hoy.slice(0, 7);
+      if (periodo === 'anio') return clave.slice(0, 4) === hoy.slice(0, 4);
+
+      return true;
+    });
+  }, [citas, periodo, hoy, rangoSemana]);
+
+  const totalCitasPeriodo = citasFiltradas.length;
+  const confirmadasPeriodo = citasFiltradas.filter((cita) => cita.estado === 'confirmada').length;
+  const completadasPeriodo = citasFiltradas.filter((cita) => cita.estado === 'completada').length;
+  const ingresosCompletados = citasFiltradas
     .filter((cita) => cita.estado === 'completada')
     .reduce((total, cita) => total + (Number(precioServicioDeCita(cita)) || 0), 0);
 
@@ -228,23 +291,23 @@ export default function ResumenAdminPage() {
     () =>
       ESTADOS_RESUMEN.map((estado) => {
         const info = etiquetaEstado(estado);
-        const total = citas.filter((cita) => cita.estado === estado).length;
+        const total = citasFiltradas.filter((cita) => cita.estado === estado).length;
 
         return {
           estado,
           etiqueta: info.etiqueta,
           tono: info.tono,
           total,
-          porcentaje: totalCitas ? Math.round((total / totalCitas) * 100) : 0,
+          porcentaje: totalCitasPeriodo ? Math.round((total / totalCitasPeriodo) * 100) : 0,
         };
       }),
-    [citas, totalCitas]
+    [citasFiltradas, totalCitasPeriodo]
   );
 
   const ranking = useMemo(() => {
     const conteo = new Map();
 
-    citas.forEach((cita) => {
+    citasFiltradas.forEach((cita) => {
       if (cita.estado !== 'confirmada' && cita.estado !== 'completada') return;
 
       const nombreServicio = nombreServicioDeCita(cita);
@@ -262,7 +325,7 @@ export default function ResumenAdminPage() {
       ...item,
       porcentaje: maximo ? Math.round((item.total / maximo) * 100) : 0,
     }));
-  }, [citas]);
+  }, [citasFiltradas]);
 
   const serviciosActivos = servicios.filter((servicio) => servicio.activo !== false).length;
   const serviciosPausados = servicios.length - serviciosActivos;
@@ -293,21 +356,47 @@ export default function ResumenAdminPage() {
         </Boton>
       </header>
 
+      <div className={styles.filtroBarra} role="region" aria-label="Filtro temporal de estadísticas">
+        <div className={styles.filtroEtiquetaGrupo}>
+          <span className={styles.filtroIcono} aria-hidden="true">
+            <IconoFiltro />
+          </span>
+          <span>Período analítico:</span>
+        </div>
+
+        <div className={styles.filtroBotones} role="group" aria-label="Seleccionar rango temporal">
+          {FILTROS_TEMPORALES.map((filtro) => {
+            const activo = periodo === filtro.id;
+            return (
+              <button
+                key={filtro.id}
+                type="button"
+                className={`${styles.filtroBoton} ${activo ? styles.filtroBotonActivo : ''}`}
+                onClick={() => setPeriodo(filtro.id)}
+                aria-pressed={activo}
+              >
+                {filtro.etiqueta}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <dl className={page.resumen} aria-label="Indicadores del atelier">
         <div className={page.resumenItem}>
-          <dt>Citas hoy</dt>
-          <dd>{cargandoCitas ? '—' : citasDeHoy}</dd>
+          <dt>{ETIQUETAS_PERIODO[periodo] ?? 'Total citas'}</dt>
+          <dd>{cargandoCitas ? '—' : totalCitasPeriodo}</dd>
         </div>
         <div className={page.resumenItem}>
           <dt>Confirmadas</dt>
-          <dd>{cargandoCitas ? '—' : confirmadas}</dd>
+          <dd>{cargandoCitas ? '—' : confirmadasPeriodo}</dd>
         </div>
         <div className={page.resumenItem}>
           <dt>Completadas</dt>
-          <dd>{cargandoCitas ? '—' : completadas}</dd>
+          <dd>{cargandoCitas ? '—' : completadasPeriodo}</dd>
         </div>
         <div className={page.resumenItem}>
-          <dt>Ingresos completados</dt>
+          <dt>Ingresos recaudados</dt>
           <dd className={styles.kpiMoneda}>
             {cargandoCitas ? '—' : formatearPrecio(ingresosCompletados)}
           </dd>
@@ -406,8 +495,8 @@ export default function ResumenAdminPage() {
               <p className={styles.panelNota}>
                 {cargandoCitas
                   ? 'Sincronizando agenda…'
-                  : `${totalCitas} ${
-                      totalCitas === 1 ? 'cita registrada' : 'citas registradas'
+                  : `${totalCitasPeriodo} ${
+                      totalCitasPeriodo === 1 ? 'cita en el período' : 'citas en el período'
                     }`}
               </p>
             </div>
@@ -449,7 +538,9 @@ export default function ResumenAdminPage() {
               <h2 className={styles.panelTitulo} id="resumen-servicios">
                 Servicios más agendados
               </h2>
-              <p className={styles.panelNota}>Entre citas confirmadas y completadas</p>
+              <p className={styles.panelNota}>
+                Preferencias según {FILTROS_TEMPORALES.find((f) => f.id === periodo)?.etiqueta.toLowerCase()}
+              </p>
             </div>
           </div>
 

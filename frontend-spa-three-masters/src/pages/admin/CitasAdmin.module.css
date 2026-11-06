@@ -587,3 +587,71 @@ a.telefono:hover {
     display: none;
   }
 }
+
+/* Etiqueta del día filtrado desde el calendario */
+.etiquetaFiltroFecha {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: #f7ebe0;
+  border: 1px solid #ebd4c2;
+  border-radius: var(--admin-radius-control);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--admin-primary-dark);
+}
+
+.etiquetaFiltroFechaBoton {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--admin-primary);
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.etiquetaFiltroFechaBoton:hover {
+  color: var(--admin-primary-dark);
+}
+
+.etiquetaFiltroFecha svg {
+  flex-shrink: 0;
+}
+
+/* Calendario lateral + tabla de citas */
+.panelAgenda {
+  display: grid;
+  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.columnaCalendario {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: stretch;
+  padding: 16px;
+  background-color: #fdfbfa;
+  border-right: 1px solid var(--admin-border);
+}
+
+@media (max-width: 1280px) {
+  .panelAgenda {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .columnaCalendario {
+    display: flex;
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: center;
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--admin-border);
+  }
+
+  .columnaCalendario > * {
+    width: min(100%, 400px);
+  }
+}

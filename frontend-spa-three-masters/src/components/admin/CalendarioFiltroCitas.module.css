@@ -1,0 +1,196 @@
+/* Calendario lateral de la agenda administrativa.
+   Reproduce el lenguaje visual del calendario de agendamiento público
+   (días circulares, navegación en círculos y acento vino) sobre los
+   tokens del panel de administración. */
+
+.calendario {
+  width: 100%;
+  padding: 1rem 1.15rem 1.15rem;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-card);
+  box-shadow: var(--admin-shadow-card);
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.etiqueta {
+  font-family: var(--admin-font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--admin-text-subtle);
+}
+
+.contadorMes {
+  padding: 2px 9px;
+  background-color: var(--admin-accent-soft);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 999px;
+  color: var(--admin-primary-dark);
+  font-family: var(--admin-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cabeceraMes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.mes {
+  font-family: var(--admin-font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: capitalize;
+  color: var(--admin-text);
+  text-align: center;
+}
+
+.nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--admin-border);
+  border-radius: 50%;
+  background-color: var(--admin-surface);
+  color: var(--admin-primary);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.nav:hover:not(:disabled) {
+  border-color: var(--admin-primary);
+  background-color: #f7edf0;
+}
+
+.nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+}
+
+.semana {
+  padding-bottom: 0.35rem;
+  font-family: var(--admin-font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--admin-text-subtle);
+}
+
+.vacio {
+  aspect-ratio: 1;
+}
+
+.dia {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background-color: transparent;
+  font-family: var(--admin-font-sans);
+  font-size: 13.5px;
+  color: var(--admin-text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.dia:hover:not(:disabled) {
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+.hoy {
+  border-color: var(--admin-border);
+  font-weight: 600;
+}
+
+.activo,
+.activo:hover:not(:disabled) {
+  border-color: var(--admin-primary);
+  background-color: var(--admin-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.punto {
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--admin-primary);
+}
+
+.activo .punto {
+  background-color: #ffffff;
+}
+
+.pista {
+  margin-top: 0.85rem;
+  font-family: var(--admin-font-sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--admin-text-muted);
+}
+
+.pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.pieBoton {
+  padding: 4px 6px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--admin-primary);
+  font-family: var(--admin-font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.pieBoton:hover:not(:disabled) {
+  background-color: var(--admin-accent-soft);
+}
+
+.pieBoton:disabled {
+  color: var(--admin-text-subtle);
+  cursor: not-allowed;
+}
