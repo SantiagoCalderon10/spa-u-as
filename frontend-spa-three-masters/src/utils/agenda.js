@@ -272,6 +272,6 @@ export function usuariosVinculables(usuarios, profesionales) {
   );
 
   return usuarios.filter(
-    (usuario) => usuario.rol !== 'cliente' && !vinculados.has(usuario._id)
+    (usuario) => usuario.rol == 'profesional' && !vinculados.has(usuario._id)
   );
 }

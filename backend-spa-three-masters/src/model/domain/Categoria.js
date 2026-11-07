@@ -1,9 +1,2 @@
-export class Categoria {
-  activar() {
-    this.estado = true;
-  }
-
-  desactivar() {
-    this.estado = false;
-  }
-}
+// Archivo legado. La entidad oficial reside en src/modules/categorias/models/domain/Categoria.js
+export { Categoria } from '../../modules/categorias/models/domain/Categoria.js';

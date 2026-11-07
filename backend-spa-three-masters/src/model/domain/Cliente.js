@@ -1,13 +1,2 @@
-
-
-export class Cliente {
-  get estaRegistrado() {
-    return Boolean(this.idUsuario);
-  }
-
-  vincularUsuario(idUsuario) {
-    if (this.estaRegistrado) throw new Error('Este cliente ya tiene una cuenta vinculada');
-    this.idUsuario = idUsuario;
-  }
-
-}
+// Archivo legado. La entidad oficial reside en src/modules/clientes/models/domain/Cliente.js
+export { Cliente } from '../../modules/clientes/models/domain/Cliente.js';

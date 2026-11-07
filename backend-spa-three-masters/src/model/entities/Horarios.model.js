@@ -1,15 +1,2 @@
-import mongoose from 'mongoose';
-import { Horario } from '../domain/Horario.js';
-
-const { Schema } = mongoose;
-
-const horariosSchema = new Schema({
-  diaSemana: { type: Number, required: true },
-  horaInicio: { type: String, required: true },
-  horaFin: { type: String, required: true },
-  idProfesional: { type: Schema.Types.ObjectId, ref: 'profesionales', required: true },
-}, { timestamps: true });
-
-horariosSchema.loadClass(Horario);
-
-export const HorarioModel = mongoose.model('horarios', horariosSchema);
+// Archivo legado. El modelo oficial reside en src/modules/horarios/models/entities/Horarios.model.js
+export { HorariosModel } from '../../modules/horarios/models/entities/Horarios.model.js';

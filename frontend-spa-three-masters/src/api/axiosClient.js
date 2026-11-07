@@ -7,7 +7,9 @@ const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 8000,
+  // 20 s: el plan gratuito de Render duerme el servicio y el primer request
+  // puede tardar ~50 s en despertar. Con 8 s la primera visita fallaba.
+  timeout: 20000,
 });
 
 // Adjunta el token guardado a cada solicitud. El backend decide si la ruta

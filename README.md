@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💅 Three Masters Spa
+#  Three Masters Spa
 ### Plataforma Integral de Agendamiento, Gestión de Citas y Administración para Salón de Belleza & Spa de Uñas
 
 [![Node.js](https://img.shields.io/badge/Node.js-v20%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -332,7 +332,7 @@ El desarrollo del proyecto se rige por decisiones formales documentadas en [`AGE
 ## 👨‍💻 Autores & Créditos Académicos
 
 Proyecto desarrollado en el marco del curso de **Ingeniería de Software Orientada a Objetos** del programa de **Ingeniería de Software / Sistemas** de la **Universidad Surcolombiana (USCO)**.
-
+* **Semestre:** Carlos Esteban Anacona Gonzalez, Santiago Calderón Almario
 * **Institución:** Universidad Surcolombiana (Neiva, Huila, Colombia).
 * **Semestre:** 6° Semestre.
 * **Año Lectivo:** 2026.
