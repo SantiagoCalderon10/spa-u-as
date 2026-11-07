@@ -1,12 +1,18 @@
 import { useId, useState } from 'react';
 import { mensajeDeError } from '../../utils/catalogo';
 import {
+  claveFechaDeCita,
   nombreClienteDeCita,
   nombreProfesionalDeCita,
   nombreServicioDeCita,
   resumenHorarioCita,
+  telefonoClienteDeCita,
 } from '../../utils/citas';
-import { formatearFechaCita } from '../../utils/reserva';
+import {
+  enlaceWhatsApp,
+  formatearFechaCita,
+  mensajeCitaCancelada,
+} from '../../utils/reserva';
 import Boton from './Boton';
 import Campo from './Campo';
 import Dialogo from './Dialogo';
@@ -20,6 +26,9 @@ export default function CancelarCitaFormulario({ cita, onGuardar, onCerrar }) {
   const [error, setError] = useState('');
   const [errorGeneral, setErrorGeneral] = useState('');
   const [guardando, setGuardando] = useState(false);
+  const [cancelada, setCancelada] = useState(false);
+  const [enlace, setEnlace] = useState('');
+  const [telefono, setTelefono] = useState('');
 
   const guardar = async (evento) => {
     evento.preventDefault();
@@ -36,12 +45,71 @@ export default function CancelarCitaFormulario({ cita, onGuardar, onCerrar }) {
 
     try {
       await onGuardar(texto);
+
+      const numero = telefonoClienteDeCita(cita);
+      const mensaje = mensajeCitaCancelada({
+        nombre: nombreClienteDeCita(cita),
+        servicio: nombreServicioDeCita(cita),
+        profesional: nombreProfesionalDeCita(cita),
+        fecha: claveFechaDeCita(cita),
+        hora: cita.horaInicio,
+        motivo: texto,
+      });
+
+      setTelefono(numero);
+      setEnlace(enlaceWhatsApp(numero, mensaje));
+      setCancelada(true);
     } catch (err) {
       setErrorGeneral(mensajeDeError(err, 'No pudimos cancelar la cita.'));
     } finally {
       setGuardando(false);
     }
   };
+
+  if (cancelada) {
+    return (
+      <Dialogo
+        titulo="Cita cancelada"
+        descripcion="La clienta verá la cita como cancelada desde su enlace."
+        onCerrar={onCerrar}
+        ancho="sm"
+      >
+        <div className={styles.formulario}>
+          <div className={styles.cuenta}>
+            <p className={styles.cuentaNombre}>{nombreClienteDeCita(cita)}</p>
+            <p className={styles.cuentaDetalle}>
+              {nombreServicioDeCita(cita)} · {formatearFechaCita(cita.fecha)} ·{' '}
+              {resumenHorarioCita(cita)}
+            </p>
+            <p className={styles.cuentaNota}>Motivo: {motivo.trim()}</p>
+          </div>
+
+          <p className={styles.cuentaNota}>
+            Para que no dependa de abrir su enlace, avísale por WhatsApp con el mensaje ya
+            redactado.
+          </p>
+
+          {!telefono && (
+            <p className={styles.errorGeneral} role="status">
+              La clienta no tiene un teléfono registrado. Compártele el motivo por otro medio.
+            </p>
+          )}
+
+          <div className={styles.acciones}>
+            <Boton onClick={onCerrar}>Cerrar</Boton>
+            {telefono && (
+              <Boton
+                variante="primario"
+                onClick={() => window.open(enlace, '_blank', 'noopener')}
+              >
+                Avisar por WhatsApp
+              </Boton>
+            )}
+          </div>
+        </div>
+      </Dialogo>
+    );
+  }
 
   return (
     <Dialogo

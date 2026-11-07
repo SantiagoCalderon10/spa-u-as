@@ -64,11 +64,20 @@ describe('Modelo de Dominio: Servicio', () => {
     });
   });
 
-  describe('desactivar()', () => {
+  describe('activar() y desactivar()', () => {
     it('debe cambiar el estado del servicio a inactivo (false)', () => {
       assert.equal(servicio.estado, true);
       servicio.desactivar();
       assert.equal(servicio.estado, false);
+      assert.equal(servicio.activo, false);
+    });
+
+    it('debe reactivar el servicio correctamente', () => {
+      servicio.desactivar();
+      assert.equal(servicio.estado, false);
+      servicio.activar();
+      assert.equal(servicio.estado, true);
+      assert.equal(servicio.activo, true);
     });
   });
 });

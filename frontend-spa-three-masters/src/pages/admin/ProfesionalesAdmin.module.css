@@ -333,3 +333,130 @@
     border-top: 1px dashed var(--color-border-subtle);
   }
 }
+
+/* Baja de profesional */
+.bajaBloque {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.bajaTitulo {
+  margin: 0;
+  font-family: var(--admin-font-sans);
+  font-size: 0.95rem;
+  color: var(--admin-text);
+}
+
+.bajaLista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bajaCita {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.55rem 0.7rem;
+  background-color: #fbfaf9;
+  border: 1px solid var(--admin-border, var(--color-border-subtle));
+  border-radius: var(--admin-radius-item, 8px);
+}
+
+.bajaCitaFecha {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--admin-text);
+}
+
+.bajaCitaDetalle {
+  font-size: 0.78rem;
+  color: var(--admin-text-muted, var(--color-text-muted));
+}
+
+.opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--admin-text-muted, var(--color-text-muted));
+  cursor: pointer;
+}
+
+.opcion input {
+  margin-top: 0.2rem;
+  accent-color: var(--admin-primary);
+}
+
+.bajaNota {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--admin-text-subtle, var(--color-text-muted));
+}
+
+.bajaNotificar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.9rem;
+  background-color: #fbfaf9;
+  border: 1px solid var(--admin-border, var(--color-border-subtle));
+  border-radius: var(--admin-radius-item, 8px);
+}
+
+.bajaNotificarTitulo {
+  margin: 0;
+  font-family: var(--admin-font-sans);
+  font-size: 0.95rem;
+  color: var(--admin-text);
+}
+
+.bajaNotificarTexto {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--admin-text-muted, var(--color-text-muted));
+}
+
+.bajaListaNotificar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bajaNotificarItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  background-color: var(--admin-surface, #fff);
+  border: 1px solid var(--admin-border, var(--color-border-subtle));
+  border-radius: 6px;
+}
+
+.bajaNotificarDatos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted, var(--color-text-muted));
+}
+
+.bajaNotificarDatos strong {
+  color: var(--admin-text);
+}
+
+.bajaSinTelefono {
+  font-size: 0.75rem;
+  color: var(--admin-text-subtle, var(--color-text-muted));
+}

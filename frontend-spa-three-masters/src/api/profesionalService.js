@@ -32,7 +32,20 @@ export const actualizarProfesional = async (id, datos) => {
   return response.data;
 };
 
-export const eliminarProfesional = async (id) => {
-  const response = await axiosClient.delete(`/profesionales/${id}`);
+// Antes de la baja: citas futuras y horarios que quedarían afectados.
+export const getResumenBajaProfesional = async (id, { signal } = {}) => {
+  const response = await axiosClient.get(`/profesionales/${id}/resumen-baja`, { signal });
+  return response.data;
+};
+
+export const eliminarProfesional = async (id, opciones = {}) => {
+  const response = await axiosClient.delete(`/profesionales/${id}`, {
+    data: {
+      cancelarCitas: Boolean(opciones.cancelarCitas),
+      eliminarHorarios: Boolean(opciones.eliminarHorarios),
+      eliminarCuenta: Boolean(opciones.eliminarCuenta),
+      motivo: opciones.motivo ?? '',
+    },
+  });
   return response.data;
 };

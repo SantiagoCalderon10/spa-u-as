@@ -12,7 +12,7 @@ export class Horario {
 
   seSolapaCon(otro) {
     return String(this.idProfesional) === String(otro.idProfesional)
-      && this.diaSemana === otro.diaSemana
+      && Number(this.diaSemana) === Number(otro.diaSemana)
       && Hora.aMinutos(this.horaInicio) < Hora.aMinutos(otro.horaFin)
       && Hora.aMinutos(this.horaFin) > Hora.aMinutos(otro.horaInicio);
   }

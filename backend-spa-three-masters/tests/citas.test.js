@@ -99,7 +99,8 @@ function crearClienteRepositorioFalso() {
 
 function crearServicioDeCitas(
   repositorio,
-  clienteServicio = new ClienteServicio(crearClienteRepositorioFalso())
+  clienteServicio = new ClienteServicio(crearClienteRepositorioFalso()),
+  profesionalRepositorio = null
 ) {
   return new CitaServicio(
     repositorio,
@@ -108,7 +109,9 @@ function crearServicioDeCitas(
         return id === 'servicio-1' ? crearServicioFalso() : null;
       },
     },
-    clienteServicio
+    clienteServicio,
+    null,
+    profesionalRepositorio
   );
 }
 
@@ -195,6 +198,50 @@ test('FN-07 calcula la hora de fin, copia el servicio y no expone el token', asy
   assert.equal(Object.hasOwn(resultado.cita, 'tokenHash'), false);
   assert.equal(resultado.enlaceToken.length, 64);
   assert.notEqual(repositorio.citasGuardadas[0].tokenHash, resultado.enlaceToken);
+});
+
+test('guarda el nombre de la profesional como snapshot en la cita', async () => {
+  const repositorio = crearRepositorioFalso();
+  const servicio = crearServicioDeCitas(repositorio, undefined, {
+    async obtenerProfesionalPorId(id) {
+      return id === 'profesional-1'
+        ? { idUsuario: { nombrecompleto: 'Marta Gómez' } }
+        : null;
+    },
+  });
+
+  const resultado = await servicio.crearCita({
+    idProfesional: 'profesional-1',
+    idCliente: 'cliente-1',
+    idServicio: 'servicio-1',
+    fecha: '2026-11-10',
+    horaInicio: '10:00',
+  });
+
+  assert.equal(resultado.cita.profesional.nombre, 'Marta Gómez');
+});
+
+test('rechaza la cita si la profesional no existe', async () => {
+  const repositorio = crearRepositorioFalso();
+  const servicio = crearServicioDeCitas(repositorio, undefined, {
+    async obtenerProfesionalPorId() {
+      return null;
+    },
+  });
+
+  await assert.rejects(
+    () =>
+      servicio.crearCita({
+        idProfesional: 'profesional-inexistente',
+        idCliente: 'cliente-1',
+        idServicio: 'servicio-1',
+        fecha: '2026-11-10',
+        horaInicio: '10:00',
+      }),
+    (error) => error.statusCode === 404 && /profesional/i.test(error.message)
+  );
+
+  assert.equal(repositorio.citasGuardadas.length, 0);
 });
 
 test('FN-06 bloquea una cita solapada del mismo profesional', async () => {

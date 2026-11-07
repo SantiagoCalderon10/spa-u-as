@@ -13,6 +13,11 @@ const citasSchema = new Schema({
     horaInicio: { type: String, required: true, match: HORA },
     horaFin: { type: String, required: true, match: HORA },
     idProfesional: { type: Schema.Types.ObjectId, ref: 'profesionales', required: true },
+    // Snapshot del nombre al momento de agendar. Igual que `servicio`, evita
+    // que el historial pierda a la profesional si su perfil se elimina.
+    profesional: {
+        nombre: { type: String, default: null },
+    },
     servicio: {
         name: { type: String, required: true },
         price: { type: Number, required: true, min: 0 },

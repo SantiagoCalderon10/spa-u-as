@@ -343,7 +343,7 @@ export default function ResumenAdminPage() {
     <div className={page.pagina}>
       <header className={page.cabecera}>
         <div className={page.tituloBloque}>
-          <h1 className={page.titulo}>EL PULSO DEL ATELIER</h1>
+          <h1 className={page.titulo}>Un buen día empieza con orden.</h1>
           <p className={page.intro}>
             Hola, {nombre}. Este es el movimiento del atelier para el{' '}
             <strong className={styles.fechaHoy}>{fechaHoy.toLowerCase()}</strong>.

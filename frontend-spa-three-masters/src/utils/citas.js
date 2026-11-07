@@ -46,10 +46,18 @@ export function telefonoClienteDeCita(cita) {
   return cliente.telefono || '';
 }
 
+/**
+ * Prioriza el perfil poblado y, si la profesional ya fue dada de baja, cae al
+ * snapshot `cita.profesional.nombre` guardado al momento de agendar.
+ */
 export function nombreProfesionalDeCita(cita) {
   const profesional = cita?.idProfesional;
-  if (!profesional || typeof profesional !== 'object') return 'Profesional sin nombre';
-  return nombreDeProfesional(profesional);
+  if (profesional && typeof profesional === 'object') {
+    const nombre = nombreDeProfesional(profesional);
+    if (nombre !== 'Profesional sin nombre') return nombre;
+  }
+
+  return cita?.profesional?.nombre || 'Profesional sin nombre';
 }
 
 export function nombreServicioDeCita(cita) {

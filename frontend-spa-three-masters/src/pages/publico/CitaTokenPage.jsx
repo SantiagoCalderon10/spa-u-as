@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { cancelarCitaPorToken, obtenerCitaPorToken } from '../../api/citaService';
-import { nombreDeProfesional } from '../../utils/agenda';
+import { nombreProfesionalDeCita } from '../../utils/citas';
 import { formatearPrecio, mensajeDeError } from '../../utils/catalogo';
 import { etiquetaEstado, formatearFechaCita, formatearHora } from '../../utils/reserva';
 import styles from './Reserva.module.css';
@@ -124,7 +124,7 @@ export default function CitaTokenPage() {
               </div>
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>Profesional</span>
-                <span className={styles.summaryValue}>{nombreDeProfesional(cita.idProfesional)}</span>
+                <span className={styles.summaryValue}>{nombreProfesionalDeCita(cita)}</span>
               </div>
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>A nombre de</span>

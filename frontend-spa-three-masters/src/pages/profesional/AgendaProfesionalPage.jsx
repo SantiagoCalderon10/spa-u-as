@@ -230,7 +230,6 @@ export default function AgendaProfesionalPage() {
       tipo: 'exito',
       mensaje: `La cita de ${nombreClienteDeCita(cita)} quedó cancelada.`,
     });
-    setCancelando(null);
   };
 
   const nombrePerfil = perfil?.idUsuario?.nombrecompleto;

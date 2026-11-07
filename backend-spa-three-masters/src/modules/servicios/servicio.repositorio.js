@@ -54,7 +54,7 @@ export class ServicioRepositorio {
         try {
             const servicioEliminado = await ServicioModel.findByIdAndDelete(id);
             if (!servicioEliminado)
-                throw new Error(`No se encontró ninguna cita con el id ${id}`);
+                throw new Error(`No se encontró ningún servicio con el id ${id}`);
             return servicioEliminado
 
         } catch (error) {

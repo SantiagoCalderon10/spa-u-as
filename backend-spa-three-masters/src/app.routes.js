@@ -82,7 +82,11 @@ const catRepo = new CategoriaRepositorio();
 const catServ = new CategoriaServicio(catRepo);
 const catCtrl = new CategoriaControlador(catServ);
 
-const profServ = new ProfesionalServicio(profRepo);
+const profServ = new ProfesionalServicio(profRepo, {
+  citaRepositorio: citaRepo,
+  horarioRepositorio: horRepo,
+  usuarioServicio: usuServ,
+});
 const profCtrl = new ProfesionalControlador(profServ);
 
 // Autenticación y guardias por rol

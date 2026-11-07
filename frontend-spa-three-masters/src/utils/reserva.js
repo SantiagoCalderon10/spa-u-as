@@ -177,3 +177,24 @@ export function mensajeEnlaceCita({ nombre, servicio, profesional, fecha, hora, 
     .filter(Boolean)
     .join('\n');
 }
+
+/**
+ * Mensaje que recibe la clienta cuando administración o la profesional
+ * cancelan su cita. No depende del enlace único: incluye los datos y el
+ * motivo para que pueda leerlo directo en WhatsApp.
+ */
+export function mensajeCitaCancelada({ nombre, servicio, profesional, fecha, hora, motivo }) {
+  const saludo = nombre ? `Hola ${nombre}, ` : 'Hola, ';
+  const detalles = [servicio, profesional].filter(Boolean).join(' con ');
+  const cuando = resumenFechaHora(fecha, hora);
+
+  return [
+    `${saludo}te informamos que tu cita en Three Masters fue cancelada.`,
+    detalles ? `Servicio: ${detalles}.` : '',
+    `Fecha: ${cuando}.`,
+    motivo ? `Motivo: ${motivo}.` : '',
+    'Si deseas reprogramar, respóndenos por este mismo chat.',
+  ]
+    .filter(Boolean)
+    .join('\n');
+}

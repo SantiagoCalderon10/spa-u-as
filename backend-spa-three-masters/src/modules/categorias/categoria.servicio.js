@@ -20,6 +20,17 @@ export class CategoriaServicio {
   }
 
   async actualizarCategoria(id, datos) {
+    const categoriaExistente = await this.obtenerCategoriaPorId(id);
+
+    if (datos?.estado !== undefined) {
+      if (datos.estado) {
+        categoriaExistente.activar();
+      } else {
+        categoriaExistente.desactivar();
+      }
+      datos.estado = categoriaExistente.estado;
+    }
+
     const categoria = await this.categoriaRepositorio.actualizarCategoria(id, datos);
     if (!categoria) throw new NotFoundError(`Categoría con id ${id} no encontrada`);
     return categoria;

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import Aviso from '../../components/admin/Aviso';
 import Boton from '../../components/admin/Boton';
-import Confirmacion from '../../components/admin/Confirmacion';
+import EliminarProfesionalFormulario from '../../components/admin/EliminarProfesionalFormulario';
 import ProfesionalFormulario from '../../components/admin/ProfesionalFormulario';
 import { useCategorias } from '../../hooks/useCategorias';
 import { useHorarios } from '../../hooks/useHorarios';
@@ -64,6 +64,7 @@ export default function ProfesionalesAdminPage() {
     recargar,
     crear,
     actualizar,
+    resumenBaja,
     eliminar,
   } = useProfesionales({ soloAdmin: true });
   const {
@@ -79,7 +80,7 @@ export default function ProfesionalesAdminPage() {
   const [filtroEspecialidad, setFiltroEspecialidad] = useState('todas');
   const [formulario, setFormulario] = useState(null);
   const [porEliminar, setPorEliminar] = useState(null);
-  const [eliminando, setEliminando] = useState(false);
+  const [cargandoResumen, setCargandoResumen] = useState(null);
   const [aviso, setAviso] = useState(null);
 
   const cerrarAviso = useCallback(() => setAviso(null), []);
@@ -175,43 +176,36 @@ export default function ProfesionalesAdminPage() {
     if (!formulario?.profesional?._id) recargarUsuarios();
   };
 
-  const pedirEliminar = (profesional) => {
-    const franjas = franjasPorProfesional.get(profesional._id) ?? 0;
-
-    if (franjas > 0) {
-      setAviso({
-        tipo: 'error',
-        mensaje: `«${nombreDeProfesional(
-          profesional
-        )}» tiene ${franjas} ${franjas === 1 ? 'horario asignado' : 'horarios asignados'}. Elimínalos primero en la sección Horarios.`,
-      });
-      return;
-    }
-
-    setPorEliminar(profesional);
-  };
-
-  const confirmarEliminar = async () => {
-    if (!porEliminar) return;
-
-    setEliminando(true);
+  const pedirEliminar = async (profesional) => {
+    setCargandoResumen(profesional._id);
 
     try {
-      await eliminar(porEliminar._id);
-      setAviso({
-        tipo: 'exito',
-        mensaje: `«${nombreDeProfesional(porEliminar)}» se eliminó del equipo. La cuenta de acceso se conserva.`,
-      });
-      setPorEliminar(null);
+      const resumen = await resumenBaja(profesional._id);
+      setPorEliminar({ profesional, resumen });
     } catch (err) {
       setAviso({
         tipo: 'error',
-        mensaje: mensajeDeError(err, 'No pudimos eliminar el perfil profesional.'),
+        mensaje: mensajeDeError(err, 'No pudimos revisar la baja de la profesional.'),
       });
-      setPorEliminar(null);
     } finally {
-      setEliminando(false);
+      setCargandoResumen(null);
     }
+  };
+
+  const confirmarEliminar = async (opciones) => {
+    if (!porEliminar) return null;
+
+    const resultado = await eliminar(porEliminar.profesional._id, opciones);
+
+    if (opciones.eliminarHorarios) recargarHorarios();
+    if (opciones.eliminarCuenta) recargarUsuarios();
+
+    setAviso({
+      tipo: 'exito',
+      mensaje: `«${nombreDeProfesional(porEliminar.profesional)}» se dio de baja del equipo.`,
+    });
+
+    return resultado;
   };
 
   const hayError = error || errorHorarios || errorCategorias;
@@ -449,6 +443,8 @@ export default function ProfesionalesAdminPage() {
                       tamano="sm"
                       variante="peligroSuave"
                       onClick={() => pedirEliminar(profesional)}
+                      cargando={cargandoResumen === profesional._id}
+                      disabled={cargandoResumen !== null && cargandoResumen !== profesional._id}
                     >
                       Eliminar
                     </Boton>
@@ -473,23 +469,11 @@ export default function ProfesionalesAdminPage() {
       )}
 
       {porEliminar && (
-        <Confirmacion
-          titulo="Eliminar profesional"
-          textoConfirmar="Eliminar del equipo"
-          cargando={eliminando}
+        <EliminarProfesionalFormulario
+          resumen={porEliminar.resumen}
           onConfirmar={confirmarEliminar}
           onCerrar={cerrarConfirmacion}
-        >
-          <p>
-            Vas a eliminar el perfil de{' '}
-            <strong>«{nombreDeProfesional(porEliminar)}»</strong>. No tiene horarios
-            asignados y la cuenta de acceso se conserva.
-          </p>
-          <p className={styles.notaEliminar}>
-            Si más adelante quieres que vuelva a la agenda, tendrás que vincular su
-            cuenta otra vez.
-          </p>
-        </Confirmacion>
+        />
       )}
     </div>
   );

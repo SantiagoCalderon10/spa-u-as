@@ -57,13 +57,37 @@ export class ProfesionalControlador {
     }
   }
 
-  async eliminarProfesional(req, res, next) {
+  async resumenBaja(req, res, next) {
     try {
-      const eliminado = await this.profesionalServicio.eliminarProfesional(req.params.id);
-      return res.status(200).json({ mensaje: "Profesional eliminado", profesional: eliminado });
+      const resumen = await this.profesionalServicio.resumenBaja(req.params.id);
+      return res.status(200).json(resumen);
     } catch (error) {
       next(error);
     }
+  }
+
+  async eliminarProfesional(req, res, next) {
+    try {
+      const opciones = {
+        cancelarCitas: this.#aBooleano(req.body?.cancelarCitas),
+        eliminarHorarios: this.#aBooleano(req.body?.eliminarHorarios),
+        eliminarCuenta: this.#aBooleano(req.body?.eliminarCuenta),
+        motivo: typeof req.body?.motivo === 'string' ? req.body.motivo : '',
+      };
+
+      const resultado = await this.profesionalServicio.eliminarProfesional(
+        req.params.id,
+        opciones
+      );
+
+      return res.status(200).json({ mensaje: "Profesional eliminado", ...resultado });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  #aBooleano(valor) {
+    return valor === true || valor === 'true' || valor === 1 || valor === '1';
   }
 }
 

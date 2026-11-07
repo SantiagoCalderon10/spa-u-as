@@ -122,9 +122,7 @@ export default function ProfesionalLayout() {
     <div className={styles.marco}>
       <aside className={styles.barra}>
         <div className={styles.marcaBloque}>
-          <span className={styles.marca}>
-            Three <em>Masters</em>
-          </span>
+          
           <p className={styles.marcaNota}>Espacio profesional</p>
         </div>
 

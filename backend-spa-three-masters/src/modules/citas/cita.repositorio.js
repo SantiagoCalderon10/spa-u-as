@@ -25,6 +25,24 @@ export class CitaRepositorio {
         }
     }
 
+    // Citas confirmadas desde una fecha (incluida). Se usa en la baja de una
+    // profesional para saber qué compromisos quedan pendientes y poder avisar
+    // a las clientas si se cancelan.
+    async obtenerCitasConfirmadasDesdePorProfesional(idProfesional, desde) {
+        try {
+            const citas = await CitasModel.find({
+                idProfesional,
+                fecha: { $gte: desde },
+                estado: EstadoCita.CONFIRMADA,
+            })
+                .populate('idCliente', 'nombre telefono')
+                .sort({ fecha: 1, horaInicio: 1 });
+            return citas || [];
+        } catch (error) {
+            throw new Error(`Error al obtener las citas futuras del profesional: ${error.message}`);
+        }
+    }
+
     async obtenerCitaPorId(id) {
         try {
             const cita = await CitasModel.findById(id);

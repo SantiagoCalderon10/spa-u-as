@@ -195,7 +195,7 @@ export default function ProfesionalFormulario({
                     etiqueta="Contraseña temporal"
                     htmlFor="profesional-contrasena"
                     error={errores.contrasena}
-                    ayuda="Mínimo 6 caracteres. La profesional deberá cambiarla al entrar."
+                    ayuda="Mínimo 6 caracteres."
                   >
                     <input
                       id="profesional-contrasena"

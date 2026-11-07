@@ -4,6 +4,7 @@ import { EstadoCita, RolUsuario } from '../../shared/enums.js';
 import { Fecha } from '../../shared/utils/Fecha.js';
 import { Hora } from '../../shared/utils/Hora.js';
 import { Cita } from './models/domain/Cita.js';
+import { Horario } from '../horarios/models/domain/Horario.js';
 
 export class CitaServicio {
     constructor(citaRepositorio, servicioRepositorio, clienteServicio, horarioRepositorio, profesionalRepositorio) {
@@ -76,6 +77,18 @@ export class CitaServicio {
             throw new ValidationError(error.message);
         }
 
+        // Guardamos el nombre de la profesional junto a la cita para que el
+        // historial siga siendo legible si después se elimina su perfil.
+        let nombreProfesional = null;
+        if (this.profesionalRepositorio) {
+            const profesional = await this.profesionalRepositorio.obtenerProfesionalPorId(idProfesional);
+            if (!profesional) {
+                throw new NotFoundError(`Profesional con id ${idProfesional} no encontrado`);
+            }
+            nombreProfesional =
+                profesional.idUsuario?.nombrecompleto ?? profesional.nombrecompleto ?? null;
+        }
+
         const datosNuevaCita = {
             fecha: fechaNormalizada,
             horaInicio,
@@ -83,6 +96,9 @@ export class CitaServicio {
             idProfesional,
             idCliente,
             idServicio,
+            profesional: {
+                nombre: nombreProfesional,
+            },
             servicio: {
                 name: servicio.nombre,
                 price: servicio.precio,
@@ -181,9 +197,9 @@ export class CitaServicio {
         const diaSemana = fechaNormalizada.getUTCDay();
 
         const horarios = await this.horarioRepositorio.obtenerPorProfesional(idProfesional);
-        const horarioDelDia = (horarios || []).find((horario) => Number(horario.diaSemana) === Number(diaSemana));
+        const horarioEncontrado = (horarios || []).find((horario) => Number(horario.diaSemana) === Number(diaSemana));
 
-        if (!horarioDelDia) {
+        if (!horarioEncontrado) {
             return {
                 fecha: fechaClave,
                 idProfesional,
@@ -194,8 +210,28 @@ export class CitaServicio {
             };
         }
 
+        const horarioDelDia = Object.assign(
+            new Horario(),
+            horarioEncontrado.toObject ? horarioEncontrado.toObject() : horarioEncontrado
+        );
+
         if (!Hora.esValida(horarioDelDia.horaInicio) || !Hora.esValida(horarioDelDia.horaFin)) {
             throw new ValidationError("El horario del profesional tiene horas inválidas");
+        }
+
+        if (horarioDelDia.duracionMinutos < duracionServicio) {
+            return {
+                fecha: fechaClave,
+                idProfesional,
+                idServicio,
+                duracionMinutos: duracionServicio,
+                horario: {
+                    horaInicio: horarioDelDia.horaInicio,
+                    horaFin: horarioDelDia.horaFin,
+                },
+                slots: [],
+                mensaje: "La jornada laboral no es suficiente para cubrir la duración de este servicio",
+            };
         }
 
         const citasConfirmadas = await this.citaRepositorio.obtenerCitasConfirmadasPorProfesionalYFechaExacta(
@@ -211,6 +247,10 @@ export class CitaServicio {
         for (let cursor = inicioMinutos; cursor + duracionServicio <= finMinutos; cursor += intervalos) {
             const horaInicioSlot = Hora.aTexto(cursor);
             const horaFinSlot = Hora.aTexto(cursor + duracionServicio);
+
+            if (!horarioDelDia.cubre(horaInicioSlot, horaFinSlot)) {
+                continue;
+            }
 
             const citaCandidata = Object.assign(new Cita(), {
                 fecha: fechaNormalizada,

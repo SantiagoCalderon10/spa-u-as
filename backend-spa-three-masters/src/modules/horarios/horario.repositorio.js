@@ -41,6 +41,14 @@ export class HorarioRepositorio {
     }
   }
 
+  async eliminarPorProfesional(idProfesional) {
+    try {
+      return await HorariosModel.deleteMany({ idProfesional });
+    } catch (error) {
+      throw new Error(`Error al eliminar los horarios del profesional: ${error.message}`);
+    }
+  }
+
   async eliminarHorario(id) {
     try {
       return await HorariosModel.findByIdAndDelete(id);

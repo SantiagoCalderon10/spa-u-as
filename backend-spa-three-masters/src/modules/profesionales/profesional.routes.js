@@ -25,6 +25,13 @@ export function crearProfesionalRoutes(profesionalControlador, guardia) {
 
   // Gestión: solo administración
   router.use(guardia.soloAdministrador);
+
+  // Antes de dar de baja: citas futuras y horarios que quedarían afectados.
+  router.get(
+    "/:id/resumen-baja",
+    profesionalControlador.resumenBaja.bind(profesionalControlador)
+  );
+
   router.post("/", profesionalControlador.crearProfesional.bind(profesionalControlador));
   router.put("/:id", profesionalControlador.actualizarProfesional.bind(profesionalControlador));
   router.delete("/:id", profesionalControlador.eliminarProfesional.bind(profesionalControlador));

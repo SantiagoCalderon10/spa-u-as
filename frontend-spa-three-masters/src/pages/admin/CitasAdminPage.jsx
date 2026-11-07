@@ -351,14 +351,13 @@ export default function CitasAdminPage() {
       tipo: 'exito',
       mensaje: `La cita de ${nombreClienteDeCita(cita)} quedó cancelada.`,
     });
-    setCancelando(null);
   };
 
   return (
     <div className={page.pagina}>
       <header className={page.cabecera}>
         <div className={page.tituloBloque}>
-          <h1 className={page.titulo}>AGENDA DEL ATELIER</h1>
+          <h1 className={page.titulo}>Un espacio para cada cita</h1>
           <p className={page.intro}>
             Revisa las citas, reprograma horarios y cierra cada servicio.
           </p>

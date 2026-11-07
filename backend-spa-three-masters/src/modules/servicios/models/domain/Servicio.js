@@ -12,7 +12,13 @@ export class Servicio {
     this.precio = nuevoPrecio;
   }
 
+  activar() {
+    this.estado = true;
+    this.activo = true;
+  }
+
   desactivar() {
     this.estado = false;
+    this.activo = false;
   }
 }

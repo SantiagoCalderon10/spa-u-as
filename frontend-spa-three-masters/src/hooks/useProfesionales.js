@@ -5,6 +5,7 @@ import {
   eliminarProfesional,
   getProfesionales,
   getProfesionalesAdmin,
+  getResumenBajaProfesional,
 } from '../api/profesionalService';
 import { crearUsuario, eliminarUsuario } from '../api/usuarioService';
 import { cuerpoCuentaProfesional, cuerpoPerfilProfesional } from '../utils/agenda';
@@ -83,13 +84,28 @@ export function useProfesionales({ soloAdmin = false } = {}) {
     [recargar]
   );
 
+  const resumenBaja = useCallback(
+    async (id) => await getResumenBajaProfesional(id),
+    []
+  );
+
   const eliminar = useCallback(
-    async (id) => {
-      await eliminarProfesional(id);
+    async (id, opciones) => {
+      const resultado = await eliminarProfesional(id, opciones);
       await recargar();
+      return resultado;
     },
     [recargar]
   );
 
-  return { profesionales, cargando, error, recargar, crear, actualizar, eliminar };
+  return {
+    profesionales,
+    cargando,
+    error,
+    recargar,
+    crear,
+    actualizar,
+    resumenBaja,
+    eliminar,
+  };
 }

@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { cancelarMiCita, getMiCita } from '../../api/citaService';
-import { nombreDeProfesional } from '../../utils/agenda';
 import { formatearPrecio, mensajeDeError } from '../../utils/catalogo';
-import { esCitaFutura } from '../../utils/citas';
+import { esCitaFutura, nombreProfesionalDeCita } from '../../utils/citas';
 import { etiquetaEstado, formatearFechaCita, formatearHora } from '../../utils/reserva';
 import styles from './Reserva.module.css';
 
@@ -140,7 +139,7 @@ export default function DetalleCitaPage() {
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>Profesional</span>
                 <span className={styles.summaryValue}>
-                  {nombreDeProfesional(cita.idProfesional)}
+                  {nombreProfesionalDeCita(cita)}
                 </span>
               </div>
               <div className={styles.summaryRow}>
