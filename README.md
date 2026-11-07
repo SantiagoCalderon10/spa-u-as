@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💅 Three Masters Spa
+#  Three Masters Spa
 ### Plataforma Integral de Agendamiento, Gestión de Citas y Administración para Salón de Belleza & Spa de Uñas
 
 [![Node.js](https://img.shields.io/badge/Node.js-v20%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
