@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { CONTACTO } from '../../content/landing';
 import styles from './Footer.module.css';
 
 const ENLACES = [
@@ -8,9 +9,9 @@ const ENLACES = [
   { etiqueta: 'Equipo', href: '#equipo' },
 ];
 
-const TELEFONO = '+57 318 450 9821';
-
 export default function Footer() {
+  const { telefono, redes } = CONTACTO;
+
   return (
     <footer id="contacto" className={styles.footer}>
       <div className={styles.inner}>
@@ -28,9 +29,24 @@ export default function Footer() {
             ))}
           </nav>
 
-          <a className={styles.phone} href="tel:+573184509821">
-            {TELEFONO}
-          </a>
+          <div className={styles.contact}>
+            <a className={styles.phone} href={telefono.enlace}>
+              {telefono.valor}
+            </a>
+            <div className={styles.social}>
+              {Object.values(redes).map((red) => (
+                <a
+                  key={red.etiqueta}
+                  className={styles.socialLink}
+                  href={red.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {red.etiqueta}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className={styles.legal}>

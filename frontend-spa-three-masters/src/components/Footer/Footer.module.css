@@ -88,6 +88,35 @@
   color: var(--landing-rose-soft);
 }
 
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Redes: Inter 500 · 10px · #CBB7BE */
+.social {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.socialLink {
+  font-family: var(--catalog-font-label);
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--landing-muted);
+  transition: color 0.2s ease;
+}
+
+.socialLink:hover {
+  color: var(--landing-surface);
+}
+
 /* Línea legal: Inter 400 · 10px · #CBB7BE */
 .legal {
   display: flex;
@@ -127,6 +156,10 @@
   }
 
   .brand {
+    align-items: flex-start;
+  }
+
+  .contact {
     align-items: flex-start;
   }
 }

@@ -18,10 +18,26 @@ export const SALON = {
   fotoAlt: 'Interior del salón Three Masters',
 };
 
+// Datos de contacto reales del salón. Se usan en la landing y en el pie de página.
+const TELEFONO_DIGITOS = '3209144129';
+
+export const REDES = {
+  instagram: {
+    etiqueta: 'Instagram',
+    usuario: '@maryuricediel',
+    url: 'https://www.instagram.com/maryuricediel/',
+  },
+  facebook: {
+    etiqueta: 'Facebook',
+    usuario: 'Maryury Cediel',
+    url: 'https://web.facebook.com/MaryuryCediel',
+  },
+};
+
 export const GALERIA = {
   antetitulo: 'Portafolio',
   titulo: 'Galería de trabajos',
-  instagram: { etiqueta: 'Instagram', url: 'https://www.instagram.com/' },
+  instagram: REDES.instagram,
   trabajos: [
     { titulo: 'Manicura Rusa con Nivelación', fotoAlt: 'Manicura rusa con nivelación' },
     { titulo: 'Escultura en Acrílico Almond', fotoAlt: 'Escultura en acrílico almond' },
@@ -62,13 +78,18 @@ export const INVITACION = {
   mensaje:
     '¿Lista para tu próxima cita? Escríbenos y reservamos el momento que mejor te venga.',
   boton: 'Escríbenos por WhatsApp',
-  url: 'https://wa.me/573184509821',
+  url: `https://wa.me/57${TELEFONO_DIGITOS}`,
 };
 
 export const CONTACTO = {
   antetitulo: 'Contacto',
   titulo: 'Ponte en contacto',
   descripcion: 'Cuéntanos tu idea y te ayudamos a agendar la cita perfecta para ti.',
-  telefono: { etiqueta: 'Teléfono', valor: '+57 318 450 9821' },
-  correo: { etiqueta: 'Correo electrónico', valor: 'contacto@threemasters.com' },
+  telefono: {
+    etiqueta: 'Teléfono',
+    valor: '+57 320 914 4129',
+    enlace: `tel:+57${TELEFONO_DIGITOS}`,
+    whatsapp: `https://wa.me/57${TELEFONO_DIGITOS}`,
+  },
+  redes: REDES,
 };
