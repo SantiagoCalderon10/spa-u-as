@@ -1,0 +1,44 @@
+.contenedor {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* Selector descendiente a propósito: le gana al `padding` que define cada
+   módulo de formulario (.control, .input) sin depender del orden de carga. */
+.contenedor .entrada {
+  padding-right: 2.75rem;
+}
+
+.boton {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  color: var(--admin-text-subtle, #8f888b);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+
+.boton:hover {
+  color: var(--admin-primary, #7a3a55);
+  background-color: rgba(122, 58, 85, 0.08);
+}
+
+.boton:focus-visible {
+  outline: 2px solid var(--admin-primary, #7a3a55);
+  outline-offset: 1px;
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

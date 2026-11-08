@@ -1,7 +1,18 @@
 import { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import CampoContrasena from '../../components/CampoContrasena';
 import { mensajeDeError } from '../../utils/catalogo';
+import {
+  EJEMPLO_TELEFONO,
+  MAX_TELEFONO_FORMATEADO,
+  MENSAJES,
+  correoValido,
+  digitosTelefono,
+  formatearTelefono,
+  normalizarCorreo,
+  telefonoValido,
+} from '../../utils/validacion';
 import styles from './Cuenta.module.css';
 
 const DESTINO_POR_ROL = {
@@ -48,7 +59,11 @@ export default function CuentaPage() {
 
   const validarLogin = () => {
     const nuevos = {};
-    if (!correo.trim()) nuevos.correo = 'Escribe tu correo.';
+    if (!correo.trim()) {
+      nuevos.correo = 'Escribe tu correo.';
+    } else if (!correoValido(correo)) {
+      nuevos.correo = MENSAJES.correo;
+    }
     if (!contrasena) nuevos.contrasena = 'Escribe tu contraseña.';
     setErrores(nuevos);
     return Object.keys(nuevos).length === 0;
@@ -56,16 +71,15 @@ export default function CuentaPage() {
 
   const validarRegistro = () => {
     const nuevos = {};
-    const telefono = registro.telefono.replace(/\D/g, '');
 
     if (registro.nombrecompleto.trim().length < 3) {
       nuevos.nombrecompleto = 'Escribe tu nombre completo.';
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registro.correo.trim())) {
-      nuevos.correo = 'Escribe un correo válido.';
+    if (!correoValido(registro.correo)) {
+      nuevos.correo = MENSAJES.correo;
     }
-    if (telefono.length < 7 || telefono.length > 15) {
-      nuevos.telefono = 'Usa un teléfono de 7 a 15 dígitos.';
+    if (!telefonoValido(registro.telefono)) {
+      nuevos.telefono = MENSAJES.telefono;
     }
     if (registro.contrasena.length < 6) {
       nuevos.contrasena = 'Usa al menos 6 caracteres.';
@@ -85,7 +99,7 @@ export default function CuentaPage() {
 
     setEnviando(true);
     try {
-      const cuenta = await iniciarSesion(correo.trim(), contrasena);
+      const cuenta = await iniciarSesion(normalizarCorreo(correo), contrasena);
       navegar(DESTINO_POR_ROL[cuenta?.rol] ?? destino(), { replace: true });
     } catch (error) {
       setErrorGeneral(
@@ -101,8 +115,8 @@ export default function CuentaPage() {
     setErrorGeneral('');
     if (!validarRegistro()) return;
 
-    const correoNormalizado = registro.correo.trim().toLowerCase();
-    const telefono = registro.telefono.replace(/\D/g, '');
+    const correoNormalizado = normalizarCorreo(registro.correo);
+    const telefono = digitosTelefono(registro.telefono);
 
     setEnviando(true);
     try {
@@ -123,15 +137,26 @@ export default function CuentaPage() {
     }
   };
 
-  const campoRegistro = (nombre) => ({
-    id: `registro-${nombre}`,
-    name: nombre,
-    value: registro[nombre],
-    onChange: (evento) =>
-      setRegistro((previo) => ({ ...previo, [nombre]: evento.target.value })),
-    'aria-invalid': Boolean(errores[nombre]),
-    'aria-describedby': errores[nombre] ? `registro-${nombre}-error` : undefined,
-  });
+  const campoRegistro = (nombre) => {
+    const esTelefono = nombre === 'telefono';
+
+    return {
+      id: `registro-${nombre}`,
+      name: nombre,
+      value: registro[nombre],
+      onChange: (evento) => {
+        const valor = esTelefono
+          ? formatearTelefono(evento.target.value)
+          : evento.target.value;
+        setRegistro((previo) => ({ ...previo, [nombre]: valor }));
+      },
+      'aria-invalid': Boolean(errores[nombre]),
+      'aria-describedby': errores[nombre] ? `registro-${nombre}-error` : undefined,
+      ...(esTelefono
+        ? { maxLength: MAX_TELEFONO_FORMATEADO, placeholder: EJEMPLO_TELEFONO }
+        : {}),
+    };
+  };
 
   return (
     <div className={styles.page}>
@@ -222,11 +247,10 @@ export default function CuentaPage() {
                   <label className={styles.label} htmlFor="cuenta-contrasena">
                     Contraseña
                   </label>
-                  <input
+                  <CampoContrasena
                     className={styles.input}
                     id="cuenta-contrasena"
                     name="contrasena"
-                    type="password"
                     autoComplete="current-password"
                     value={contrasena}
                     onChange={(evento) => setContrasena(evento.target.value)}
@@ -311,9 +335,8 @@ export default function CuentaPage() {
                     <label className={styles.label} htmlFor="registro-contrasena">
                       Contraseña
                     </label>
-                    <input
+                    <CampoContrasena
                       className={styles.input}
-                      type="password"
                       autoComplete="new-password"
                       {...campoRegistro('contrasena')}
                     />
@@ -332,9 +355,8 @@ export default function CuentaPage() {
                     <label className={styles.label} htmlFor="registro-confirmar">
                       Repite la contraseña
                     </label>
-                    <input
+                    <CampoContrasena
                       className={styles.input}
-                      type="password"
                       autoComplete="new-password"
                       {...campoRegistro('confirmar')}
                     />

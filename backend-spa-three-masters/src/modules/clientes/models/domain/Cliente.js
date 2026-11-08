@@ -22,10 +22,16 @@ export class Cliente {
   }
 
   static normalizarTelefono(telefono) {
-    const telefonoNormalizado = String(telefono ?? '').replace(/\D/g, '');
+    let telefonoNormalizado = String(telefono ?? '').replace(/\D/g, '');
 
-    if (telefonoNormalizado.length < 7 || telefonoNormalizado.length > 15) {
-      throw new ValidationError('El teléfono debe tener entre 7 y 15 dígitos');
+    // Si llega con el indicativo de Colombia (+57 …), se descarta el prefijo
+    // antes de validar: el número local debe quedar en 10 dígitos.
+    if (telefonoNormalizado.length > 10 && telefonoNormalizado.startsWith('57')) {
+      telefonoNormalizado = telefonoNormalizado.slice(2);
+    }
+
+    if (telefonoNormalizado.length !== 10) {
+      throw new ValidationError('El teléfono debe tener exactamente 10 dígitos');
     }
 
     return telefonoNormalizado;

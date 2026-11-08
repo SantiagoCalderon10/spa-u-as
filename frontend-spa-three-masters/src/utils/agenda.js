@@ -1,5 +1,15 @@
 // Utilidades compartidas por los módulos de profesionales y horarios.
 
+import {
+  MENSAJES,
+  correoValido,
+  digitosTelefono,
+  formatearTelefono,
+  telefonoValido,
+} from './validacion';
+
+export { correoValido };
+
 // El backend guarda diaSemana con la convención de JavaScript (0 = domingo).
 // La agenda del atelier se muestra de lunes a domingo.
 export const DIAS_SEMANA = [
@@ -171,7 +181,9 @@ export function datosFormularioProfesional(profesional) {
     modo: 'editar',
     nombrecompleto: profesional.idUsuario?.nombrecompleto ?? '',
     correo: profesional.idUsuario?.correo ?? '',
-    telefono: profesional.idUsuario?.telefono ? String(profesional.idUsuario.telefono) : '',
+    telefono: profesional.idUsuario?.telefono
+      ? formatearTelefono(profesional.idUsuario.telefono)
+      : '',
     contrasena: '',
     idUsuario: profesional.idUsuario?._id ?? profesional.idUsuario ?? '',
     anioExperiencia:
@@ -185,12 +197,8 @@ export function datosFormularioProfesional(profesional) {
   };
 }
 
-export function correoValido(correo) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(correo ?? '').trim());
-}
-
 export function telefonoNormalizado(telefono) {
-  return String(telefono ?? '').replace(/\D/g, '');
+  return digitosTelefono(telefono);
 }
 
 export function validarProfesional(datos) {
@@ -203,12 +211,11 @@ export function validarProfesional(datos) {
     }
 
     if (!correoValido(datos.correo)) {
-      errores.correo = 'Usa un correo válido, por ejemplo nombre@atelier.com.';
+      errores.correo = MENSAJES.correo;
     }
 
-    const telefono = telefonoNormalizado(datos.telefono);
-    if (telefono.length < 7) {
-      errores.telefono = 'Escribe un teléfono de al menos 7 dígitos.';
+    if (!telefonoValido(datos.telefono)) {
+      errores.telefono = MENSAJES.telefono;
     }
 
     if (datos.contrasena.length < 6) {

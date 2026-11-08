@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import Boton from './Boton';
 import Campo from './Campo';
+import CampoContrasena from '../CampoContrasena';
 import CampoImagen from './CampoImagen';
 import Dialogo from './Dialogo';
 import { datosFormularioProfesional, validarProfesional } from '../../utils/agenda';
+import {
+  EJEMPLO_TELEFONO,
+  MAX_TELEFONO_FORMATEADO,
+  formatearTelefono,
+} from '../../utils/validacion';
 import { mensajeDeError } from '../../utils/catalogo';
 import styles from './Formulario.module.css';
 
@@ -23,8 +29,13 @@ export default function ProfesionalFormulario({
   const [guardando, setGuardando] = useState(false);
 
   const cambiar = (campo) => (evento) => {
-    const valor =
-      evento.target.type === 'checkbox' ? evento.target.checked : evento.target.value;
+    let valor = evento.target.value;
+
+    if (evento.target.type === 'checkbox') {
+      valor = evento.target.checked;
+    } else if (campo === 'telefono') {
+      valor = formatearTelefono(valor);
+    }
 
     setDatos((previos) => ({ ...previos, [campo]: valor }));
     setErrores((previos) => {
@@ -181,6 +192,8 @@ export default function ProfesionalFormulario({
                         className={styles.control}
                         type="tel"
                         inputMode="tel"
+                        maxLength={MAX_TELEFONO_FORMATEADO}
+                        placeholder={EJEMPLO_TELEFONO}
                         value={datos.telefono}
                         onChange={cambiar('telefono')}
                         aria-invalid={Boolean(errores.telefono)}
@@ -197,10 +210,9 @@ export default function ProfesionalFormulario({
                     error={errores.contrasena}
                     ayuda="Mínimo 6 caracteres."
                   >
-                    <input
+                    <CampoContrasena
                       id="profesional-contrasena"
                       className={styles.control}
-                      type="password"
                       autoComplete="new-password"
                       value={datos.contrasena}
                       onChange={cambiar('contrasena')}

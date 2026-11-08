@@ -27,16 +27,22 @@ describe('Modelo de Dominio: Cliente', () => {
 
   describe('normalizarTelefono()', () => {
     it('debe extraer solo los dígitos de cadenas con guiones, espacios o paréntesis', () => {
-      assert.equal(Cliente.normalizarTelefono('+57 (310) 456-7890'), '573104567890');
       assert.equal(Cliente.normalizarTelefono('312-456-7890'), '3124567890');
+      assert.equal(Cliente.normalizarTelefono('312 456 7890'), '3124567890');
+    });
+
+    it('debe descartar el indicativo de Colombia cuando llega en el texto', () => {
+      assert.equal(Cliente.normalizarTelefono('+57 (310) 456-7890'), '3104567890');
     });
 
     it('debe aceptar números directamente y convertirlos a cadena limpia', () => {
       assert.equal(Cliente.normalizarTelefono(3001234567), '3001234567');
     });
 
-    it('debe lanzar ValidationError si el teléfono tiene menos de 7 o más de 15 dígitos', () => {
+    it('debe lanzar ValidationError si el teléfono no tiene exactamente 10 dígitos', () => {
       assert.throws(() => Cliente.normalizarTelefono('123456'), ValidationError); // 6 dígitos
+      assert.throws(() => Cliente.normalizarTelefono('300123456'), ValidationError); // 9 dígitos
+      assert.throws(() => Cliente.normalizarTelefono('30012345678'), ValidationError); // 11 dígitos
       assert.throws(() => Cliente.normalizarTelefono('1234567890123456'), ValidationError); // 16 dígitos
       assert.throws(() => Cliente.normalizarTelefono(''), ValidationError);
       assert.throws(() => Cliente.normalizarTelefono('abc'), ValidationError);

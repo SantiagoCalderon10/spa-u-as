@@ -8,6 +8,14 @@ import { useServicios } from '../../hooks/useServicios';
 import { inicialesDe, nombreDeProfesional } from '../../utils/agenda';
 import { formatearDuracion, formatearPrecio, mensajeDeError } from '../../utils/catalogo';
 import {
+  EJEMPLO_TELEFONO,
+  MAX_TELEFONO_FORMATEADO,
+  MENSAJES,
+  digitosTelefono,
+  formatearTelefono,
+  telefonoValido,
+} from '../../utils/validacion';
+import {
   claveFecha,
   enlaceWhatsApp,
   fechaDesdeClaveLocal,
@@ -254,7 +262,7 @@ export default function ReservaPage() {
         ? previo
         : {
             nombre: usuario.nombrecompleto ?? '',
-            telefono: usuario.telefono ? String(usuario.telefono) : '',
+            telefono: usuario.telefono ? formatearTelefono(usuario.telefono) : '',
           }
     );
   }, [usuario]);
@@ -376,9 +384,8 @@ export default function ReservaPage() {
       nuevos.nombre = 'Escribe tu nombre completo.';
     }
 
-    const telefono = cliente.telefono.replace(/\D/g, '');
-    if (telefono.length < 7 || telefono.length > 15) {
-      nuevos.telefono = 'Usa un teléfono de 7 a 15 dígitos.';
+    if (!telefonoValido(cliente.telefono)) {
+      nuevos.telefono = MENSAJES.telefono;
     }
 
     return nuevos;
@@ -403,7 +410,7 @@ export default function ReservaPage() {
         horaInicio: hora,
         cliente: {
           nombre: cliente.nombre.trim(),
-          telefono: cliente.telefono.replace(/\D/g, ''),
+          telefono: digitosTelefono(cliente.telefono),
         },
       });
 
@@ -738,12 +745,18 @@ export default function ReservaPage() {
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
+                  maxLength={MAX_TELEFONO_FORMATEADO}
                   value={cliente.telefono}
-                  onChange={(evento) => setCliente((previo) => ({ ...previo, telefono: evento.target.value }))}
+                  onChange={(evento) =>
+                    setCliente((previo) => ({
+                      ...previo,
+                      telefono: formatearTelefono(evento.target.value),
+                    }))
+                  }
                   readOnly={usuario?.rol === 'cliente'}
                   aria-invalid={Boolean(errores.telefono)}
                   aria-describedby={errores.telefono ? 'cliente-telefono-error' : 'cliente-telefono-ayuda'}
-                  placeholder="Ej. 318 450 9821"
+                  placeholder={EJEMPLO_TELEFONO}
                 />
                 {errores.telefono ? (
                   <span id="cliente-telefono-error" className={styles.error}>{errores.telefono}</span>

@@ -22,6 +22,8 @@ const CAMPOS_ACTUALIZACION = [
 ];
 
 const LONGITUD_MINIMA_CONTRASENA = 6;
+const LONGITUD_TELEFONO = 10;
+const PATRON_CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export class UsuarioServicio {
   constructor(usuarioRepositorio) {
@@ -39,7 +41,9 @@ export class UsuarioServicio {
     if (!correo) {
       throw new ValidationError('El correo es requerido');
     }
+    this.#validarFormatoCorreo(correo);
     campos.correo = correo;
+    campos.telefono = this.#normalizarTelefono(campos.telefono);
 
     const existe = await this.usuarioRepositorio.obtenerPorCorreo(correo);
     if (existe) {
@@ -94,6 +98,7 @@ export class UsuarioServicio {
       if (!correo) {
         throw new ValidationError('El correo no puede estar vacío');
       }
+      this.#validarFormatoCorreo(correo);
 
       const existente = await this.usuarioRepositorio.obtenerPorCorreo(correo);
       if (existente && String(existente._id) !== String(id)) {
@@ -101,6 +106,10 @@ export class UsuarioServicio {
       }
 
       cambios.correo = correo;
+    }
+
+    if (cambios.telefono !== undefined) {
+      cambios.telefono = this.#normalizarTelefono(cambios.telefono);
     }
 
     if (cambios.contrasena !== undefined) {
@@ -137,11 +146,7 @@ export class UsuarioServicio {
     }
 
     if (cambios.telefono !== undefined) {
-      const telefono = Number(cambios.telefono);
-      if (!Number.isInteger(telefono) || telefono <= 0) {
-        throw new ValidationError('El teléfono no es válido');
-      }
-      cambios.telefono = telefono;
+      cambios.telefono = this.#normalizarTelefono(cambios.telefono);
     }
 
     if (cambios.correo !== undefined) {
@@ -149,6 +154,7 @@ export class UsuarioServicio {
       if (!correo) {
         throw new ValidationError('El correo no puede estar vacío');
       }
+      this.#validarFormatoCorreo(correo);
 
       const existente = await this.usuarioRepositorio.obtenerPorCorreo(correo);
       if (existente && String(existente._id) !== String(id)) {
@@ -186,6 +192,34 @@ export class UsuarioServicio {
 
   #normalizarCorreo(correo) {
     return String(correo ?? '').toLowerCase().trim();
+  }
+
+  #validarFormatoCorreo(correo) {
+    if (!PATRON_CORREO.test(correo)) {
+      throw new ValidationError(
+        'El correo no tiene un formato válido, por ejemplo nombre@correo.com'
+      );
+    }
+  }
+
+  /**
+   * El teléfono se guarda como número de 10 dígitos. Acepta el indicativo de
+   * Colombia (+57 …) al pegar, pero rechaza cualquier otra longitud.
+   */
+  #normalizarTelefono(telefono) {
+    let digitos = String(telefono ?? '').replace(/\D/g, '');
+
+    if (digitos.length > LONGITUD_TELEFONO && digitos.startsWith('57')) {
+      digitos = digitos.slice(2);
+    }
+
+    if (digitos.length !== LONGITUD_TELEFONO) {
+      throw new ValidationError(
+        `El teléfono es requerido y debe tener exactamente ${LONGITUD_TELEFONO} dígitos`
+      );
+    }
+
+    return Number(digitos);
   }
 
   #validarContrasena(contrasena) {

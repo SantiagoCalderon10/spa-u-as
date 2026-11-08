@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Boton from '../../components/admin/Boton';
 import Campo from '../../components/admin/Campo';
+import CampoContrasena from '../../components/CampoContrasena';
 import { useAuth } from '../../context/AuthContext';
 import { mensajeDeError } from '../../utils/catalogo';
+import { MENSAJES, correoValido, normalizarCorreo } from '../../utils/validacion';
 import formulario from '../../components/admin/Formulario.module.css';
 import styles from './LoginPage.module.css';
 
@@ -46,6 +48,8 @@ export default function LoginPage() {
 
     if (!correo.trim()) {
       nuevos.correo = 'Escribe tu correo.';
+    } else if (!correoValido(correo)) {
+      nuevos.correo = MENSAJES.correo;
     }
 
     if (!contrasena) {
@@ -65,7 +69,7 @@ export default function LoginPage() {
     setEnviando(true);
 
     try {
-      const cuenta = await iniciarSesion(correo.trim(), contrasena);
+      const cuenta = await iniciarSesion(normalizarCorreo(correo), contrasena);
 
       if (!cuenta || !PANEL_POR_ROL[cuenta.rol]) {
         cerrarSesion();
@@ -122,10 +126,9 @@ export default function LoginPage() {
           </Campo>
 
           <Campo etiqueta="Contraseña" htmlFor="contrasena" error={errores.contrasena}>
-            <input
+            <CampoContrasena
               id="contrasena"
               name="contrasena"
-              type="password"
               className={formulario.control}
               value={contrasena}
               onChange={(evento) => setContrasena(evento.target.value)}

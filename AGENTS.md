@@ -172,4 +172,10 @@ Estado de las prioridades técnicas de cierre:
    - Backfill: `npm run backfill:profesional-citas` (acepta `--dry-run`).
    - Frontend: [`EliminarProfesionalFormulario.jsx`](file:///c:/Users/ASUS/Documents/USCO/6%20SEMESTRE/Ingenieria%20de%20Sotfware%20Orientada%20a%20Objetos/Proyecto%20Final/spa-uñas/frontend-spa-three-masters/src/components/admin/EliminarProfesionalFormulario.jsx) con resumen, motivo obligatorio, elección de cuenta y avisos por WhatsApp.
 
+7. **Validación Normalizada de Correo y Teléfono:** ✅ **COMPLETADO**
+   - Regla única en el frontend: [`utils/validacion.js`](file:///c:/Users/ASUS/Documents/USCO/6%20SEMESTRE/Ingenieria%20de%20Sotfware%20Orientada%20a%20Objetos/Proyecto%20Final/spa-uñas/frontend-spa-three-masters/src/utils/validacion.js) exporta `correoValido`, `normalizarCorreo`, `digitosTelefono`, `formatearTelefono` y `telefonoValido`.
+   - El correo se valida con formato `nombre@dominio.tld` en login admin, login/registro de clienta, perfil de clienta y formulario de profesional.
+   - El teléfono solo acepta dígitos, máximo **10** y se muestra como `312 345 6789` mientras se escribe. El valor que viaja al backend es siempre de 10 dígitos. Si se pega con indicativo `+57`, se descarta el prefijo.
+   - Defensa en profundidad en backend: `UsuarioServicio` (`crearUsuario`, `actualizarUsuario`, `actualizarPerfilCliente`) y `Cliente.normalizarTelefono` rechazan cualquier teléfono que no tenga exactamente 10 dígitos y cualquier correo sin formato válido. Cubierto por [`UsuarioServicio.test.js`](file:///c:/Users/ASUS/Documents/USCO/6%20SEMESTRE/Ingenieria%20de%20Sotfware%20Orientada%20a%20Objetos/Proyecto%20Final/spa-uñas/backend-spa-three-masters/test/UsuarioServicio.test.js) y [`Cliente.test.js`](file:///c:/Users/ASUS/Documents/USCO/6%20SEMESTRE/Ingenieria%20de%20Sotfware%20Orientada%20a%20Objetos/Proyecto%20Final/spa-uñas/backend-spa-three-masters/test/Cliente.test.js).
+
 

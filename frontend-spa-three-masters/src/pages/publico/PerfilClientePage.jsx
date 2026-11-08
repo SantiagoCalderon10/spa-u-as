@@ -14,28 +14,37 @@ import {
   resumenHorarioCita,
 } from '../../utils/citas';
 import { etiquetaEstado, formatearFechaCita } from '../../utils/reserva';
+import {
+  EJEMPLO_TELEFONO,
+  MAX_TELEFONO_FORMATEADO,
+  MENSAJES,
+  correoValido,
+  digitosTelefono,
+  formatearTelefono,
+  normalizarCorreo,
+  telefonoValido,
+} from '../../utils/validacion';
 import styles from './PerfilCliente.module.css';
 
 function formularioDesde(usuario) {
   return {
     nombrecompleto: usuario?.nombrecompleto ?? '',
-    telefono: usuario?.telefono ? String(usuario.telefono) : '',
+    telefono: usuario?.telefono ? formatearTelefono(usuario.telefono) : '',
     correo: usuario?.correo ?? '',
   };
 }
 
 function validarFormulario(datos) {
   const errores = {};
-  const telefono = datos.telefono.replace(/\D/g, '');
 
   if (datos.nombrecompleto.trim().length < 3) {
     errores.nombrecompleto = 'Escribe tu nombre completo.';
   }
-  if (telefono.length < 7 || telefono.length > 15) {
-    errores.telefono = 'Usa un teléfono de 7 a 15 dígitos.';
+  if (!telefonoValido(datos.telefono)) {
+    errores.telefono = MENSAJES.telefono;
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.correo.trim())) {
-    errores.correo = 'Escribe un correo válido.';
+  if (!correoValido(datos.correo)) {
+    errores.correo = MENSAJES.correo;
   }
 
   return errores;
@@ -104,7 +113,9 @@ export default function PerfilClientePage() {
   const primerNombre = (datos?.nombrecompleto ?? '').trim().split(/\s+/)[0] || 'clienta';
 
   const alCambiar = (campo) => (evento) => {
-    setFormulario((previo) => ({ ...previo, [campo]: evento.target.value }));
+    const valor =
+      campo === 'telefono' ? formatearTelefono(evento.target.value) : evento.target.value;
+    setFormulario((previo) => ({ ...previo, [campo]: valor }));
     setExito('');
   };
 
@@ -121,8 +132,8 @@ export default function PerfilClientePage() {
     try {
       const respuesta = await actualizarMiPerfil({
         nombrecompleto: formulario.nombrecompleto.trim(),
-        telefono: formulario.telefono.replace(/\D/g, ''),
-        correo: formulario.correo.trim().toLowerCase(),
+        telefono: digitosTelefono(formulario.telefono),
+        correo: normalizarCorreo(formulario.correo),
       });
 
       setPerfil(respuesta);
@@ -259,6 +270,8 @@ export default function PerfilClientePage() {
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
+                  maxLength={MAX_TELEFONO_FORMATEADO}
+                  placeholder={EJEMPLO_TELEFONO}
                   value={formulario.telefono}
                   onChange={alCambiar('telefono')}
                   aria-invalid={Boolean(errores.telefono)}
