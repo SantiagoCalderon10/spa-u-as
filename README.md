@@ -9,7 +9,7 @@
 [![Vite](https://img.shields.io/badge/Vite-v8.3-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose%209-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-Image%20CDN-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
-[![Unit Tests](https://img.shields.io/badge/Tests-8%20Suites%20Passing-brightgreen?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/api/test.html)
+[![Unit Tests](https://img.shields.io/badge/Tests-14%20Suites%20Escritas-orange?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/api/test.html)
 
 <p align="center">
   <b>Proyecto Final de Ingeniería de Software Orientada a Objetos (ISOO - 6° Semestre)</b><br>
@@ -21,7 +21,8 @@
 [🧪 Pruebas Unitarias](#-estrategia-de-pruebas-unitarias-backend) •
 [🚀 Instalación Local](#-instalación-y-puesta-en-marcha) •
 [🌐 Despliegue](#-arquitectura-de-despliegue-en-la-nube) •
-[👥 Roles & Vistas](#-estructura-de-roles-y-permisos)
+[👥 Roles & Vistas](#-estructura-de-roles-y-permisos) •
+[📋 Documentación Scrum](#-documentación-scrum)
 
 ---
 
@@ -32,6 +33,12 @@
 **Three Masters Spa** es una solución web integral diseñada para digitalizar, optimizar y automatizar el ciclo de vida completo de un centro de estética y cuidado de uñas. 
 
 El sistema resuelve la fricción típica de reservas mediante un motor inteligente de disponibilidad en tiempo real, agendamiento sin obligatoriedad de registro previo, gestión segura de citas vía tokens criptográficos, integración de avisos vía **WhatsApp** y un panel analítico ejecutivo con métricas temporales para la toma de decisiones empresariales.
+
+---
+
+## 📋 Documentación Scrum
+
+Los artefactos del proceso (34 historias de usuario, dos sprint backlogs con 120 tareas, burndown, review y retrospectiva) están en [`docs/scrum/`](docs/scrum/README.md). Incluyen una nota explicando qué partes son reconstrucción retrospectiva y cuáles corresponden a evidencia real del repositorio.
 
 ---
 
@@ -149,17 +156,26 @@ En cumplimiento de los requerimientos de verificación y validación formal de s
 
 ```bash
 backend-spa-three-masters/test/
-├── Hora.test.js          # Aritmética de minutos, validación de formato HH:mm y adición de tiempo
-├── Fecha.test.js         # Normalización a UTC medianoche, rechazo de fechas inválidas y claves YYYY-MM-DD
-├── Cita.test.js          # Solapamiento de citas, transiciones válidas/inválidas de estado y reglas por rol
-├── Cliente.test.js       # Sanitización de nombres, extracción de dígitos telefónicos y vinculación de cuenta
-├── Horario.test.js       # Duración en minutos, cobertura de intervalos y prevención de turnos solapados
-├── Servicio.test.js      # Cálculo de hora final, validación de precios no negativos y activación
-├── Categoria.test.js     # Transición de estados activo/inactivo en categorías del catálogo
-└── Profesional.test.js   # Verificación de atención según especialidad y asignación dinámica
+├── Hora.test.js                 # Aritmética de minutos, formato HH:mm y adición de tiempo
+├── Fecha.test.js                # Normalización a UTC medianoche y claves YYYY-MM-DD
+├── Cita.test.js                 # Solapamiento y transiciones de estado de la entidad Cita
+├── Cliente.test.js              # Sanitización de nombres y teléfonos; vinculación de cuenta
+├── Horario.test.js              # Cobertura de intervalos y prevención de turnos solapados
+├── HorarioCitasAfectadas.test.js # Detección de citas afectadas al editar o eliminar una franja
+├── Servicio.test.js             # Hora final, precios no negativos y activación
+├── Categoria.test.js            # Transición de estados activo/inactivo
+├── Profesional.test.js          # Atención por especialidad y asignación dinámica
+├── ProfesionalServicio.test.js  # Guardas de la baja definitiva
+├── UsuarioServicio.test.js      # Validación de correo y teléfono
+└── CatalogoDuplicados.test.js   # Nombres duplicados sin importar mayúsculas, tildes ni espacios
+
+backend-spa-three-masters/tests/
+├── auth.test.js   # Registro con rol forzado a cliente, login, token y middleware de roles
+└── citas.test.js  # Flujo de CitaServicio: FN-03/04/06/07/19/24 y snapshot de la profesional
 ```
 
-Para ejecutar las pruebas:
+**14 suites escritas.** El badge indica “escritas”, no “passing”: el entorno donde se generó esta documentación no pudo ejecutar los comandos (el shell devolvía código 9 sin salida). Para verificarlas:
+
 ```bash
 cd backend-spa-three-masters
 npm test

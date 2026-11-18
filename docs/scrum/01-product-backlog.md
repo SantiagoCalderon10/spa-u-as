@@ -1,0 +1,61 @@
+# 01 · Product backlog
+
+**Fuente:** las 34 historias entregadas por el equipo, sin agregar ni quitar ninguna.
+**Prioridad:** `M` = debe (núcleo), `S` = debería (ampliación), misma escala de `docs/requisitos/funcionalidades.md`.
+**Puntos:** 1 punto ≈ 4 h. **Estado:** las 34 están `Done` al cierre del Sprint 2; se conserva la columna para fines de trazabilidad.
+
+| ID | Módulo | Historia (Como… quiero… para…) | Criterios de aceptación | FN | Prio | Pts | Sprint | Estado |
+|---|---|---|---|---|---|---:|---|---|
+| HU-ACC-01 | Acceso | Como profesional o administrador deseo iniciar sesión con mis credenciales, para acceder a las funciones de mi rol. | Usuario con rol y hash de contraseña · endpoints de inicio y cierre de sesión · pantalla compartida · credenciales inválidas y logout probados | FN-15 | M | 3 | 1 | Done |
+| HU-ACC-02 | Acceso | Como administrador deseo que cada usuario solo acceda a lo que su rol permite, para proteger precios, servicios y datos de las clientas. | Middleware de autenticación y rol · menú y rutas protegidas · acceso directo con rol no autorizado probado | FN-15 | M | 3 | 1 | Done |
+| HU-ADS-03 | Catálogos | Como administrador deseo crear categorías, para agrupar los servicios y asignarlas como especialidades. | Esquema y repositorio · endpoint con validaciones · formulario · nombre vacío o repetido rechazado (también con tildes y mayúsculas) | FN-12 | M | 2 | 1 | Done |
+| HU-ADS-01 | Catálogos | Como administrador deseo crear un servicio con nombre, descripción, precio y categoría, para que las clientas puedan verlo y reservarlo. | Esquema con duración · endpoint con validación de precio · formulario con carga de imagen · campos vacíos, precio inválido y nombre duplicado probados | FN-12 | M | 3 | 1 | Done |
+| HU-ADP-01 | Profesionales | Como administrador deseo crear la cuenta de una profesional, para que pueda iniciar sesión y recibir citas. | Perfil asociado a su usuario · correo único · formulario · correo duplicado y permisos probados | FN-13 | M | 3 | 1 | Done |
+| HU-ADP-02 | Profesionales | Como administrador deseo indicar las especialidades que realiza cada profesional, para que las clientas solo vean profesionales capacitadas. | Campo de especialidades (categorías) · endpoint para asignar y modificar · selector en pantalla · reflejo en la selección pública probado | FN-13 | M | 2 | 1 | Done |
+| HU-ADP-03 | Horarios | Como administrador deseo definir el horario de trabajo de cada profesional por día y franja, para que el sistema solo ofrezca horarios reales. | Esquema día/inicio/fin · endpoint con validación y control de solapes · vista por día y matriz semanal · franja inválida probada | FN-13 | M | 3 | 1 | Done |
+| HU-SER-01 | Catálogo público | Como cliente deseo consultar los servicios agrupados por categoría, con descripción y precio, para elegir el que quiero reservar. | Endpoint agrupado · pantalla C-01 · catálogo vacío probado | FN-01 | M | 2 | 1 | Done |
+| HU-DIS-01 | Disponibilidad | Como cliente deseo ver las profesionales que realizan el servicio y sus horarios libres, para escoger con quién y cuándo. | Endpoint por servicio y especialidad · cálculo franja menos citas · pantalla C-02 · mensajes sin disponibilidad · prueba con cita confirmada y cancelada | FN-02 | M | 4 | 1 | Done |
+| HU-AGE-01 | Agendamiento | Como cliente deseo reservar mi cita dejando nombre, teléfono y correo, para no tener que crear una cuenta. | Cita con datos embebidos y hash del enlace · módulo único de cruces · respaldo en BD · endpoint y enlace único · formulario C-03 y resumen C-04 · reservas simultáneas probadas | FN-03, FN-06, FN-07 | M | 5 | 1 | Done |
+| HU-CIT-03 | Enlace público | Como cliente deseo abrir mi enlace único, para ver el detalle y el estado de mi cita sin iniciar sesión. | Consulta por hash · pantalla C-05 · enlace inválido sin revelar datos · casos válido e inválido probados | FN-04 | M | 2 | 1 | Done |
+| HU-CIT-04 | Enlace público | Como cliente deseo cancelar mi cita desde mi enlace, para liberar el horario si no puedo asistir. | Cancelación por enlace con validación de estado · confirmación en C-05 · horario liberado · estados finales probados | FN-04 | M | 2 | 1 | Done |
+| HU-ADC-01 | Panel citas | Como administrador deseo ver todas las citas de todas las profesionales con su estado, para tener la agenda del salón en un lugar. | Endpoint solo administrador · pantalla A-02 con calendario y menú de acciones · permisos y listado verificados | FN-08 | M | 1 | 1 | Done |
+| HU-ADC-02 | Panel citas | Como administrador deseo abrir una cita y ver su detalle, para consultar datos de la clienta y del servicio sin buscar en otros canales. | Endpoint de detalle · pantalla A-03 · datos mostrados incluida la justificación | FN-08 | M | 1 | 1 | Done |
+| HU-ADC-03 | Panel citas | Como administrador deseo marcar una cita como completada o no asistió, para llevar el registro de lo realizado. | Endpoint con transiciones válidas · acciones en A-03 · prueba de citas en estado final | FN-11 | M | 2 | 1 | Done |
+| HU-ADS-02 | Catálogos | Como administrador deseo modificar descripción, precio y categoría de un servicio, para mantener el catálogo actualizado. | Endpoint con validaciones incluido nombre duplicado · formulario de edición · reflejo inmediato en catálogo sin alterar citas agendadas | FN-12 | M | 2 | 2 | Done |
+| HU-ADP-04 | Horarios | Como administrador deseo eliminar una franja del horario, para que deje de ofrecerse cuando ya no trabaja en ese rango. | Endpoint con verificación de citas confirmadas · confirmación en pantalla · aviso con lista de citas afectadas y enlace a Citas · prueba con y sin citas | FN-13 | M | 2 | 2 | Done |
+| HU-ADP-05 | Profesionales | Como administrador deseo desactivar una profesional conservando su cuenta, para que deje de recibir citas sin perder historial. | Campo activo · endpoints de desactivar y reactivar · acción en pantalla · exclusión en selección y horarios | FN-13 | M | 2 | 2 | Done |
+| HU-ADP-06 | Profesionales | Como administrador deseo eliminar de forma definitiva a una profesional, para retirar su cuenta cuando deja el salón. | Guardas para citas y horarios · cancelación con motivo conservando el historial · borrado condicional de cuenta · avisos por WhatsApp · prueba con y sin citas pendientes | FN-13 | M | 4 | 2 | Done |
+| HU-PRF-01 | Panel profesional | Como profesional deseo ver las citas asignadas, para organizar mi jornada. | Endpoint de la profesional autenticada · pantalla P-02 · aislamiento de citas ajenas verificado | FN-14 | M | 1 | 2 | Done |
+| HU-PRF-02 | Panel profesional | Como profesional deseo cancelar una cita dejando justificación, para liberar el horario y que quede constancia del motivo. | Justificación obligatoria · formulario P-03 · horario liberado y motivo registrado · prueba de justificación vacía, citas ajenas y estado final | FN-14 | M | 2 | 2 | Done |
+| HU-PRF-03 | Notificaciones | Como administrador o profesional deseo avisar por WhatsApp al cancelar, para que la clienta se entere sin abrir su enlace. | Enlace `wa.me` con teléfono y mensaje prellenado · opción tras cancelar sin cerrar el diálogo · cancelación válida aunque no se envíe | FN-14 | M | 2 | 2 | Done |
+| HU-ADS-04 | Catálogos | Como administrador deseo ver el listado de categorías, para saber cuáles existen antes de crear servicios o especialidades. | Endpoint de listado · pantalla de categorías | FN-12 | M | 1 | 2 | Done |
+| HU-ADS-05 | Catálogos | Como administrador deseo modificar una categoría, para corregir su nombre sin recrear los servicios. | Endpoint de edición con validaciones · formulario de edición | FN-12 | M | 1 | 2 | Done |
+| HU-ADS-06 | Catálogos | Como administrador deseo eliminar una categoría que ya no uso, para mantener el catálogo ordenado. | Endpoint con verificación de uso · confirmación en pantalla · prueba de categoría en uso y sin uso | FN-12 | M | 1 | 2 | Done |
+| HU-ADS-07 | Catálogos | Como administrador deseo activar o desactivar una categoría, para ocultarla sin perder su historial. | Campo activo · endpoint de activación · interruptor en pantalla · exclusión de inactivas en servicios y especialidades | FN-12 | M | 1 | 2 | Done |
+| HU-ADS-08 | Catálogos | Como administrador deseo desactivar un servicio que ya no ofrezco, para que no se pueda reservar sin borrar su historial. | Campo activo · endpoint de activación · interruptor en pantalla · exclusión en catálogo público | FN-12 | M | 2 | 2 | Done |
+| HU-ACC-03 | Acceso | Como cliente deseo registrarme de forma opcional, para centralizar mis citas. | Rol cliente y vínculo con perfil · registro con correo único y hash · pantalla · correo duplicado y agendamiento sin cuenta probados | FN-18 | S | 2 | 2 | Done |
+| HU-AGE-02 | Agendamiento | Como cliente con cuenta deseo que mis reservas queden en mi cuenta, para consultarlas después sin el enlace. | Cita asociada a cuenta y perfil · endpoint según haya sesión · prueba con y sin sesión | FN-18, FN-19 | S | 2 | 2 | Done |
+| HU-AGE-03 | Notificaciones | Como cliente deseo compartir mi enlace por WhatsApp al confirmar, para no perderlo. | Enlace `wa.me` con la URL única · botón de compartir en C-04 | FN-04 | S | 1 | 2 | Done |
+| HU-ACC-04 | Cuenta cliente | Como cliente con cuenta deseo cambiar mi nombre, correo y teléfono, para mantener mis datos al día. | Endpoint de actualización · pantalla de perfil · correo único y permisos validados | FN-18 | S | 2 | 2 | Done |
+| HU-CIT-01 | Cuenta cliente | Como cliente con cuenta deseo ver el listado de mis citas con su estado, para saber cuáles tengo confirmadas, cumplidas o canceladas. | Endpoint de la clienta autenticada · pantalla de historial · aislamiento de citas ajenas verificado | FN-19 | S | 2 | 2 | Done |
+| HU-CIT-02 | Cuenta cliente | Como cliente con cuenta deseo abrir el detalle de una cita desde mi perfil y cancelarla, para gestionarla sin usar el enlace. | Endpoint autorizado por sesión y pertenencia · botón que abre C-05 · prueba con citas de otra persona | FN-24 | S | 2 | 2 | Done |
+| HU-ADC-04 | Panel citas | Como administrador deseo reprogramar una cita a otro horario, para acomodar cambios sin cancelarla. | Endpoint con validación de cruces · selector de horario libre en A-03 · prueba de solapamiento y estado final | FN-10 | M | 2 | 2 | Done |
+
+**Totales:** 34 historias · 72 puntos · 38 pts en Sprint 1 y 34 pts en Sprint 2.
+
+## Trabajo posterior a las 34 HUs (sin puntos)
+
+Estas mejoras existen en el código y se documentan en `AGENTS.md`, pero **no tenían HU propia en la lista entregada**. Se dejan fuera de la estimación para no inflar la velocidad; quedan trazadas dentro de tareas de la HU más cercana cuando aplica:
+
+| Mejora | Dónde se registró | HU relacionada |
+|---|---|---|
+| Matriz semanal de horarios con filtros y alta desde celdas | `MatrizHorarios.jsx`, `HorariosAdminPage.jsx` | HU-ADP-03 |
+| Validación de nombres duplicados insensible a mayúsculas, tildes y espacios | `normalizarNombre.js`, `catalogo.js`, `CatalogoDuplicados.test.js` | HU-ADS-01, HU-ADS-03 |
+| Aviso de citas afectadas al editar o eliminar una franja | `AvisoCitasAfectadas.jsx`, `HorarioCitasAfectadas.test.js` | HU-ADP-04 |
+| Calendario y menú de acciones en el panel de citas | `CalendarioFiltroCitas.jsx`, `MenuAccionesCita.jsx` | HU-ADC-01 |
+| Carga de imágenes en Cloudinary | `upload/`, `CampoImagen.jsx`, `uploadService.js` | HU-ADS-01, HU-ADS-02 |
+| Normalización de correo y teléfono | `validacion.js`, `UsuarioServicio.test.js`, `Cliente.test.js` | HU-ACC-03, HU-ACC-04 |
+| Página de presentación y datos públicos de contacto | `LandingPage.jsx`, `content/landing.js`, `Footer.jsx`, `ContactoSection.jsx` | HU-SER-01 (escaparate público) |
+| Panel analítico con filtros temporales | `ResumenAdminPage.jsx`, `ResumenAdmin.module.css` | Sin HU · ver aviso abajo |
+
+> **Aclarado el 2026-11-18:** `ResumenAdminPage.jsx` implementa KPIs y filtros Semana/Mes/Año, pero son una vista operativa y un cálculo derivado en el frontend, no el reporte histórico exportable de **FN-17** ni el registro persistido de **FN-16**. `docs/requisitos/funcionalidades.md` conserva ambas como `Pendiente` y lo explica en su actualización de esa fecha. Tampoco se calculan ingresos proyectados (FN-23, `Posterior`). No se agregó HU nueva: el panel sigue registrado aquí como trabajo sin puntos.
