@@ -6,12 +6,13 @@ import Interruptor from './Interruptor';
 import {
   cuerpoCategoria,
   datosFormularioCategoria,
+  esConflicto,
   mensajeDeError,
   validarCategoria,
 } from '../../utils/catalogo';
 import styles from './Formulario.module.css';
 
-export default function CategoriaFormulario({ categoria, onGuardar, onCerrar }) {
+export default function CategoriaFormulario({ categoria, categorias = [], onGuardar, onCerrar }) {
   const editando = Boolean(categoria?._id);
   const [datos, setDatos] = useState(() => datosFormularioCategoria(categoria));
   const [errores, setErrores] = useState({});
@@ -34,7 +35,7 @@ export default function CategoriaFormulario({ categoria, onGuardar, onCerrar }) 
   const enviar = async (evento) => {
     evento.preventDefault();
 
-    const nuevosErrores = validarCategoria(datos);
+    const nuevosErrores = validarCategoria(datos, categorias, categoria?._id);
     if (Object.keys(nuevosErrores).length > 0) {
       setErrores(nuevosErrores);
       return;
@@ -46,9 +47,13 @@ export default function CategoriaFormulario({ categoria, onGuardar, onCerrar }) 
     try {
       await onGuardar(cuerpoCategoria(datos));
     } catch (error) {
-      setErrorGeneral(
-        mensajeDeError(error, 'No pudimos guardar la categoría. Intenta de nuevo.')
-      );
+      const mensaje = mensajeDeError(error, 'No pudimos guardar la categoría. Intenta de nuevo.');
+      if (esConflicto(error)) {
+        setErrores((previos) => ({ ...previos, nombre: mensaje }));
+        setErrorGeneral('');
+      } else {
+        setErrorGeneral(mensaje);
+      }
       setGuardando(false);
     }
   };

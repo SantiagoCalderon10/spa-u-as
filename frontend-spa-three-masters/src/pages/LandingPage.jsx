@@ -9,8 +9,13 @@ import CuidadoSection from '../components/Cuidado/CuidadoSection';
 import InvitacionSection from '../components/Invitacion/InvitacionSection';
 import ContactoSection from '../components/Contacto/ContactoSection';
 import Footer from '../components/Footer/Footer';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function LandingPage() {
+  // El hero tiene su propia entrada escalonada; el resto de secciones aparece
+  // con un desplazamiento suave al entrar en el viewport.
+  useScrollReveal('main > section:not(:first-child)');
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />

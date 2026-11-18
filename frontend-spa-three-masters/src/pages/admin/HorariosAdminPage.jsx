@@ -1,9 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AvisoCitasAfectadas from '../../components/admin/AvisoCitasAfectadas';
 import Aviso from '../../components/admin/Aviso';
 import Boton from '../../components/admin/Boton';
 import Confirmacion from '../../components/admin/Confirmacion';
 import HorarioFormulario from '../../components/admin/HorarioFormulario';
+import MatrizHorarios from '../../components/admin/MatrizHorarios';
+import { useCitasAfectadas } from '../../hooks/useCitasAfectadas';
 import { useHorarios } from '../../hooks/useHorarios';
 import { useProfesionales } from '../../hooks/useProfesionales';
 import {
@@ -19,6 +22,11 @@ import {
 import { mensajeDeError } from '../../utils/catalogo';
 import page from './AdminPage.module.css';
 import styles from './HorariosAdmin.module.css';
+
+function avisoReasignacion(cantidad) {
+  if (!cantidad) return '';
+  return ` ${cantidad} ${cantidad === 1 ? 'cita quedó' : 'citas quedaron'} sin franja: reprográmalas desde Citas.`;
+}
 
 function EsqueletoLista() {
   return (
@@ -56,14 +64,26 @@ export default function HorariosAdminPage() {
 
   const [filtroProfesional, setFiltroProfesional] = useState('todas');
   const [filtroDia, setFiltroDia] = useState('todos');
+  const [vista, setVista] = useState('semana');
   const [formulario, setFormulario] = useState(null);
   const [porEliminar, setPorEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
   const [aviso, setAviso] = useState(null);
 
+  const {
+    citas: citasPorEliminar,
+    cargando: consultandoCitas,
+    error: errorCitas,
+  } = useCitasAfectadas({
+    id: porEliminar?._id ?? null,
+    cambios: null,
+    activo: Boolean(porEliminar),
+  });
+
   const cerrarAviso = useCallback(() => setAviso(null), []);
   const cerrarFormulario = useCallback(() => setFormulario(null), []);
   const cerrarConfirmacion = useCallback(() => setPorEliminar(null), []);
+  const abrirEliminar = useCallback((horario) => setPorEliminar(horario), []);
 
   const profesionalesPorId = useMemo(
     () => new Map(profesionales.map((profesional) => [profesional._id, profesional])),
@@ -111,6 +131,37 @@ export default function HorariosAdminPage() {
     return [...mapa.values()].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
   }, [franjasFiltradas, profesionalesPorId]);
 
+  // La matriz muestra todas las profesionales (incluso las que aún no tienen
+  // franjas) y conserva los grupos huérfanos para no ocultar horarios de perfiles
+  // eliminados.
+  const filasMatriz = useMemo(() => {
+    const filas = profesionales.map((profesional) => ({
+      id: profesional._id,
+      nombre: nombreDeProfesional(profesional),
+      existe: true,
+    }));
+    const conocidas = new Set(filas.map((fila) => fila.id));
+
+    grupos.forEach((grupo) => {
+      if (!grupo.existe && !conocidas.has(grupo.id)) {
+        filas.push({ id: grupo.id, nombre: grupo.nombre, existe: false });
+      }
+    });
+
+    const ordenadas = filas.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    return filtroProfesional === 'todas'
+      ? ordenadas
+      : ordenadas.filter((fila) => fila.id === filtroProfesional);
+  }, [profesionales, grupos, filtroProfesional]);
+
+  const diasMatriz = useMemo(
+    () =>
+      filtroDia === 'todos'
+        ? DIAS_SEMANA
+        : DIAS_SEMANA.filter((dia) => Number(dia.valor) === Number(filtroDia)),
+    [filtroDia]
+  );
+
   const minutosSemanales = franjasFiltradas.reduce(
     (total, horario) => total + Math.max(duracionFranja(horario.horaInicio, horario.horaFin), 0),
     0
@@ -133,13 +184,19 @@ export default function HorariosAdminPage() {
 
   const abrirNueva = () => setFormulario({ horario: null });
   const abrirEditar = (horario) => setFormulario({ horario });
+  // Un objeto sin _id se trata como alta, pero ya trae profesional y día elegidos
+  // desde la celda de la matriz.
+  const abrirNuevaEn = (fila, dia) =>
+    setFormulario({ horario: { idProfesional: fila.id, diaSemana: dia.valor } });
 
   const guardar = async (datos) => {
     if (formulario?.horario?._id) {
-      await actualizar(formulario.horario._id, datos);
+      const respuesta = await actualizar(formulario.horario._id, datos);
       setAviso({
         tipo: 'exito',
-        mensaje: `Horario de ${nombreDia(datos.diaSemana)} actualizado.`,
+        mensaje: `Horario de ${nombreDia(datos.diaSemana)} actualizado.${avisoReasignacion(
+          respuesta?.citasAfectadas?.length ?? 0
+        )}`,
       });
     } else {
       await crear(datos);
@@ -158,10 +215,12 @@ export default function HorariosAdminPage() {
     setEliminando(true);
 
     try {
-      await eliminar(porEliminar._id);
+      const respuesta = await eliminar(porEliminar._id);
       setAviso({
         tipo: 'exito',
-        mensaje: `Se eliminó la franja del ${nombreDia(porEliminar.diaSemana)}.`,
+        mensaje: `Se eliminó la franja del ${nombreDia(porEliminar.diaSemana)}.${avisoReasignacion(
+          respuesta?.citasAfectadas?.length ?? 0
+        )}`,
       });
       setPorEliminar(null);
     } catch (err) {
@@ -317,6 +376,32 @@ export default function HorariosAdminPage() {
         </p>
       </div>
 
+      <div className={styles.vistas} role="group" aria-label="Vista de los horarios">
+        <div className={styles.vistasSelector}>
+          <button
+            type="button"
+            className={`${styles.vistaBoton} ${vista === 'semana' ? styles.vistaBotonActivo : ''}`}
+            aria-pressed={vista === 'semana'}
+            onClick={() => setVista('semana')}
+          >
+            Semana
+          </button>
+          <button
+            type="button"
+            className={`${styles.vistaBoton} ${vista === 'lista' ? styles.vistaBotonActivo : ''}`}
+            aria-pressed={vista === 'lista'}
+            onClick={() => setVista('lista')}
+          >
+            Lista
+          </button>
+        </div>
+        <p className={styles.vistasPista}>
+          {vista === 'semana'
+            ? 'Clic en una franja para editarla o en «Agregar» para crear una.'
+            : 'Edita o elimina cada franja desde su fila.'}
+        </p>
+      </div>
+
       {error ? null : cargando ? (
         <EsqueletoLista />
       ) : sinProfesionales ? (
@@ -345,7 +430,7 @@ export default function HorariosAdminPage() {
             </Boton>
           </div>
         </div>
-      ) : grupos.length === 0 ? (
+      ) : grupos.length === 0 && vista === 'lista' ? (
         <div className={`${page.vacio} ${page.vacioCompacto}`}>
           <h2 className={page.vacioTitulo}>Ninguna franja coincide</h2>
           <p className={page.vacioTexto}>
@@ -355,6 +440,15 @@ export default function HorariosAdminPage() {
             <Boton onClick={limpiarFiltros}>Limpiar filtros</Boton>
           </div>
         </div>
+      ) : vista === 'semana' ? (
+        <MatrizHorarios
+          filas={filasMatriz}
+          dias={diasMatriz}
+          franjas={franjasFiltradas}
+          onEditar={abrirEditar}
+          onNueva={abrirNuevaEn}
+          onEliminar={abrirEliminar}
+        />
       ) : (
         <div className={styles.grupos}>
           {grupos.map((grupo) => (
@@ -393,7 +487,7 @@ export default function HorariosAdminPage() {
                       <Boton
                         tamano="sm"
                         variante="peligroSuave"
-                        onClick={() => setPorEliminar(horario)}
+                        onClick={() => abrirEliminar(horario)}
                       >
                         Eliminar
                       </Boton>
@@ -429,6 +523,12 @@ export default function HorariosAdminPage() {
             entre <strong>{formatearFranja(porEliminar.horaInicio, porEliminar.horaFin)}</strong>.
             La profesional dejará de tener disponibilidad en ese rango.
           </p>
+
+          <AvisoCitasAfectadas
+            citas={citasPorEliminar}
+            cargando={consultandoCitas}
+            error={errorCitas}
+          />
         </Confirmacion>
       )}
     </div>

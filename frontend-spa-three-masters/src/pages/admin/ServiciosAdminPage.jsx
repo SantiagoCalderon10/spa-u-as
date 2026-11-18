@@ -625,6 +625,7 @@ export default function ServiciosAdminPage() {
       {formulario && (
         <ServicioFormulario
           servicio={formulario.servicio}
+          servicios={servicios}
           categorias={categorias}
           onGuardar={guardar}
           onCerrar={cerrarFormulario}

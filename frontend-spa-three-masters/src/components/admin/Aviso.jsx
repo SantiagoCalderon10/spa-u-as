@@ -1,12 +1,45 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './Aviso.module.css';
 
+// Debe coincidir con la animación `salir` de Aviso.module.css.
+const MS_SALIDA = 180;
+const MS_AUTOCIERRE = 6000;
+
 export default function Aviso({ tipo = 'exito', mensaje, onCerrar }) {
+  const [saliendo, setSaliendo] = useState(false);
+  const saliendoRef = useRef(false);
+  const temporizador = useRef(null);
+  const onCerrarRef = useRef(onCerrar);
+  onCerrarRef.current = onCerrar;
+
+  const cerrar = useCallback(() => {
+    if (saliendoRef.current) return;
+
+    const reducido =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducido) {
+      onCerrarRef.current?.();
+      return;
+    }
+
+    saliendoRef.current = true;
+    setSaliendo(true);
+    temporizador.current = setTimeout(() => onCerrarRef.current?.(), MS_SALIDA);
+  }, []);
+
+  useEffect(() => () => clearTimeout(temporizador.current), []);
+
   useEffect(() => {
     if (!mensaje) return undefined;
-    const temporizador = setTimeout(onCerrar, 6000);
-    return () => clearTimeout(temporizador);
-  }, [mensaje, onCerrar]);
+
+    saliendoRef.current = false;
+    setSaliendo(false);
+
+    const auto = setTimeout(cerrar, MS_AUTOCIERRE);
+    return () => clearTimeout(auto);
+  }, [mensaje, cerrar]);
 
   if (!mensaje) return null;
 
@@ -14,14 +47,16 @@ export default function Aviso({ tipo = 'exito', mensaje, onCerrar }) {
 
   return (
     <div
-      className={`${styles.aviso} ${esError ? styles.error : styles.exito}`}
+      className={`${styles.aviso} ${esError ? styles.error : styles.exito} ${
+        saliendo ? styles.saliendo : ''
+      }`}
       role={esError ? 'alert' : 'status'}
     >
       <span className={styles.mensaje}>{mensaje}</span>
       <button
         type="button"
         className={styles.cerrar}
-        onClick={onCerrar}
+        onClick={cerrar}
         aria-label="Cerrar aviso"
       >
         <svg

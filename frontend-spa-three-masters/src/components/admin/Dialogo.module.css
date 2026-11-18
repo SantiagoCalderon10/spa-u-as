@@ -108,6 +108,17 @@
   }
 }
 
+@keyframes desaparecer {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+}
+
 @keyframes fundir {
   from {
     opacity: 0;
@@ -115,6 +126,25 @@
   to {
     opacity: 1;
   }
+}
+
+@keyframes fundirSalida {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Salida: se aplica solo cuando el consumidor pidió cerrar y esperamos el
+   tiempo de la animación antes de desmontar el diálogo. */
+.dialogo[open].cerrando {
+  animation: desaparecer 0.18s var(--ease-in-soft) both;
+}
+
+.dialogo.cerrando::backdrop {
+  animation: fundirSalida 0.18s var(--ease-in-soft) both;
 }
 
 @media (max-width: 560px) {
@@ -147,7 +177,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dialogo[open],
-  .dialogo::backdrop {
+  .dialogo::backdrop,
+  .dialogo[open].cerrando,
+  .dialogo.cerrando::backdrop {
     animation: none;
   }
 }

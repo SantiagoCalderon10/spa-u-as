@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
+import PageTransition from '../components/PageTransition/PageTransition';
 import styles from './PublicLayout.module.css';
 
 // Marco de las páginas públicas que no son la landing (reserva y enlace con
@@ -10,7 +11,9 @@ export default function PublicLayout() {
     <div className={styles.layout}>
       <Navbar enLanding={false} />
       <main className={styles.main}>
-        <Outlet />
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
       </main>
       <Footer />
     </div>

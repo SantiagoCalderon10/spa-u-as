@@ -5,6 +5,7 @@ import Boton from '../../components/admin/Boton';
 import CalendarioFiltroCitas from '../../components/admin/CalendarioFiltroCitas';
 import CancelarCitaFormulario from '../../components/admin/CancelarCitaFormulario';
 import Confirmacion from '../../components/admin/Confirmacion';
+import MenuAccionesCita from '../../components/admin/MenuAccionesCita';
 import ReprogramarCitaFormulario from '../../components/admin/ReprogramarCitaFormulario';
 import { useCitas } from '../../hooks/useCitas';
 import { inicialesDe } from '../../utils/agenda';
@@ -77,84 +78,6 @@ function IconoCalendario() {
     >
       <rect x="3" y="5" width="18" height="16" rx="2.5" />
       <path d="M8 3v4M16 3v4M3 10h18" />
-    </svg>
-  );
-}
-
-function IconoReprogramar() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 12a9 9 0 1 1-2.6-6.4" />
-      <path d="M21 3v6h-6" />
-      <path d="M12 7.5V12l3 1.8" />
-    </svg>
-  );
-}
-
-function IconoCompletar() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="m8.5 12 2.5 2.5 4.5-5" />
-    </svg>
-  );
-}
-
-function IconoNoAsistio() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="10" cy="8" r="3.2" />
-      <path d="M4 20c0-3.2 2.7-5.4 6-5.4 1.2 0 2.3.3 3.2.8" />
-      <path d="m16 16 5 5M21 16l-5 5" />
-    </svg>
-  );
-}
-
-function IconoCancelar() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="m9 9 6 6M15 9l-6 6" />
     </svg>
   );
 }
@@ -653,51 +576,15 @@ export default function CitasAdminPage() {
                       <td className={styles.celdaAcciones}>
                         {confirmada ? (
                           <div className={styles.acciones}>
-                            <Boton
-                              tamano="sm"
-                              variante="fantasma"
-                              className={styles.botonIcono}
-                              onClick={() => setReprogramando(cita)}
-                              disabled={ocupada}
-                              aria-label={`Reprogramar la cita de ${nombre}`}
-                              title="Reprogramar"
-                            >
-                              <IconoReprogramar />
-                            </Boton>
-                            <Boton
-                              tamano="sm"
-                              variante="fantasma"
-                              className={styles.botonIcono}
-                              onClick={() => completarCita(cita)}
-                              cargando={ocupada && accion.tipo === 'completar'}
-                              disabled={ocupada && accion.tipo !== 'completar'}
-                              aria-label={`Marcar como completada la cita de ${nombre}`}
-                              title="Marcar como completada"
-                            >
-                              {!(ocupada && accion.tipo === 'completar') && <IconoCompletar />}
-                            </Boton>
-                            <Boton
-                              tamano="sm"
-                              variante="fantasma"
-                              className={styles.botonIcono}
-                              onClick={() => setPorNoAsistir(cita)}
-                              disabled={ocupada}
-                              aria-label={`Marcar como no asistió la cita de ${nombre}`}
-                              title="Marcar como no asistió"
-                            >
-                              <IconoNoAsistio />
-                            </Boton>
-                            <Boton
-                              tamano="sm"
-                              variante="peligroSuave"
-                              className={`${styles.botonIcono} ${styles.botonIconoPeligro}`}
-                              onClick={() => setCancelando(cita)}
-                              disabled={ocupada}
-                              aria-label={`Cancelar la cita de ${nombre}`}
-                              title="Cancelar cita"
-                            >
-                              <IconoCancelar />
-                            </Boton>
+                            <MenuAccionesCita
+                              nombre={nombre}
+                              ocupada={ocupada}
+                              accion={accion}
+                              onReprogramar={() => setReprogramando(cita)}
+                              onCompletar={() => completarCita(cita)}
+                              onNoAsistir={() => setPorNoAsistir(cita)}
+                              onCancelar={() => setCancelando(cita)}
+                            />
                           </div>
                         ) : (
                           <span className={styles.sinAcciones}>Sin acciones</span>

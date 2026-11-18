@@ -19,6 +19,7 @@
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-card);
   box-shadow: 0 24px 60px rgba(46, 35, 40, 0.12);
+  animation: tarjetaEntra var(--motion-slow) var(--ease-out-soft) both;
 }
 
 .marca {
@@ -30,6 +31,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--admin-primary);
+  transition: color var(--motion-fast) ease;
 }
 
 .marca:hover {
@@ -72,6 +74,7 @@
   font-weight: 600;
   line-height: 1.5;
   color: var(--admin-danger);
+  animation: avisoEntra var(--motion-base) var(--ease-out-soft) both;
 }
 
 .accion {
@@ -91,11 +94,34 @@
 .enlace {
   font-weight: 600;
   color: var(--admin-primary);
+  transition: color var(--motion-fast) ease;
 }
 
 .enlace:hover {
   color: var(--admin-primary-dark);
   text-decoration: underline;
+}
+
+@keyframes tarjetaEntra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes avisoEntra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @media (max-width: 480px) {
@@ -105,5 +131,12 @@
 
   .titulo {
     font-size: 1.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta,
+  .errorGeneral {
+    animation: none;
   }
 }

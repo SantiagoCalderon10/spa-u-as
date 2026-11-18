@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import PageTransition from '../components/PageTransition/PageTransition';
 import { useAuth } from '../context/AuthContext';
 import { inicialesDe } from '../utils/agenda';
 import styles from './AdminLayout.module.css';
@@ -323,7 +324,9 @@ export default function AdminLayout() {
         </header>
 
         <main className={styles.principal}>
-          <Outlet />
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
         </main>
       </div>
     </div>

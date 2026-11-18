@@ -13,11 +13,11 @@
   white-space: nowrap;
   cursor: pointer;
   transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.15s ease,
-    box-shadow 0.18s ease;
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    color var(--motion-fast) ease,
+    transform var(--motion-base) var(--ease-out-soft),
+    box-shadow var(--motion-base) var(--ease-out-soft);
 }
 
 .boton:focus-visible {
@@ -52,6 +52,11 @@
   box-shadow: 0 5px 14px rgba(94, 39, 66, 0.24);
 }
 
+.primario:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+  box-shadow: 0 2px 6px rgba(94, 39, 66, 0.2);
+}
+
 .secundario {
   background-color: var(--admin-surface);
   border-color: #e2dbd7;
@@ -62,6 +67,12 @@
   background-color: #fbf8f7;
   border-color: var(--admin-accent-border);
   color: var(--admin-primary);
+}
+
+.secundario:active:not(:disabled),
+.fantasma:active:not(:disabled),
+.peligroSuave:active:not(:disabled) {
+  transform: scale(0.985);
 }
 
 .fantasma {
@@ -82,6 +93,10 @@
 .peligro:hover:not(:disabled) {
   background-color: #7a2334;
   transform: translateY(-1px);
+}
+
+.peligro:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
 }
 
 .peligroSuave {
@@ -111,5 +126,15 @@
 @media (prefers-reduced-motion: reduce) {
   .boton {
     transition: none;
+  }
+
+  .primario:hover:not(:disabled),
+  .primario:active:not(:disabled),
+  .secundario:active:not(:disabled),
+  .fantasma:active:not(:disabled),
+  .peligro:hover:not(:disabled),
+  .peligro:active:not(:disabled),
+  .peligroSuave:active:not(:disabled) {
+    transform: none;
   }
 }

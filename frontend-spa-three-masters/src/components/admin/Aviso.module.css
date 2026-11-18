@@ -8,7 +8,7 @@
   border-radius: var(--admin-radius-control);
   font-size: 12.5px;
   line-height: 1.5;
-  animation: entrar 0.2s ease-out;
+  animation: entrar 0.2s var(--ease-out-soft) both;
 }
 
 .exito {
@@ -39,12 +39,26 @@
   color: inherit;
   cursor: pointer;
   opacity: 0.75;
-  transition: opacity 0.18s ease, background-color 0.18s ease;
+  transition:
+    opacity var(--motion-fast) ease,
+    background-color var(--motion-fast) ease,
+    transform var(--motion-base) var(--ease-out-soft);
 }
 
 .cerrar:hover {
   background-color: rgba(255, 255, 255, 0.55);
   opacity: 1;
+  transform: rotate(90deg);
+}
+
+.cerrar:active {
+  transform: rotate(90deg) scale(0.9);
+}
+
+/* Salida: el componente espera estos 180 ms antes de avisar al padre. */
+.saliendo {
+  animation: salir 0.18s var(--ease-in-soft) both;
+  pointer-events: none;
 }
 
 @keyframes entrar {
@@ -58,8 +72,25 @@
   }
 }
 
+@keyframes salir {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .aviso {
+  .aviso,
+  .saliendo {
     animation: none;
+  }
+
+  .cerrar:hover,
+  .cerrar:active {
+    transform: none;
   }
 }

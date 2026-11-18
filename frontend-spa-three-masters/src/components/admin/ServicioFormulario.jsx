@@ -7,6 +7,7 @@ import Interruptor from './Interruptor';
 import {
   cuerpoServicio,
   datosFormularioServicio,
+  esConflicto,
   mensajeDeError,
   validarServicio,
 } from '../../utils/catalogo';
@@ -23,6 +24,7 @@ const IDS_CAMPOS = {
 
 export default function ServicioFormulario({
   servicio,
+  servicios = [],
   categorias,
   onGuardar,
   onCerrar,
@@ -70,7 +72,7 @@ export default function ServicioFormulario({
   const enviar = async (evento) => {
     evento.preventDefault();
 
-    const nuevosErrores = validarServicio(datos);
+    const nuevosErrores = validarServicio(datos, servicios, servicio?._id);
     if (Object.keys(nuevosErrores).length > 0) {
       setErrores(nuevosErrores);
       return;
@@ -82,9 +84,13 @@ export default function ServicioFormulario({
     try {
       await onGuardar(cuerpoServicio(datos));
     } catch (error) {
-      setErrorGeneral(
-        mensajeDeError(error, 'No pudimos guardar el servicio. Intenta de nuevo.')
-      );
+      const mensaje = mensajeDeError(error, 'No pudimos guardar el servicio. Intenta de nuevo.');
+      if (esConflicto(error)) {
+        setErrores((previos) => ({ ...previos, nombre: mensaje }));
+        setErrorGeneral('');
+      } else {
+        setErrorGeneral(mensaje);
+      }
       setGuardando(false);
     }
   };

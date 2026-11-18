@@ -1,0 +1,84 @@
+.aviso {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background-color: #fdf4e8;
+  border: 1px solid #edd7b4;
+  border-radius: var(--admin-radius-item, 10px);
+  color: var(--admin-text);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.cabecera {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #8a5a15;
+}
+
+.cabecera svg {
+  flex: none;
+  margin-top: 1px;
+}
+
+.cabecera strong {
+  font-weight: 600;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cita {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 7px 10px;
+  background-color: var(--admin-surface, #ffffff);
+  border: 1px solid #f0e4d2;
+  border-radius: 8px;
+}
+
+.cliente {
+  font-weight: 600;
+}
+
+.detalle {
+  color: var(--admin-text-muted, #6e666a);
+  font-size: 12px;
+}
+
+.instruccion {
+  margin: 10px 0 0;
+  color: var(--admin-text-muted, #6e666a);
+}
+
+.enlace {
+  color: var(--admin-primary, #7a3a55);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.enlace:hover {
+  color: var(--admin-primary-dark, #5e2742);
+}
+
+.consultando,
+.sinCitas {
+  margin: 14px 0 0;
+  color: var(--admin-text-subtle, #8f888b);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.error {
+  margin: 14px 0 0;
+  color: var(--admin-danger, #932c40);
+  font-size: 12px;
+}

@@ -55,13 +55,14 @@ import { crearUploadRoutes } from "./modules/uploads/upload.routes.js";
 const appRouter = Router();
 
 // Repositorios compartidos
+const citaRepo = new CitaRepositorio();
 const horRepo = new HorarioRepositorio();
 const servRepo = new ServicioRepositorio();
 const cliRepo = new ClienteRepositorio();
 const profRepo = new ProfesionalRepositorio();
 
 // Servicios y controladores
-const horServ = new HorarioServicio(horRepo);
+const horServ = new HorarioServicio(horRepo, citaRepo);
 const horCtrl = new HorarioControlador(horServ);
 
 const servServ = new ServicioServicio(servRepo);
@@ -74,7 +75,6 @@ const usuCtrl = new UsuarioControlador(usuServ);
 const cliServ = new ClienteServicio(cliRepo, usuServ);
 const cliCtrl = new ClienteControlador(cliServ);
 
-const citaRepo = new CitaRepositorio();
 const citaServ = new CitaServicio(citaRepo, servRepo, cliServ, horRepo, profRepo);
 const citaCtrl = new CitaControlador(citaServ);
 

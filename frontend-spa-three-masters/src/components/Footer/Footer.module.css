@@ -35,7 +35,7 @@
 
 /* Cormorant Garamond · 34px · 100% · #F4EEE6 */
 .brandName {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans  );
   font-weight: 400;
   font-size: 34px;
   line-height: 1;
@@ -67,7 +67,7 @@
   font-size: 12px;
   line-height: 1.5;
   color: var(--landing-surface);
-  transition: color 0.2s ease;
+  transition: color var(--motion-fast) ease;
 }
 
 .link:hover {
@@ -81,7 +81,7 @@
   font-size: 26px;
   line-height: 1.06;
   color: var(--landing-surface);
-  transition: color 0.2s ease;
+  transition: color var(--motion-fast) ease;
 }
 
 .phone:hover {
@@ -110,7 +110,7 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--landing-muted);
-  transition: color 0.2s ease;
+  transition: color var(--motion-fast) ease;
 }
 
 .socialLink:hover {
@@ -141,11 +141,15 @@
 
 .legalLink {
   color: var(--landing-muted);
-  transition: color 0.2s ease;
+  transition:
+    color var(--motion-fast) ease,
+    text-underline-offset var(--motion-fast) ease;
 }
 
 .legalLink:hover {
   color: var(--landing-surface);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 @media (max-width: 900px) {

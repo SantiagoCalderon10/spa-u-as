@@ -52,6 +52,32 @@
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-card);
   box-shadow: var(--admin-shadow-card);
+  animation: kpiEntra var(--motion-base) var(--ease-out-soft) both;
+  animation-delay: calc(var(--kpi-index, 0) * 70ms);
+  transition:
+    transform var(--motion-base) var(--ease-out-soft),
+    box-shadow var(--motion-base) var(--ease-out-soft);
+}
+
+.resumenItem:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(46, 35, 40, 0.08);
+}
+
+.resumenItem:nth-child(1) {
+  --kpi-index: 0;
+}
+
+.resumenItem:nth-child(2) {
+  --kpi-index: 1;
+}
+
+.resumenItem:nth-child(3) {
+  --kpi-index: 2;
+}
+
+.resumenItem:nth-child(4) {
+  --kpi-index: 3;
 }
 
 .resumenItem dt {
@@ -192,5 +218,24 @@
   .esqueleto {
     animation: none;
     background: #efeae7;
+  }
+
+  .resumenItem {
+    animation: none;
+  }
+
+  .resumenItem:hover {
+    transform: none;
+  }
+}
+
+@keyframes kpiEntra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }

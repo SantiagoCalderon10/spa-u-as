@@ -28,7 +28,7 @@ export class AuthServicio {
   }
 
   /**
-   * Registro público: siempre crea un cliente, aunque el cuerpo envíe otro rol.
+   * Registro público: siempre crea un cliente, <aunque> el cuerpo envíe otro rol.
    */
   async registrar(datos = {}) {
     const entrada = datos || {};

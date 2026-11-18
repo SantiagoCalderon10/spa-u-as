@@ -456,7 +456,7 @@ export default function CategoriasAdminPage() {
                     <tr className={styles.fila} key={categoria._id}>
                       <th scope="row" className={styles.celdaCategoria}>
                         <span className={styles.categoriaFila}>
-                          <MiniaturaCategoria nombre={categoria.nombre} />
+                           
                           <span className={styles.categoriaTexto}>
                             <span className={styles.nombre}>{categoria.nombre}</span>
                             <span className={styles.descripcion}>
@@ -493,7 +493,7 @@ export default function CategoriasAdminPage() {
                           }
                         >
                           <span className={styles.punto} aria-hidden="true" />
-                          {ocupada ? 'Guardando…' : estaActiva ? 'ACTIVA' : 'EN PAUSA'}
+                          {ocupada ? 'Guardando…' : estaActiva ? 'ACTIVO' : 'EN PAUSA'}
                         </button>
                       </td>
 
@@ -533,6 +533,7 @@ export default function CategoriasAdminPage() {
       {formulario && (
         <CategoriaFormulario
           categoria={formulario.categoria}
+          categorias={categorias}
           onGuardar={guardar}
           onCerrar={cerrarFormulario}
         />

@@ -1,12 +1,27 @@
-import { NotFoundError } from '../../shared/errors/AppError.js';
+import { ConflictError, NotFoundError, ValidationError } from '../../shared/errors/AppError.js';
+import { limpiarNombre, nombreDuplicado } from '../../shared/utils/normalizarNombre.js';
 
 export class CategoriaServicio {
   constructor(categoriaRepositorio) {
     this.categoriaRepositorio = categoriaRepositorio;
   }
 
+  /** Valida el nombre y devuelve la forma limpia que se guardará. */
+  async validarNombre(nombre, idExcluido) {
+    const limpio = limpiarNombre(nombre);
+    if (!limpio) throw new ValidationError('El nombre de la categoría es obligatorio');
+
+    const categorias = await this.categoriaRepositorio.obtenerCategorias();
+    if (nombreDuplicado(limpio, categorias, idExcluido)) {
+      throw new ConflictError(`Ya existe una categoría llamada «${limpio}»`);
+    }
+
+    return limpio;
+  }
+
   async crearCategoria(datos) {
-    return await this.categoriaRepositorio.crearCategoria(datos);
+    const nombre = await this.validarNombre(datos?.nombre);
+    return await this.categoriaRepositorio.crearCategoria({ ...datos, nombre });
   }
 
   async obtenerCategorias() {
@@ -21,17 +36,22 @@ export class CategoriaServicio {
 
   async actualizarCategoria(id, datos) {
     const categoriaExistente = await this.obtenerCategoriaPorId(id);
+    const cambios = { ...(datos ?? {}) };
 
-    if (datos?.estado !== undefined) {
-      if (datos.estado) {
+    if (cambios.nombre !== undefined) {
+      cambios.nombre = await this.validarNombre(cambios.nombre, id);
+    }
+
+    if (cambios.estado !== undefined) {
+      if (cambios.estado) {
         categoriaExistente.activar();
       } else {
         categoriaExistente.desactivar();
       }
-      datos.estado = categoriaExistente.estado;
+      cambios.estado = categoriaExistente.estado;
     }
 
-    const categoria = await this.categoriaRepositorio.actualizarCategoria(id, datos);
+    const categoria = await this.categoriaRepositorio.actualizarCategoria(id, cambios);
     if (!categoria) throw new NotFoundError(`Categoría con id ${id} no encontrada`);
     return categoria;
   }

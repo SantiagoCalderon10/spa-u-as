@@ -465,8 +465,12 @@ export default function AgendaProfesionalPage() {
           </div>
         ) : (
           <div className={styles.grupos}>
-            {grupos.map((grupo) => (
-              <section className={styles.grupo} key={grupo.clave}>
+            {grupos.map((grupo, indice) => (
+              <section
+                className={styles.grupo}
+                key={grupo.clave}
+                style={{ '--grupo-index': indice }}
+              >
                 <header className={styles.grupoCabecera}>
                   <h3 className={styles.grupoFecha}>{grupo.fecha}</h3>
                   {grupo.esHoy && <span className={styles.hoyBadge}>Hoy</span>}

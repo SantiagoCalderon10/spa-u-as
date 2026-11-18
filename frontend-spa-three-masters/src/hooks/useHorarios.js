@@ -52,16 +52,18 @@ export function useHorarios({ idProfesional, activo = true } = {}) {
 
   const actualizar = useCallback(
     async (id, datos) => {
-      await actualizarHorario(id, cuerpoHorario(datos));
+      const respuesta = await actualizarHorario(id, cuerpoHorario(datos));
       await recargar();
+      return respuesta;
     },
     [recargar]
   );
 
   const eliminar = useCallback(
     async (id) => {
-      await eliminarHorario(id);
+      const respuesta = await eliminarHorario(id);
       await recargar();
+      return respuesta;
     },
     [recargar]
   );

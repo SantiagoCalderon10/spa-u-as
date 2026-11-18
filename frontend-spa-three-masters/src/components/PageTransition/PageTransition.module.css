@@ -1,0 +1,24 @@
+.transition {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  animation: entrarPagina var(--motion-slow) var(--ease-out-soft) both;
+}
+
+@keyframes entrarPagina {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition {
+    animation: none;
+  }
+}

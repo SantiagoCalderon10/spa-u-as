@@ -64,7 +64,7 @@ export default function Navbar({ enLanding = true }) {
 
         <nav className={styles.navigation} aria-label="Navegación principal">
           <ul className={styles.navLinks}>
-            <li><a href={enlaceSeccion('filosofia')} className={styles.link}>Salón</a></li>
+            <li><a href={enlaceSeccion('salon')} className={styles.link}>Salón</a></li>
             <li><a href={enlaceSeccion('catalogo')} className={styles.link}>Servicios</a></li>
             <li><a href={enlaceSeccion('galeria')} className={styles.link}>Nuestro trabajo</a></li>
             <li><a href={enlaceSeccion('equipo')} className={styles.link}>Equipo</a></li>

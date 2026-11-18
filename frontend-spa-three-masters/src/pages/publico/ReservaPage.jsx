@@ -502,7 +502,7 @@ export default function ReservaPage() {
         )}
 
         {paso === 1 && (
-          <section className={styles.panel} aria-labelledby="paso-servicio">
+          <section key="paso-1" className={styles.panel} aria-labelledby="paso-servicio">
             <div className={styles.panelHead}>
               <h2 id="paso-servicio" className={styles.panelTitle}>Elige tu servicio</h2>
               {servicioSeleccionado && (
@@ -566,7 +566,7 @@ export default function ReservaPage() {
         )}
 
         {paso === 2 && servicioSeleccionado && (
-          <section className={styles.panel} aria-labelledby="paso-horario">
+          <section key="paso-2" className={styles.panel} aria-labelledby="paso-horario">
             <div className={styles.panelHead}>
               <h2 id="paso-horario" className={styles.panelTitle}>Profesional y horario</h2>
               <p className={styles.panelHint}>{servicioSeleccionado.nombre}</p>
@@ -645,7 +645,7 @@ export default function ReservaPage() {
                 </p>
               ) : (
                 <div className={styles.slots} role="radiogroup" aria-label="Horarios disponibles">
-                  {slots.map((slot) => {
+                  {slots.map((slot, indice) => {
                     const activo = slot.horaInicio === hora;
 
                     return (
@@ -654,6 +654,7 @@ export default function ReservaPage() {
                         type="button"
                         role="radio"
                         aria-checked={activo}
+                        style={{ '--slot-index': indice }}
                         className={`${styles.slot} ${activo ? styles.slotActive : ''}`}
                         onClick={() => setHora(slot.horaInicio)}
                       >
@@ -682,7 +683,7 @@ export default function ReservaPage() {
         )}
 
         {paso === 3 && servicioSeleccionado && (
-          <section className={styles.panel} aria-labelledby="paso-datos">
+          <section key="paso-3" className={styles.panel} aria-labelledby="paso-datos">
             <div className={styles.panelHead}>
               <h2 id="paso-datos" className={styles.panelTitle}>Tus datos</h2>
               <p className={styles.panelHint}>
@@ -789,8 +790,8 @@ export default function ReservaPage() {
         )}
 
         {paso === 4 && resultado && (
-          <section className={`${styles.panel} ${styles.success}`} aria-live="polite">
-            <span className={styles.successMark} aria-hidden="true"><IconoCheck /></span>
+          <section key="paso-4" className={`${styles.panel} ${styles.success}`} aria-live="polite">
+            <span className={`${styles.successMark} ui-pop`} aria-hidden="true"><IconoCheck /></span>
             <h2 className={styles.panelTitle}>Tu cita quedó agendada</h2>
             <p className={styles.subtitle}>
               Envía el enlace a tu teléfono con un toque. Con él puedes revisar o cancelar la cita sin crear una cuenta.

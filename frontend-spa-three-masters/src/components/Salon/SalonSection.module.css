@@ -31,6 +31,14 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  transition:
+    box-shadow var(--motion-slow) var(--ease-out-soft),
+    transform var(--motion-slow) var(--ease-out-soft);
+}
+
+.photo:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevated);
 }
 
 .text {

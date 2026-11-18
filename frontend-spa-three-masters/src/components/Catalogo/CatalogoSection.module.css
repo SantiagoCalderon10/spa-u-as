@@ -76,12 +76,22 @@
   font-weight: 400;
   line-height: 1.5;
   white-space: nowrap;
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color var(--motion-fast) ease,
+    color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease,
+    transform var(--motion-base) var(--ease-out-soft),
+    box-shadow var(--motion-base) var(--ease-out-soft);
 }
 
 .filterPill:hover {
   border-color: var(--catalog-wine);
   color: var(--catalog-wine);
+  transform: translateY(-1px);
+}
+
+.filterPill:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .filterPillActive,
@@ -89,6 +99,7 @@
   background-color: var(--catalog-wine);
   border-color: var(--catalog-wine);
   color: #ffffff;
+  box-shadow: 0 6px 14px rgba(120, 62, 80, 0.22);
 }
 
 .grid {
@@ -113,6 +124,15 @@
   aspect-ratio: 302 / 270;
   border-radius: 6px;
   display: block;
+  transition:
+    transform 650ms var(--ease-out-soft),
+    box-shadow var(--motion-base) var(--ease-out-soft);
+}
+
+.card:hover .cardPhoto,
+.card:hover .cardPhotoFallback {
+  transform: scale(1.025);
+  box-shadow: var(--shadow-elevated);
 }
 
 .cardPhoto {
@@ -158,6 +178,11 @@
   font-weight: 400;
   line-height: 1.06;
   color: var(--catalog-ink);
+  transition: color var(--motion-base) ease;
+}
+
+.card:hover .cardTitle {
+  color: var(--catalog-wine);
 }
 
 .cardDescription {
@@ -221,11 +246,21 @@
   line-height: 1.5;
   letter-spacing: 0.02em;
   color: var(--catalog-wine);
-  transition: color 0.2s ease;
+  transition: color var(--motion-fast) ease;
+}
+
+.cardReserve svg,
+.advice svg {
+  transition: transform var(--motion-base) var(--ease-out-soft);
 }
 
 .cardReserve:hover {
   color: var(--catalog-ink);
+}
+
+.cardReserve:hover svg,
+.advice:hover svg {
+  transform: translate(2px, -2px);
 }
 
 .referenceNotice {

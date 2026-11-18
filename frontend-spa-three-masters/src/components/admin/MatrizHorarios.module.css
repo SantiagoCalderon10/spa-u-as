@@ -1,0 +1,234 @@
+/* Matriz semanal de franjas por profesional */
+.envoltura {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-subtle);
+}
+
+.tabla {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-family: var(--font-sans);
+}
+
+.tabla thead th {
+  padding: 11px 12px;
+  background-color: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tabla tbody th,
+.tabla tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+
+.tabla tbody tr:last-child th,
+.tabla tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.colProfesional {
+  width: 190px;
+}
+
+.celdaProfesional {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: var(--color-surface-card);
+}
+
+.tabla thead .colProfesional {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: var(--color-surface-subtle);
+}
+
+.profesional {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-brand-soft);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 50%;
+  color: var(--color-brand-plum);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.datosProfesional {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nombreProfesional {
+  color: var(--color-text-title);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.sinPerfil {
+  align-self: flex-start;
+  padding: 1px 6px;
+  background-color: var(--color-danger-soft);
+  border-radius: var(--radius-pill);
+  color: var(--color-danger);
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.celda {
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+.contenidoCelda {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 62px;
+}
+
+.franja {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: 3px;
+}
+
+.chip {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 8px;
+  background-color: var(--color-brand-soft);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-brand-plum);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.chip:hover,
+.chip:focus-visible {
+  outline: none;
+  background-color: #efe1e5;
+  border-color: var(--color-brand-primary);
+}
+
+.chipHoras {
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.chipDuracion {
+  color: var(--color-text-muted);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.botonEliminar {
+  flex: 0 0 auto;
+  width: 22px;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+}
+
+.botonEliminar:hover,
+.botonEliminar:focus-visible {
+  outline: none;
+  opacity: 1;
+  background-color: var(--color-danger-soft);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.botonAgregar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 7px;
+  background-color: transparent;
+  border: 1px dashed var(--color-border-hover);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+.botonAgregar:hover,
+.botonAgregar:focus-visible {
+  outline: none;
+  background-color: var(--color-brand-soft);
+  border-color: var(--color-brand-primary);
+  color: var(--color-brand-primary);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .botonEliminar,
+  .botonAgregar {
+    transition: none;
+  }
+}

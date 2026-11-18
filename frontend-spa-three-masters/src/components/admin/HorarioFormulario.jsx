@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AvisoCitasAfectadas from './AvisoCitasAfectadas';
 import Boton from './Boton';
 import Campo from './Campo';
 import Dialogo from './Dialogo';
@@ -9,6 +10,7 @@ import {
   nombreDeProfesional,
   validarHorario,
 } from '../../utils/agenda';
+import { useCitasAfectadas } from '../../hooks/useCitasAfectadas';
 import { mensajeDeError } from '../../utils/catalogo';
 import styles from './Formulario.module.css';
 
@@ -30,6 +32,17 @@ export default function HorarioFormulario({
   const [errores, setErrores] = useState({});
   const [errorGeneral, setErrorGeneral] = useState('');
   const [guardando, setGuardando] = useState(false);
+
+  // Al editar, advertimos en vivo qué citas dejarían de encajar en la franja.
+  const {
+    citas: citasAfectadas,
+    cargando: consultandoCitas,
+    error: errorCitas,
+  } = useCitasAfectadas({
+    id: editando ? horario._id : null,
+    cambios: datos,
+    activo: editando,
+  });
 
   const cambiar = (campo) => (evento) => {
     setDatos((previos) => ({ ...previos, [campo]: evento.target.value }));
@@ -157,6 +170,14 @@ export default function HorarioFormulario({
             </p>
           )}
         </fieldset>
+
+        {editando && (
+          <AvisoCitasAfectadas
+            citas={citasAfectadas}
+            cargando={consultandoCitas}
+            error={errorCitas}
+          />
+        )}
 
         {errorGeneral && (
           <p className={styles.errorGeneral} role="alert">

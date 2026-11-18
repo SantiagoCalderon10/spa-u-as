@@ -46,7 +46,7 @@ function App() {
               <Route path="cuenta/citas/:id" element={<DetalleCitaPage />} />
             </Route>
           </Route>
-          <Route path="/admin/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route element={<RutaPrivada roles={['administrador']} />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Navigate to="resumen" replace />} />

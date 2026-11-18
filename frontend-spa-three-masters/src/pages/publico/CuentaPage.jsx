@@ -21,6 +21,7 @@ const DESTINO_POR_ROL = {
   profesional: '/profesional/agenda',
 };
 
+
 const REGISTRO_INICIAL = {
   nombrecompleto: '',
   correo: '',
@@ -88,6 +89,7 @@ export default function CuentaPage() {
       nuevos.confirmar = 'Las contraseñas no coinciden.';
     }
 
+    
     setErrores(nuevos);
     return Object.keys(nuevos).length === 0;
   };
@@ -209,7 +211,7 @@ export default function CuentaPage() {
               </button>
             </div>
 
-            <h2 className={styles.cardTitle} id="cuenta-form-title">
+            <h2 key={modo} className={styles.cardTitle} id="cuenta-form-title">
               {modo === 'login' ? 'Bienvenida de nuevo' : 'Crea tu cuenta'}
             </h2>
 
@@ -220,7 +222,7 @@ export default function CuentaPage() {
             )}
 
             {modo === 'login' ? (
-              <form className={styles.form} onSubmit={alEntrar} noValidate>
+              <form key="login" className={styles.form} onSubmit={alEntrar} noValidate>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="cuenta-correo">
                     Correo
@@ -271,7 +273,7 @@ export default function CuentaPage() {
                 </button>
               </form>
             ) : (
-              <form className={styles.form} onSubmit={alRegistrar} noValidate>
+              <form key="registro" className={styles.form} onSubmit={alRegistrar} noValidate>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="registro-nombrecompleto">
                     Nombre completo

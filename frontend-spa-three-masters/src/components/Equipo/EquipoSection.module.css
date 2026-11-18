@@ -70,6 +70,11 @@
   gap: 18px;
   height: 100%;
   min-width: 0;
+  transition: transform var(--motion-base) var(--ease-out-soft);
+}
+
+.card:hover {
+  transform: translateY(-4px);
 }
 
 /*
@@ -154,6 +159,14 @@
   object-fit: cover;
   border-radius: 6px;
   background-color: #ece2dd;
+  transition:
+    box-shadow var(--motion-base) var(--ease-out-soft),
+    filter var(--motion-base) ease;
+}
+
+.card:hover .photo {
+  box-shadow: var(--shadow-elevated);
+  filter: saturate(1.04);
 }
 
 .photoVacia {
@@ -181,6 +194,11 @@
   font-size: 30px;
   line-height: 1.06;
   color: var(--catalog-ink);
+  transition: color var(--motion-base) ease;
+}
+
+.card:hover .name {
+  color: var(--catalog-wine);
 }
 
 /* Inter 500 · 11px · #783E50 */
@@ -247,6 +265,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:hover {
+    transition: none;
+    transform: none;
+  }
+
   .flecha {
     transition: none;
   }

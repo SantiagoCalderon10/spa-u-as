@@ -90,6 +90,11 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  transition: transform var(--motion-base) var(--ease-out-soft);
+}
+
+.item:hover {
+  transform: translateY(-4px);
 }
 
 .photo {
@@ -99,6 +104,33 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  box-shadow: 0 0 0 rgba(51, 42, 43, 0);
+  transition: box-shadow var(--motion-base) var(--ease-out-soft);
+}
+
+.item:hover .photo {
+  box-shadow: var(--shadow-elevated);
+}
+
+.caption {
+  font-family: var(--catalog-font-body);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--catalog-ink);
+  transition: color var(--motion-base) ease;
+}
+
+.item:hover .caption {
+  color: var(--catalog-wine);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .item:hover {
+    transition: none;
+    transform: none;
+  }
 }
 
 /*
@@ -118,15 +150,6 @@
 .item[data-posicion='3'] .photo {
   --foto: url('/images/galeria/peinado.jpg');
   aspect-ratio: 360 / 388;
-}
-
-/* Pie de cada trabajo: Jost 400 · 12px · #332A2B */
-.caption {
-  font-family: var(--catalog-font-body);
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--catalog-ink);
 }
 
 @media (max-width: 1024px) {

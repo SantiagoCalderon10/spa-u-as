@@ -142,11 +142,18 @@
 }
 
 .fila {
-  transition: background-color 0.16s ease;
+  transition:
+    background-color var(--motion-fast) ease,
+    color var(--motion-fast) ease;
 }
 
 .fila:hover {
   background-color: #fcfaf9;
+}
+
+.fila:hover > td:first-child,
+.fila:hover > th:first-child {
+  box-shadow: inset 3px 0 0 var(--admin-primary);
 }
 
 .fila > th,

@@ -24,6 +24,33 @@ export function formatearDuracion(minutos) {
   return `${horas} h ${resto} min`;
 }
 
+/** Comparación de nombres tolerante a mayúsculas, tildes y espacios dobles. */
+export function normalizarNombre(valor) {
+  return String(valor ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLocaleLowerCase('es');
+}
+
+export function nombreDuplicado(nombre, elementos = [], idExcluido) {
+  const objetivo = normalizarNombre(nombre);
+  if (!objetivo) return false;
+
+  return elementos.some((elemento) => {
+    const id = elemento?._id ?? elemento?.id;
+    if (idExcluido != null && id != null && String(id) === String(idExcluido)) {
+      return false;
+    }
+    return normalizarNombre(elemento?.nombre) === objetivo;
+  });
+}
+
+export function esConflicto(error) {
+  return Boolean(error?.response && error.response.status === 409);
+}
+
 export function idCategoriaDe(servicio) {
   const valor = servicio?.idCategoria;
   if (!valor) return '';
@@ -86,11 +113,13 @@ export function cuerpoCategoria(datos) {
   };
 }
 
-export function validarServicio(datos) {
+export function validarServicio(datos, servicios = [], idActual) {
   const errores = {};
 
   if (!datos.nombre.trim()) {
     errores.nombre = 'Escribe el nombre del servicio.';
+  } else if (nombreDuplicado(datos.nombre, servicios, idActual)) {
+    errores.nombre = 'Ya existe un servicio con ese nombre.';
   }
 
   if (String(datos.precio).trim() === '') {
@@ -114,11 +143,13 @@ export function validarServicio(datos) {
   return errores;
 }
 
-export function validarCategoria(datos) {
+export function validarCategoria(datos, categorias = [], idActual) {
   const errores = {};
 
   if (!datos.nombre.trim()) {
     errores.nombre = 'Escribe el nombre de la categoría.';
+  } else if (nombreDuplicado(datos.nombre, categorias, idActual)) {
+    errores.nombre = 'Ya existe una categoría con ese nombre.';
   }
 
   return errores;

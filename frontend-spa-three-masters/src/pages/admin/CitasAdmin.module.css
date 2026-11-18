@@ -142,11 +142,18 @@
 }
 
 .fila {
-  transition: background-color 0.16s ease;
+  transition:
+    background-color var(--motion-fast) ease,
+    color var(--motion-fast) ease;
 }
 
 .fila:hover {
   background-color: #fcfaf9;
+}
+
+.fila:hover > td:first-child,
+.fila:hover > th:first-child {
+  box-shadow: inset 3px 0 0 var(--admin-primary);
 }
 
 .fila > th,
@@ -336,42 +343,18 @@ a.telefono:hover {
 
 /* Acciones */
 .colAcciones {
-  width: 184px;
+  width: 96px;
   text-align: right !important;
 }
 
 .celdaAcciones {
-  width: 184px;
+  width: 96px;
   text-align: right;
 }
 
 .acciones {
   display: flex;
   justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 2px;
-}
-
-.botonIcono.botonIcono {
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  border-radius: var(--admin-radius-control);
-  color: var(--admin-text-subtle);
-}
-
-.botonIcono.botonIcono:hover:not(:disabled) {
-  color: var(--admin-primary);
-  background-color: var(--admin-accent-soft);
-}
-
-.botonIconoPeligro.botonIconoPeligro {
-  color: var(--admin-danger);
-}
-
-.botonIconoPeligro.botonIconoPeligro:hover:not(:disabled) {
-  color: var(--admin-danger);
-  background-color: var(--admin-danger-soft);
 }
 
 .sinAcciones {
@@ -421,8 +404,8 @@ a.telefono:hover {
 }
 
 .esqueletoAcciones {
-  width: 150px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   margin-left: auto;
   border-radius: var(--admin-radius-control);
 }
@@ -509,7 +492,7 @@ a.telefono:hover {
   }
 
   .fila .celdaAcciones .acciones {
-    flex: 1;
+    justify-content: flex-end;
   }
 
   .celdaAcciones {
@@ -576,7 +559,7 @@ a.telefono:hover {
   }
 
   .fila .celdaAcciones .acciones {
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
 
   .filaEsqueleto {

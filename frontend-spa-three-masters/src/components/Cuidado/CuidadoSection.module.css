@@ -30,6 +30,25 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  transition:
+    box-shadow var(--motion-slow) var(--ease-out-soft),
+    transform var(--motion-slow) var(--ease-out-soft);
+}
+
+.photo:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevated);
+}
+
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  transition: transform var(--motion-base) var(--ease-out-soft);
+}
+
+.benefit:hover {
+  transform: translateX(3px);
 }
 
 .content {

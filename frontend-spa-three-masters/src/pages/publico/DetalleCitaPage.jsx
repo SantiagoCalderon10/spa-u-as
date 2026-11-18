@@ -190,7 +190,7 @@ export default function DetalleCitaPage() {
             )}
 
             {puedeCancelar && mostrarCancelacion && (
-              <form className={styles.field} onSubmit={cancelar}>
+              <form className={`${styles.field} ${styles.cancelarForm}`} onSubmit={cancelar}>
                 <label className={styles.label} htmlFor="motivo-cancelacion">
                   Motivo de la cancelación (opcional)
                 </label>

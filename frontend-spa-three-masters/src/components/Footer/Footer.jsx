@@ -18,7 +18,7 @@ export default function Footer() {
         <div className={styles.top}>
           <div className={styles.brand}>
             <p className={styles.brandName}>Three Masters</p>
-            <p className={styles.brandDescriptor}>Atelier de uñas</p>
+            <p className={styles.brandDescriptor}>Spa de uñas</p>
           </div>
 
           <nav className={styles.links} aria-label="Enlaces del pie de página">
@@ -30,9 +30,7 @@ export default function Footer() {
           </nav>
 
           <div className={styles.contact}>
-            <a className={styles.phone} href={telefono.enlace}>
-              {telefono.valor}
-            </a>
+            
             <div className={styles.social}>
               {Object.values(redes).map((red) => (
                 <a
@@ -50,7 +48,7 @@ export default function Footer() {
         </div>
 
         <div className={styles.legal}>
-          <p>© {new Date().getFullYear()} Three Masters Spa. Todos los derechos reservados.</p>
+          
           <Link to="/admin" className={styles.legalLink}>Acceso del equipo</Link>
         </div>
       </div>

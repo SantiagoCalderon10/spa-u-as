@@ -1,6 +1,9 @@
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import Boton from './Boton';
 import styles from './Dialogo.module.css';
+
+// Debe coincidir con `desaparecer` de Dialogo.module.css.
+const MS_SALIDA = 180;
 
 export default function Dialogo({
   titulo,
@@ -13,6 +16,12 @@ export default function Dialogo({
   const referencia = useRef(null);
   const idTitulo = useId();
   const idDescripcion = useId();
+  const [cerrando, setCerrando] = useState(false);
+  const temporizador = useRef(null);
+  const onCerrarRef = useRef(onCerrar);
+  onCerrarRef.current = onCerrar;
+
+  useEffect(() => () => clearTimeout(temporizador.current), []);
 
   useEffect(() => {
     const dialogo = referencia.current;
@@ -37,20 +46,30 @@ export default function Dialogo({
   }, []);
 
   const cerrar = () => {
-    if (!bloqueado) onCerrar?.();
+    if (bloqueado || cerrando) return;
+
+    const reducido =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducido) {
+      onCerrarRef.current?.();
+      return;
+    }
+
+    setCerrando(true);
+    temporizador.current = setTimeout(() => onCerrarRef.current?.(), MS_SALIDA);
   };
 
   return (
     <dialog
       ref={referencia}
-      className={`${styles.dialogo} ${styles[ancho]}`}
+      className={`${styles.dialogo} ${styles[ancho]} ${cerrando ? styles.cerrando : ''}`}
       aria-labelledby={idTitulo}
       aria-describedby={descripcion ? idDescripcion : undefined}
       onCancel={(evento) => {
-        if (bloqueado) {
-          evento.preventDefault();
-          return;
-        }
+        // Evita que el navegador cierre el diálogo antes de reproducir la salida.
+        evento.preventDefault();
         cerrar();
       }}
       onClick={(evento) => {
