@@ -211,7 +211,7 @@ export default function CuentaPage() {
               </button>
             </div>
 
-            <h2 key={modo} className={styles.cardTitle} id="cuenta-form-title">
+            <h2 key={`titulo-${modo}`} className={styles.cardTitle} id="cuenta-form-title">
               {modo === 'login' ? 'Bienvenida de nuevo' : 'Crea tu cuenta'}
             </h2>
 
@@ -222,7 +222,7 @@ export default function CuentaPage() {
             )}
 
             {modo === 'login' ? (
-              <form key="login" className={styles.form} onSubmit={alEntrar} noValidate>
+              <form key={`formulario-${modo}`} className={styles.form} onSubmit={alEntrar} noValidate>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="cuenta-correo">
                     Correo
@@ -273,7 +273,7 @@ export default function CuentaPage() {
                 </button>
               </form>
             ) : (
-              <form key="registro" className={styles.form} onSubmit={alRegistrar} noValidate>
+              <form key={`formulario-${modo}`} className={styles.form} onSubmit={alRegistrar} noValidate>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="registro-nombrecompleto">
                     Nombre completo

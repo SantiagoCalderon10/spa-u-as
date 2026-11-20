@@ -48,7 +48,7 @@
 ## 5. Decisiones vigentes
 - La cita **nace confirmada**. La clienta cancela en cualquier momento (los 4 días hábiles quedan como mejora futura).
 - El motivo de cancelación es obligatorio si cancela el profesional o el administrador, y opcional si cancela la clienta. La clienta lo ve en su enlace.
-- La cita copia **nombre y precio del servicio**. Profesional y cliente van por referencia.
+- La cita copia **nombre y precio del servicio** y el **nombre de la profesional** al agendar (ADR-03). El **cliente va por referencia** (`idCliente`): sus datos se leen del perfil vigente, no se copian dentro de la cita.
 - Las especialidades de una profesional son **categorías**; atiende todos los servicios activos de ellas.
 - Cliente sin cuenta: se identifica por **teléfono y nombre normalizados**. Mismo teléfono con otro nombre es otro cliente. El formulario público no autocompleta ni revela datos de otras clientas; solo se prellena con los datos de la cuenta que tiene sesión iniciada.
 - Cuenta opcional: la clienta se liga al usuario por `idUsuario`. El vínculo inicial se resuelve una vez con **teléfono + nombre normalizados** para recuperar el historial de invitada; de ahí en adelante manda `idUsuario`.

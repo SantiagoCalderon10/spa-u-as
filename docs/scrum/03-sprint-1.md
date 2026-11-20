@@ -66,7 +66,7 @@
 | S1-T33 | HU-DIS-01 | Pantalla de profesional y horarios libres (C-02) | Dev 2 | 4 | D9 | `frontend/src/pages/publico/ReservaPage.jsx` |
 | S1-T34 | HU-DIS-01 | Mensajes sin disponibilidad y cambio de servicio o profesional | Dev 2 | 2 | D9 | `frontend/src/pages/publico/ReservaPage.jsx` |
 | S1-T35 | HU-DIS-01 | Pruebas con cita confirmada y cita cancelada | Dev 2 | 2 | D9 | `backend/test/Cita.test.js` |
-| S1-T36 | HU-AGE-01 | Esquema de cita con datos embebidos y hash del enlace | Dev 1 | 3 | D8 | `backend/src/modules/citas/models/entities/Cita.model.js` |
+| S1-T36 | HU-AGE-01 | Esquema de cita con snapshots de servicio y profesional, `idCliente` por referencia y hash del enlace | Dev 1 | 3 | D8 | `backend/src/modules/citas/models/entities/Cita.model.js` |
 | S1-T37 | HU-AGE-01 | Módulo único de validación de cruces de horario | Dev 1 | 4 | D9 | `backend/src/modules/citas/models/domain/Cita.js`, `test/Cita.test.js` |
 | S1-T38 | HU-AGE-01 | Respaldo en base de datos contra la doble reserva | Dev 1 | 3 | D9 | `backend/src/modules/citas/cita.repositorio.js` |
 | S1-T39 | HU-AGE-01 | Endpoint de agendamiento con generación del enlace único | Dev 1 | 4 | D9 | `backend/src/modules/citas/cita.servicio.js`, `cita.controlador.js` |
